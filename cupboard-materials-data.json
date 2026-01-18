@@ -1,0 +1,378 @@
+{
+  "project": {
+    "name": "Liezl Crown Cupboards",
+    "location": "Nerina, Durbanville",
+    "supplier": "Taylormade Cupboards",
+    "contact": {
+      "name": "Pierre",
+      "phone": "083 454 3617",
+      "email": "taylormadecupboards@gmail.com"
+    },
+    "date": "2026-01-18"
+  },
+  "drawings": [
+    {
+      "id": "drawing_1",
+      "name": "Wardrobe Unit - Left Side",
+      "dimensions": {
+        "width": 1840,
+        "height": 2520,
+        "depth": 600
+      },
+      "sections": [
+        {
+          "name": "Left Section",
+          "width": 480,
+          "type": "hanging_and_drawers",
+          "components": ["top_cupboard", "hanging_rail", "drawer_unit_2"]
+        },
+        {
+          "name": "Center Section",
+          "width": 800,
+          "type": "full_hanging",
+          "components": ["hanging_rail_full", "drawer_unit_2"]
+        },
+        {
+          "name": "Right Section",
+          "width": 480,
+          "type": "cupboard",
+          "components": ["shelving_full_height"]
+        }
+      ],
+      "materials": {
+        "sheets_16mm": 4,
+        "sheets_6mm": 2,
+        "hanging_rails": 2,
+        "drawer_runners": 4,
+        "hinges": 8,
+        "handles": 8,
+        "edge_banding_meters": 60
+      }
+    },
+    {
+      "id": "drawing_2",
+      "name": "Wardrobe Unit - Right Side Decorative",
+      "dimensions": {
+        "width": 1840,
+        "height": 2520,
+        "depth": 600
+      },
+      "sections": [
+        {
+          "name": "Left Shelving",
+          "shelves": 5,
+          "type": "open_shelving"
+        },
+        {
+          "name": "Center Decorative",
+          "type": "arched_compartments",
+          "arches": 6
+        },
+        {
+          "name": "Storage Sections",
+          "type": "mixed_storage"
+        }
+      ],
+      "materials": {
+        "sheets_16mm": 5,
+        "sheets_6mm": 2,
+        "hinges": 6,
+        "handles": 6,
+        "shelf_pins": 48,
+        "edge_banding_meters": 80
+      }
+    },
+    {
+      "id": "drawing_3",
+      "name": "Pantry & Kitchen Wall Unit",
+      "components": [
+        {
+          "name": "Pantry Unit",
+          "dimensions": {
+            "width": 590,
+            "height": 1764,
+            "depth": 600
+          },
+          "type": "full_height_pantry",
+          "shelves": 6
+        },
+        {
+          "name": "Kitchen Wall Units",
+          "dimensions": {
+            "width": 1500,
+            "height": 1764,
+            "depth": 350
+          },
+          "sections": ["wall_cabinets", "microwave_housing", "drawer_units"]
+        }
+      ],
+      "materials": {
+        "sheets_16mm": 4,
+        "sheets_6mm": 2,
+        "hinges": 15,
+        "drawer_runners": 3,
+        "handles": 8,
+        "shelf_pins": 24,
+        "edge_banding_meters": 70
+      }
+    },
+    {
+      "id": "drawing_4",
+      "name": "Kitchen Layout with Scullery",
+      "components": [
+        {
+          "name": "Upper Wall Units",
+          "total_width": 2544,
+          "sections": [
+            {"width": 600},
+            {"width": 650},
+            {"width": 1294}
+          ]
+        },
+        {
+          "name": "Lower Base Units",
+          "total_width": 3444,
+          "sections": [
+            {"width": 900, "type": "cupboard"},
+            {"width": 450, "type": "cupboard"},
+            {"width": 850, "type": "cupboard"},
+            {"width": 644, "type": "cupboard"},
+            {"width": 600, "type": "sink_base"}
+          ]
+        },
+        {
+          "name": "Scullery Side Unit",
+          "dimensions": {
+            "width": 600,
+            "height": 1921
+          }
+        }
+      ],
+      "materials": {
+        "sheets_16mm": 8,
+        "sheets_6mm": 3,
+        "benchtop_38mm": 1,
+        "hinges": 36,
+        "drawer_runners": 8,
+        "handles": 24,
+        "shelf_pins": 40,
+        "edge_banding_meters": 120
+      }
+    },
+    {
+      "id": "drawing_5",
+      "name": "Large Kitchen Layout",
+      "components": [
+        {
+          "name": "Upper Wall Units",
+          "total_width": 3440,
+          "height": 1890,
+          "sections": [
+            {"width": 600},
+            {"width": 550},
+            {"width": 600, "special": "wood_grain_door"},
+            {"width": 640, "type": "range_hood"},
+            {"width": 550},
+            {"width": 1090, "special": "wood_grain_door"}
+          ]
+        },
+        {
+          "name": "Lower Base Units",
+          "total_width": 3440,
+          "sections": [
+            {"width": 900, "type": "cupboard"},
+            {"width": 300, "type": "space"},
+            {"width": 600, "type": "stove_space"},
+            {"width": 300, "type": "space"},
+            {"width": 840, "type": "drawer_bank_3"},
+            {"width": 500, "type": "cupboard"}
+          ]
+        }
+      ],
+      "materials": {
+        "sheets_16mm": 10,
+        "sheets_6mm": 3,
+        "benchtop_38mm": 1,
+        "sheets_16mm_wood_grain": 1,
+        "hinges": 20,
+        "drawer_runners": 6,
+        "handles": 18,
+        "shelf_pins": 30,
+        "edge_banding_meters": 100
+      }
+    }
+  ],
+  "material_costs": {
+    "sheet_materials": [
+      {
+        "type": "16mm_melamine_white",
+        "size": "2440x1220mm",
+        "quantity": 31,
+        "unit_price": 850,
+        "total": 26350,
+        "currency": "ZAR"
+      },
+      {
+        "type": "6mm_hardboard_backing",
+        "size": "2440x1220mm",
+        "quantity": 12,
+        "unit_price": 280,
+        "total": 3360,
+        "currency": "ZAR"
+      },
+      {
+        "type": "38mm_benchtop_laminated",
+        "size": "3050x600mm",
+        "quantity": 2,
+        "unit_price": 2800,
+        "total": 5600,
+        "currency": "ZAR"
+      },
+      {
+        "type": "16mm_wood_grain_melamine",
+        "size": "2440x1220mm",
+        "quantity": 1,
+        "unit_price": 1200,
+        "total": 1200,
+        "currency": "ZAR"
+      }
+    ],
+    "hardware": [
+      {
+        "type": "soft_close_hinges_35mm",
+        "quantity": 85,
+        "unit": "pairs",
+        "unit_price": 45,
+        "total": 3825,
+        "currency": "ZAR"
+      },
+      {
+        "type": "drawer_runners_450mm_soft_close",
+        "quantity": 24,
+        "unit": "pairs",
+        "unit_price": 180,
+        "total": 4320,
+        "currency": "ZAR"
+      },
+      {
+        "type": "hanging_rails_800mm_chrome",
+        "quantity": 2,
+        "unit": "units",
+        "unit_price": 120,
+        "total": 240,
+        "currency": "ZAR"
+      },
+      {
+        "type": "handles_brushed_nickel",
+        "quantity": 80,
+        "unit": "units",
+        "unit_price": 65,
+        "total": 5200,
+        "currency": "ZAR"
+      },
+      {
+        "type": "shelf_pins",
+        "quantity": 200,
+        "unit": "units",
+        "unit_price": 3,
+        "total": 600,
+        "currency": "ZAR"
+      }
+    ],
+    "consumables": [
+      {
+        "type": "edge_banding_16mm",
+        "quantity": 430,
+        "unit": "linear_meters",
+        "unit_price": 12,
+        "total": 5160,
+        "currency": "ZAR"
+      },
+      {
+        "type": "pva_wood_glue_5L",
+        "quantity": 2,
+        "unit": "containers",
+        "unit_price": 180,
+        "total": 360,
+        "currency": "ZAR"
+      },
+      {
+        "type": "contact_adhesive_5L",
+        "quantity": 1,
+        "unit": "containers",
+        "unit_price": 320,
+        "total": 320,
+        "currency": "ZAR"
+      },
+      {
+        "type": "confirmat_screws",
+        "quantity": 2,
+        "unit": "boxes_of_1000",
+        "unit_price": 450,
+        "total": 900,
+        "currency": "ZAR"
+      }
+    ]
+  },
+  "cost_summary": {
+    "sheet_materials_subtotal": 36510,
+    "hardware_subtotal": 14185,
+    "consumables_subtotal": 6740,
+    "subtotal_materials": 57435,
+    "wastage_contingency_10_percent": 5744,
+    "total_materials_cost": 63179,
+    "currency": "ZAR"
+  },
+  "labor_estimate": {
+    "cutting_and_edge_banding": {
+      "hours": 40,
+      "rate_per_hour": 350,
+      "total": 14000
+    },
+    "assembly": {
+      "hours": 60,
+      "rate_per_hour": 350,
+      "total": 21000
+    },
+    "installation_on_site": {
+      "hours": 32,
+      "rate_per_hour": 400,
+      "total": 12800
+    },
+    "labor_subtotal": 47800,
+    "currency": "ZAR"
+  },
+  "project_totals": {
+    "materials_with_contingency": 63179,
+    "labor_and_installation": 47800,
+    "subtotal": 110979,
+    "profit_margin_20_percent": 22196,
+    "total_project_cost": 133175,
+    "vat_15_percent": 19976,
+    "final_price_incl_vat": 153151,
+    "currency": "ZAR"
+  },
+  "notes": [
+    "All measurements taken from technical drawings",
+    "Measurements TBC on site - may affect layout and quotation",
+    "Standard 16mm white melamine/supawood for carcasses",
+    "Wood grain melamine for decorative doors",
+    "38mm postformed laminate benchtops",
+    "Soft-close hardware throughout",
+    "Pricing based on 2026 South African market rates (Durbanville area)",
+    "Excludes: appliances, plumbing, electrical, wall prep, removal of old cupboards, transport",
+    "Estimated timeline: 2-3 weeks from order to completion",
+    "Standard 12-month warranty on workmanship and materials"
+  ],
+  "materials_only_answer": {
+    "total": 63179,
+    "currency": "ZAR",
+    "description": "Total cost for cupboard materials only (excluding labor)",
+    "includes": [
+      "All sheet materials (melamine, backing, benchtops)",
+      "All hardware (hinges, runners, handles)",
+      "Edge banding and adhesives",
+      "10% wastage contingency"
+    ]
+  }
+}
