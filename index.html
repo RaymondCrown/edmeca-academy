@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Tracker - Daily Calorie Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Meal Tracker</h1>
+            <p class="subtitle">Track your daily meals and calories</p>
+        </header>
+
+        <section class="daily-summary">
+            <div class="date-selector">
+                <button id="prev-day" class="btn-nav">&lt;</button>
+                <input type="date" id="current-date">
+                <button id="next-day" class="btn-nav">&gt;</button>
+            </div>
+            <div class="calorie-summary">
+                <div class="calorie-circle">
+                    <span id="total-calories">0</span>
+                    <span class="label">calories</span>
+                </div>
+                <div class="calorie-goal">
+                    <label for="calorie-goal">Daily Goal:</label>
+                    <input type="number" id="calorie-goal" value="2000" min="500" max="10000">
+                    <span>kcal</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+                <p id="remaining-calories" class="remaining">2000 calories remaining</p>
+            </div>
+        </section>
+
+        <section class="add-meal">
+            <h2>Add Food</h2>
+            <div class="meal-type-selector">
+                <button class="meal-type active" data-meal="breakfast">Breakfast</button>
+                <button class="meal-type" data-meal="lunch">Lunch</button>
+                <button class="meal-type" data-meal="dinner">Dinner</button>
+                <button class="meal-type" data-meal="snacks">Snacks</button>
+            </div>
+
+            <div class="food-input">
+                <div class="search-container">
+                    <input type="text" id="food-search" placeholder="Search for food...">
+                    <div id="food-suggestions" class="suggestions-dropdown"></div>
+                </div>
+                <div class="custom-food">
+                    <span>Or add custom:</span>
+                    <input type="text" id="custom-food-name" placeholder="Food name">
+                    <input type="number" id="custom-food-calories" placeholder="Calories" min="0">
+                    <input type="number" id="custom-food-serving" placeholder="Serving (g)" min="0" value="100">
+                </div>
+                <button id="add-food-btn" class="btn-primary">Add Food</button>
+            </div>
+        </section>
+
+        <section class="meals-list">
+            <h2>Today's Meals</h2>
+
+            <div class="meal-section" id="breakfast-section">
+                <div class="meal-header">
+                    <h3>Breakfast</h3>
+                    <span class="meal-calories" id="breakfast-calories">0 kcal</span>
+                </div>
+                <ul class="food-list" id="breakfast-list"></ul>
+            </div>
+
+            <div class="meal-section" id="lunch-section">
+                <div class="meal-header">
+                    <h3>Lunch</h3>
+                    <span class="meal-calories" id="lunch-calories">0 kcal</span>
+                </div>
+                <ul class="food-list" id="lunch-list"></ul>
+            </div>
+
+            <div class="meal-section" id="dinner-section">
+                <div class="meal-header">
+                    <h3>Dinner</h3>
+                    <span class="meal-calories" id="dinner-calories">0 kcal</span>
+                </div>
+                <ul class="food-list" id="dinner-list"></ul>
+            </div>
+
+            <div class="meal-section" id="snacks-section">
+                <div class="meal-header">
+                    <h3>Snacks</h3>
+                    <span class="meal-calories" id="snacks-calories">0 kcal</span>
+                </div>
+                <ul class="food-list" id="snacks-list"></ul>
+            </div>
+        </section>
+
+        <section class="nutrition-summary">
+            <h2>Nutrition Summary</h2>
+            <div class="macro-grid">
+                <div class="macro-item">
+                    <span class="macro-value" id="total-protein">0g</span>
+                    <span class="macro-label">Protein</span>
+                </div>
+                <div class="macro-item">
+                    <span class="macro-value" id="total-carbs">0g</span>
+                    <span class="macro-label">Carbs</span>
+                </div>
+                <div class="macro-item">
+                    <span class="macro-value" id="total-fat">0g</span>
+                    <span class="macro-label">Fat</span>
+                </div>
+                <div class="macro-item">
+                    <span class="macro-value" id="total-fiber">0g</span>
+                    <span class="macro-label">Fiber</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="weekly-history">
+            <h2>Weekly Overview</h2>
+            <div class="week-chart" id="week-chart"></div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
