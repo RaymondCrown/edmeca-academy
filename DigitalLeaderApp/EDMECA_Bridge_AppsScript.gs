@@ -5,6 +5,7 @@ var TABS = {
   Ex2_Prompt: ['Timestamp','Name','Business','Role','Task','Context','Requirements','Reasoning','Boundaries','AssembledPrompt','RatingOutOf10','IterationNotes'],
   Ex3_Ideas: ['Timestamp','SaveId','Name','Business','Idea','Area','Impact','Effort','Quadrant','Priority'],
   Ex3_Map: ['Timestamp','SaveId','Name','Business','IdeaCount','PriorityCount','TopIdeas','PartnerNotes'],
+  Ex2_ProcessMapping: ['Timestamp','Name','Business','ProcessName','ProcessOwner','Steps','Bottlenecks','Handoffs','Accepted'],
   Ex4_Baseline: ['Timestamp','Name','Business','Profile','TotalOutOf20','Dim1_Mindset','Dim2_Operations','Dim3_Growth','Dim4_Innovation','Dim5_Team'],
   Submissions: ['Timestamp','Name','Business']
 };
@@ -79,6 +80,8 @@ function doPost(event) {
       });
       var topIdeas = ideas.filter(function (idea) { return idea.priority || idea.top; }).map(function (idea) { return idea.text || idea.txt || ''; }).join(' | ');
       sheet('Ex3_Map').appendRow([timestamp, saveId, name, business, ideas.length, ideas.filter(function (idea) { return idea.priority || idea.top; }).length, topIdeas, data.partnerNotes || data.notes || '']);
+    } else if (exercise === 's2_process') {
+      sheet('Ex2_ProcessMapping').appendRow([timestamp, name, business, data.processName || '', data.processOwner || '', JSON.stringify(data.steps || []), JSON.stringify(data.bottlenecks || []), JSON.stringify(data.handoffs || []), data.accepted ? 'YES' : '']);
     } else if (exercise === 'e4') {
       var dimensions = data.dims || [];
       sheet('Ex4_Baseline').appendRow([timestamp, name, business, data.profile || '', data.total || '', dimensions[0] || '', dimensions[1] || '', dimensions[2] || '', dimensions[3] || '', dimensions[4] || '']);
