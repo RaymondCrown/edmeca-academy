@@ -18,7 +18,9 @@ The `State` tab is the canonical resume record. The readable exercise tabs are a
 
 ## State payload
 
-The app stores the current participant state in `StateJSON`. Session 1 currently includes:
+The app stores the current participant state in `StateJSON`.
+
+Session 1:
 
 - Exercise 1 snapshot: `data.q1`, `data.q2`, `data.q3`
 - Exercise 2 prompt: `data.task`, `data.context`, `data.role`, `data.requirements`, `data.reasoning`, `data.boundaries`, `data.prompt`, `data.rating`, `data.notes`
@@ -26,23 +28,47 @@ The app stores the current participant state in `StateJSON`. Session 1 currently
 - Exercise 3 pressure test: `data.partnerNotes`
 - Exercise 4 baseline: `profile`, `data.total`, and `data.dims[]`
 
-Session 2 currently adds:
+Session 2 (matches the facilitator deck: Map Two Processes → Redesign and Standardise → Measure and Make It Stick):
 
-- Selected items from Session 1 Exercise 3: `session2Priorities[]`, containing the selected idea indexes
-- Prioritisation rationale: `session2Notes`
-- Process mapping placeholder: `processName`, `processOwner`, and `processNotes`
+- Priorities: `session2Priorities[]` (indexes into Session 1's `ideas[]`), `session2Notes` (why these three)
+- Process maps: `processes[]`, two entries, each `{ name, trigger, steps: [{ text, friction }] }`. `friction` is one of the five kinds from the deck: `repetitive`, `waiting`, `errors`, `bottleneck`, `owner`
+- Chosen process: `chosenProcess` (0 or 1, index into `processes[]`)
+- Redesign: the chosen process's `steps[]` gain `action` (`eliminate` / `simplify` / `combine` / `keep`, the Eliminate-Simplify-Combine ladder) and `split` (`human` / `ai` / `automated`)
+- SOP: `sopText`, the AI-generated SOP the participant pasted back in
+- Baseline: `baselineBefore`, `baselineAfter` (minutes)
+- Operations checklist: `checklist` (map of item key → adopted boolean), artefact 7
+- Pilot: `pilot { process, intervention, tool, owner, baseline, nextStep, nextStepDate }`, the closing commitment artefact
 
 ## Adding future sessions
 
-Each new session should add its own state namespace, for example `session3`, and keep its fields inside the same `StateJSON` object. Add a readable reporting tab in Apps Script only when facilitators need spreadsheet columns for that session. This keeps resume data complete while allowing each session to have different exercises.
+Each new session should add its own state namespace, for example `session3`, and keep its fields inside the same `StateJSON` object. Add a readable reporting tab in Apps Script only when facilitators need spreadsheet columns for that session, and prefix its name with the session number (`S3_...`) so tabs never collide across sessions that reuse the same exercise numbering. This keeps resume data complete while allowing each session to have different exercises.
 
 ## Google Sheet reporting tabs
 
+Cross-session (not prefixed — these track the participant across the whole programme):
+
 - `Participants`: sign-in and submission events
-- `Ex1_Snapshot`: three leadership snapshot answers
-- `Ex2_Prompt`: six prompt blocks, assembled prompt, rating, and iteration notes
-- `Ex3_Ideas`: one row per opportunity idea
-- `Ex3_Map`: idea count, priority count, selected ideas, and pressure-test notes
-- `Ex4_Baseline`: profile, total score, and optional dimensions
-- `State`: one upserted JSON record per participant for cross-device resume
 - `Submissions`: final submission events
+- `State`: one upserted JSON record per participant for cross-device resume
+
+Session 1 (`S1_...`):
+
+- `S1_Ex1_Snapshot`: three leadership snapshot answers
+- `S1_Ex2_Prompt`: six prompt blocks, assembled prompt, rating, and iteration notes
+- `S1_Ex3_Ideas`: one row per opportunity idea
+- `S1_Ex3_Map`: idea count, priority count, selected ideas, and pressure-test notes
+- `S1_Ex4_Baseline`: profile, total score, and optional dimensions
+
+Session 2 (`S2_...`):
+
+- `S2_Priorities`: the up-to-three opportunities carried forward, and the rationale
+- `S2_ProcessMaps`: one row per step, per process — two processes per save, `ProcessNumber` (1 or 2) and `StepNumber` distinguish them, `Friction` holds the tagged friction kind
+- `S2_Redesign`: one row per step of the chosen process, with its Eliminate/Simplify/Combine ladder action and its Human/AI/Automated split
+- `S2_SOP`: the AI-generated SOP text pasted back in for the chosen process
+- `S2_Baseline`: before/after/saved minutes for the chosen process
+- `S2_Checklist`: which daily/weekly/monthly operations-checklist items the participant committed to
+- `S2_Pilot`: the closing six-field pilot commitment — process, intervention, tool, owner, baseline, next step and date
+
+## Note on renaming existing tabs
+
+Apps Script's `sheet()` helper only creates a tab the first time its name is requested — it does not rename an existing tab. If the spreadsheet already has tabs under the old unprefixed names (`Ex1_Snapshot`, `Ex2_Prompt`, `Ex2_ProcessMapping`, `Ex3_Ideas`, `Ex3_Map`, `Ex4_Baseline`), the redeployed script will create fresh `S1_...`/`S2_...` tabs alongside them rather than migrating the old ones. Rename or archive the old tabs by hand in Google Sheets after redeploying.
