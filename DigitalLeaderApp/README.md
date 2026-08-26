@@ -1,6 +1,6 @@
 # EDMECA Digital Leader App
 
-Six-session exercise workbook for Property Point | Growthpoint Enterprise Development Cohort Seven. Session 1 contains the current Digital Leader exercises; Sessions 2-6 are ready for their own exercise content.
+Six-session exercise workbook for Property Point | Growthpoint Enterprise Development Cohort Seven. Session 1 (Digital Leader) and Session 2 (Operations) are built; Sessions 3-6 show a "coming soon" placeholder until their exercise content is added.
 
 ## Run locally
 
@@ -26,7 +26,7 @@ vercel env add EDMECA_BRIDGE_URL production
 
 Set its value to the Apps Script `/exec` URL and redeploy. The browser calls `/api/bridge`; the serverless function forwards GET resume requests and POST save events to Apps Script.
 
-The Apps Script creates reporting tabs on demand. The new `Ex2_ProcessMapping` tab appears after the first successful accepted process-map save. Existing localStorage entries are not automatically uploaded; repeat the save while using the deployed app after the bridge is configured.
+The Apps Script creates reporting tabs on demand, prefixed by session (`S1_...`, `S2_...`) — see `DATA_MODEL.md` for the full list. Existing localStorage entries are not automatically uploaded; repeat the save while using the deployed app after the bridge is configured.
 
 ## App files
 

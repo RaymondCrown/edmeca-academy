@@ -26,7 +26,6 @@ Session 1:
 - Exercise 2 prompt: `data.task`, `data.context`, `data.role`, `data.requirements`, `data.reasoning`, `data.boundaries`, `data.prompt`, `data.rating`, `data.notes`
 - Exercise 3 opportunity map: `ideas[]`, each with `text`, `area`, `impact`, `effort`, and `priority`
 - Exercise 3 pressure test: `data.partnerNotes`
-- Exercise 4 baseline: `profile`, `data.total`, and `data.dims[]`
 
 Session 2 (matches the facilitator deck: Map Two Processes → Redesign and Standardise → Measure and Make It Stick):
 
@@ -57,7 +56,6 @@ Session 1 (`S1_...`):
 - `S1_Ex2_Prompt`: six prompt blocks, assembled prompt, rating, and iteration notes
 - `S1_Ex3_Ideas`: one row per opportunity idea
 - `S1_Ex3_Map`: idea count, priority count, selected ideas, and pressure-test notes
-- `S1_Ex4_Baseline`: profile, total score, and optional dimensions
 
 Session 2 (`S2_...`):
 
@@ -72,3 +70,7 @@ Session 2 (`S2_...`):
 ## Note on renaming existing tabs
 
 Apps Script's `sheet()` helper only creates a tab the first time its name is requested — it does not rename an existing tab. If the spreadsheet already has tabs under the old unprefixed names (`Ex1_Snapshot`, `Ex2_Prompt`, `Ex2_ProcessMapping`, `Ex3_Ideas`, `Ex3_Map`, `Ex4_Baseline`), the redeployed script will create fresh `S1_...`/`S2_...` tabs alongside them rather than migrating the old ones. Rename or archive the old tabs by hand in Google Sheets after redeploying.
+
+## Note on Session 1 Exercise 4 (retired)
+
+Session 1 no longer has a fourth exercise — the "Your Baseline, Revealed" profile/score step (Thinker/Builder/Doer, total score, five dimension scores) was removed from the workbook entirely, not just renamed. There is no `S1_Ex4_Baseline` tab; if an old `Ex4_Baseline` tab exists from before, it can be archived.
