@@ -9,7 +9,7 @@ var TABS = {
   S2_Priorities: ['Timestamp','Name','Business','SelectedIdeas','Rationale'],
   S2_ProcessMaps: ['Timestamp','SaveId','Name','Business','ProcessNumber','ProcessName','Trigger','StepNumber','StepText','Friction'],
   S2_Redesign: ['Timestamp','Name','Business','ChosenProcess','StepNumber','StepText','LadderAction','Split'],
-  S2_SOP: ['Timestamp','Name','Business','ChosenProcess','SOPText'],
+  S2_SOP: ['Timestamp','Name','Business','ChosenProcess','SOPPrompt','SOPText'],
   S2_Baseline: ['Timestamp','Name','Business','ChosenProcess','BeforeMinutes','AfterMinutes','SavedMinutes'],
   S2_Checklist: ['Timestamp','Name','Business','AdoptedItems'],
   S2_Pilot: ['Timestamp','Name','Business','Process','Intervention','Tool','Owner','BaselineMinutes','NextStep','NextStepDate']
@@ -106,7 +106,7 @@ function doPost(event) {
         rSheet.appendRow([timestamp, name, business, data.chosenProcess || '', sIndex + 1, step.text || '', step.action || '', step.split || '']);
       });
     } else if (exercise === 's2_sop') {
-      sheet('S2_SOP').appendRow([timestamp, name, business, data.chosenProcess || '', data.sopText || '']);
+      sheet('S2_SOP').appendRow([timestamp, name, business, data.chosenProcess || '', data.sopPrompt || '', data.sopText || '']);
     } else if (exercise === 's2_baseline') {
       var before = Number(data.before) || 0;
       var after = Number(data.after) || 0;

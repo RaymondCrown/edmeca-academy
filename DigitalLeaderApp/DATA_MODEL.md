@@ -33,7 +33,7 @@ Session 2 (matches the facilitator deck: Map Two Processes → Redesign and Stan
 - Process maps: `processes[]`, two entries, each `{ name, trigger, steps: [{ text, friction }] }`. `friction` is one of the five kinds from the deck: `repetitive`, `waiting`, `errors`, `bottleneck`, `owner`
 - Chosen process: `chosenProcess` (0 or 1, index into `processes[]`)
 - Redesign: the chosen process's `steps[]` gain `action` (`eliminate` / `simplify` / `combine` / `keep`, the Eliminate-Simplify-Combine ladder) and `split` (`human` / `ai` / `automated`)
-- SOP: `sopText`, the AI-generated SOP the participant pasted back in
+- SOP: `sopPrompt`, built from the chosen process's steps and their Simplify & split decisions (via the "Build prompt" button); `sopText`, the AI-generated SOP the participant pasted back in after running that prompt
 - Baseline: `baselineBefore`, `baselineAfter` (minutes)
 - Operations checklist: `checklist` (map of item key → adopted boolean), artefact 7
 - Pilot: `pilot { process, intervention, tool, owner, baseline, nextStep, nextStepDate }`, the closing commitment artefact
@@ -62,7 +62,7 @@ Session 2 (`S2_...`):
 - `S2_Priorities`: the up-to-three opportunities carried forward, and the rationale
 - `S2_ProcessMaps`: one row per step, per process — two processes per save, `ProcessNumber` (1 or 2) and `StepNumber` distinguish them, `Friction` holds the tagged friction kind
 - `S2_Redesign`: one row per step of the chosen process, with its Eliminate/Simplify/Combine ladder action and its Human/AI/Automated split
-- `S2_SOP`: the AI-generated SOP text pasted back in for the chosen process
+- `S2_SOP`: the built prompt (from the Simplify & split decisions) and the AI-generated SOP text pasted back in for the chosen process
 - `S2_Baseline`: before/after/saved minutes for the chosen process
 - `S2_Checklist`: which daily/weekly/monthly operations-checklist items the participant committed to
 - `S2_Pilot`: the closing six-field pilot commitment — process, intervention, tool, owner, baseline, next step and date
