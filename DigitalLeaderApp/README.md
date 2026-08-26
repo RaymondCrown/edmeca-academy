@@ -33,3 +33,7 @@ The Apps Script creates reporting tabs on demand, prefixed by session (`S1_...`,
 - `index.html`: six-session navigation, Session 1 exercises, per-user local draft persistence, resume, and save events
 - `api/bridge.js`: same-origin proxy to Apps Script
 - `vercel.json`: route for the bridge function
+
+## Deploying
+
+This app lives in `DigitalLeaderApp/`, a subfolder of the repo. The Vercel project's **Root Directory** must be set to `DigitalLeaderApp` (Settings → General) for git-triggered deploys to find `index.html`; without it, pushes to `main` build from the repo root and 404.
