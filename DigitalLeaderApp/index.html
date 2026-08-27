@@ -13,7 +13,7 @@
 </style>
 </head>
 <body>
-<header><div class="wrap head"><div class="logo">E</div><div class="titles"><div class="kicker">AI Enablement Programme · Session 1 of 6</div><div class="title">Digital Leader - Exercise Workbook</div></div><div class="who" id="who">Not signed in</div></div></header>
+<header><div class="wrap head"><div class="logo">E</div><div class="titles"><div class="kicker">AI Enablement Programme · Session 1 of 6</div><div class="title">Digital Leader - Exercise Workbook</div></div><div class="who" id="who">Not signed in</div><button class="btn ghost" id="signOutBtn" style="display:none;padding:6px 14px;font-size:12px" onclick="signOut()">Sign out</button></div></header>
 <nav class="session-nav"><div class="wrap session-tabs" id="sessionTabs"></div><div class="wrap steps" id="steps"></div></nav>
 <main class="wrap">
 <section class="show" id="s0"><div class="hero"><div class="kicker" style="color:#c9f2bc">Property Point · Growthpoint Enterprise Development · Cohort Seven</div><h1>Welcome, Digital Leader.</h1><p>This workbook walks you through today's three exercises. Your answers save as you go, and you can come back to them on any device.</p><div class="meta">Facilitated by EDMECA · From Framework to Execution to Evidence</div></div><div class="grid3" id="exerciseList"></div><div class="card"><h3>Who are you?</h3><div class="hint">Use the same name and business every time so the workbook can find your saved answers.</div><div class="grid2"><div><label>Your name</label><input id="name" placeholder="e.g. Sipho Dlamini"></div><div><label>Business name</label><input id="business" placeholder="e.g. Dlamini Electrical"></div></div><button class="btn primary" style="margin-top:18px" onclick="signIn()">Start the exercises -&gt;</button></div></section>
@@ -62,7 +62,23 @@ const sessionSelect=selectSession;
 sessionTabs.insertAdjacentHTML('afterbegin','<button class="session-tab login-tab active" type="button" onclick="selectLogin()">Login<span>Participant access</span></button>');
 function setTopTab(active){document.querySelectorAll('.session-tab').forEach(tab=>tab.classList.toggle('active',tab===active))}
 function signedIn(){return !!(state.name&&state.business)}
-function updateTabLocks(){document.querySelectorAll('.session-tab').forEach(tab=>{if(!tab.classList.contains('login-tab'))tab.classList.toggle('locked',!signedIn())})}
+function updateTabLocks(){document.querySelectorAll('.session-tab').forEach(tab=>{if(!tab.classList.contains('login-tab'))tab.classList.toggle('locked',!signedIn())});const signOutBtn=$('signOutBtn');if(signOutBtn)signOutBtn.style.display=signedIn()?'':'none'}
+function signOut(){
+	clearTimeout(draftTimer);
+	Object.keys(localStorage).filter(k=>k.startsWith('edmeca:')).forEach(k=>localStorage.removeItem(k));
+	delete state.step;delete state.session2Step;
+	Object.assign(state,{name:'',business:'',area:'Operations',ideas:[],rating:0,session2Priorities:[],session2Notes:'',processes:[{name:'',trigger:'',steps:[]},{name:'',trigger:'',steps:[]}],chosenProcess:null,sopPrompt:'',sopText:'',baselineBefore:'',baselineAfter:'',checklist:{},pilot:{},session:1});
+	session2Step=0;
+	['name','business','q1','q2','q3','task','context','role','requirements','reasoning','boundaries','e2notes','e3notes','ideaText'].forEach(id=>{if($(id))$(id).value=''});
+	document.querySelectorAll('.rating button').forEach(b=>b.classList.remove('selected'));
+	build();
+	renderIdeas();
+	$('who').textContent='Not signed in';
+	sessionLabel.textContent='AI Enablement Programme · Session 1 of 6';
+	updateTabLocks();
+	selectLogin();
+	toast('Signed out and cleared local data.');
+}
 function trySelectSession(number){if(!signedIn()){toast('Sign in first — enter your name and business, then Start the exercises.');return selectLogin();}selectSession(number);}
 function selectLogin(){
 	document.querySelectorAll('main section').forEach(section=>section.classList.remove('show'));
