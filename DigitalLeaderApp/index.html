@@ -10,6 +10,35 @@
 .login-tab{border-right:1px solid var(--line);margin-right:6px;color:var(--deep)}.login-tab.active{background:var(--green-tint);border-color:#cbe9be}.login-tab span{color:var(--green)}
 .session-tab.locked{opacity:.45;cursor:not-allowed}
 #exerciseList{display:none}.login-only-copy{display:none}
+.opp{border:1px solid var(--line);border-radius:11px;padding:14px;margin-bottom:10px}
+.opp.chosen{border-color:var(--bright);background:var(--green-tint)}
+.opp-head{display:flex;gap:10px;align-items:center}
+.opp-head .num{font-weight:800;color:var(--faint);font-size:13px}
+.opp-head input{flex:1}
+.scorerow{display:grid;grid-template-columns:repeat(3,1fr) auto;gap:10px;align-items:end;margin-top:10px}
+.scorerow label{margin:0 0 4px}
+.total{font-weight:800;color:var(--deep);font-size:13px;white-space:nowrap;padding-bottom:11px}
+.evrow{display:grid;grid-template-columns:1.3fr 1.7fr .8fr .9fr 1.3fr auto;gap:8px;align-items:center;margin-bottom:8px}
+.evrow input{font-size:13px;padding:8px 10px}
+.evhead{display:grid;grid-template-columns:1.3fr 1.7fr .8fr .9fr 1.3fr auto;gap:8px;font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+.gaprow{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px}
+.rowdel{border:0;background:none;color:var(--faint);cursor:pointer;font-weight:800;padding:6px}
+.rowdel:hover{color:var(--red)}
+.sortrow{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border-bottom:1px solid var(--line);padding:9px 0}
+.sortopts{display:flex;gap:5px}
+.sortopts button{border:1.5px solid var(--line);border-radius:8px;background:#fff;color:var(--soft);font-size:11px;font-weight:750;padding:6px 10px;cursor:pointer;white-space:nowrap}
+.sortopts button.on{background:var(--purple);color:#fff;border-color:var(--purple)}
+.sortopts button.on.warn{background:var(--red);border-color:var(--red)}
+.ptable{width:100%;border-collapse:collapse;font-size:13px}
+.ptable th{text-align:left;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--faint);padding:8px 10px;border-bottom:1px solid var(--line)}
+.ptable td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.ptable td:first-child{font-weight:750;color:var(--deep);white-space:nowrap}
+.tick{color:var(--green);font-weight:800}
+.drop{border:1.5px dashed var(--purple-line);border-radius:10px;background:var(--purple-tint);padding:12px 14px;margin:8px 0 6px;font-size:13px;color:var(--soft)}
+.drop.over{border-color:var(--purple);background:#ebe7fb}
+.drop small{display:block;color:var(--faint);font-size:11px;margin-top:4px}
+.drop label{display:inline;margin:0;color:var(--purple);cursor:pointer;font-weight:750;font-size:13px}
+@media(max-width:760px){.scorerow{grid-template-columns:1fr 1fr}.evrow,.evhead,.gaprow{grid-template-columns:1fr}.evhead{display:none}.sortrow{grid-template-columns:1fr}.sortopts{flex-wrap:wrap}}
 </style>
 </head>
 <body>
@@ -17,14 +46,15 @@
 <nav class="session-nav"><div class="wrap session-tabs" id="sessionTabs"></div><div class="wrap steps" id="steps"></div></nav>
 <main class="wrap">
 <section class="show" id="s0"><div class="hero"><div class="kicker" style="color:#c9f2bc">Property Point · Growthpoint Enterprise Development · Cohort Seven</div><h1>Welcome, Digital Leader.</h1><p>This workbook walks you through today's three exercises. Your answers save as you go, and you can come back to them on any device.</p><div class="meta">Facilitated by EDMECA · From Framework to Execution to Evidence</div></div><div class="grid3" id="exerciseList"></div><div class="card"><h3>Who are you?</h3><div class="hint">Use the same name and business every time so the workbook can find your saved answers.</div><div class="grid2"><div><label>Your name</label><input id="name" placeholder="e.g. Sipho Dlamini"></div><div><label>Business name</label><input id="business" placeholder="e.g. Dlamini Electrical"></div></div><button class="btn primary" style="margin-top:18px" onclick="signIn()">Start the exercises -&gt;</button></div></section>
-<section id="sessionPlaceholder"><div id="session2Content"></div><div class="session-placeholder" id="comingSoon" style="display:none"><h1>Session <span id="placeholderNumber">3</span> is coming soon</h1><p>This part of the workbook isn't built yet.</p></div></section>
+<section id="sessionPlaceholder"><div id="session2Content"></div><div id="session3Content"></div><div class="session-placeholder" id="comingSoon" style="display:none"><h1>Session <span id="placeholderNumber">3</span> is coming soon</h1><p>This part of the workbook isn't built yet.</p></div></section>
 <section id="s1"><div class="lead"><span class="time">10 MINUTES · WORKING ALONE</span><h1><b>Exercise 1:</b> Your Leadership Snapshot</h1><p>Short answers are fine. You will share one answer with the group.</p></div><div class="card"><label>1 · Where does your time go?</label><textarea id="q1" placeholder="Quotes and follow-ups: 6 hrs/week, site reports: 4 hrs..."></textarea><label>2 · What would you do with 10 extra hours a week?</label><textarea id="q2" placeholder="More site visits, two more tenders a month, home by 17:00..."></textarea><label>3 · What is one thing a competitor does better or faster?</label><textarea id="q3" placeholder="They turn quotes around same-day..."></textarea></div><div class="actions"><span class="hint">Answers auto-save when you continue.</span><button class="btn primary" onclick="save(1);go(2)">Save &amp; continue -&gt;</button></div></section>
 <section id="s2"><div class="lead"><span class="time">20 MINUTES · YOUR LAPTOP OR PHONE</span><h1><b>Exercise 2:</b> Create a Business Prompt</h1><p>Pick one time-drain task. Fill in the blocks, run the prompt, judge the result, then refine it.</p></div><div class="blocks"><div class="card"><h3>The six building blocks</h3><div class="hint">Your prompt assembles itself on the right as you type.</div><div id="blockFields"></div></div><div><div class="card"><h3>Your assembled prompt</h3><div class="prompt" id="prompt"><span class="placeholder">Your prompt appears here as you fill in the blocks...</span></div><div class="actions" style="margin-top:10px"><span class="hint" id="blockCount">0 of 6 blocks used</span><button class="btn purple" onclick="copyPrompt()">Copy prompt</button></div></div><div class="card"><h3>How did it go?</h3><label>Rate your best result out of 10</label><div class="rating" id="rating"></div><label>What changed between your first and best run?</label><textarea id="e2notes" placeholder="Adding Boundaries stopped it inventing prices..."></textarea></div></div></div><div class="actions"><button class="btn ghost" onclick="go(1)">Back</button><button class="btn primary" onclick="save(2);go(3)">Save &amp; continue -&gt;</button></div></section>
 <section id="s3"><div class="lead"><span class="time">40 MINUTES · SCAN → SCORE → SELECT → SHARE</span><h1><b>Exercise 3:</b> Your AI Opportunity Map</h1><p>Capture 8 to 12 raw ideas, score impact and effort, then star your top 3 to 5.</p></div><div class="card"><h3>1 · Capture ideas</h3><div class="hint" style="margin-bottom:12px">Pick an area, describe the task, and score it. The grid plots it for you.<br>Impact = time, money or stress it would save if fixed. Effort = how hard or costly it is to actually set up.</div><div class="chips" id="areas"></div><div class="grid3"><div><label>The task</label><input id="ideaText" placeholder="Quotation cover notes rewritten for every client"></div><div><label>Impact</label><select id="impact"><option>High</option><option>Medium</option><option>Low</option></select></div><div><label>Effort</label><select id="effort"><option>Low</option><option>Medium</option><option>High</option></select></div></div><button class="btn purple" style="margin-top:18px" onclick="addIdea()">Add idea</button><div class="ideas" id="ideas"></div></div><div class="grid2"><div class="card"><h3>2 · Your grid</h3><div class="hint">Green dots are quick wins. Star an idea to mark it as a priority.</div><div class="matrix" id="matrix"><div class="quad q1">Quick wins · do first</div><div class="quad q2">Big bets · plan</div><div class="quad q3">Fill-ins · maybe</div><div class="quad q4">Time sinks · avoid</div></div></div><div class="card"><h3>3 · Pressure-test</h3><label>Ideas captured: <span id="ideaCount">0</span> · Priorities starred: <span id="topCount">0</span></label><label style="color:var(--faint)">What did your partner challenge, and what changed? <span style="font-weight:400">(retired — no longer collected)</span></label><textarea id="e3notes" placeholder="Thandi asked how many hours the tender checklist really saves..." disabled style="opacity:.55;cursor:not-allowed"></textarea></div></div><div class="actions"><button class="btn ghost" onclick="go(2)">Back</button><button class="btn primary" onclick="save(3);go(4)">Save &amp; continue -&gt;</button></div></section>
 <section id="s4"><div class="lead"><h1><b>Done.</b> Your Session 1 artefacts</h1><p>Everything below is saved against your name. Bring it to Session 2 - Operations - where we automate one of these.</p></div><div class="card" id="summary"></div><div class="card" style="background:var(--green-tint);border-color:#cbe9be"><h3>Before Session 2: keep the momentum</h3><div class="hint">Run your Exercise 2 prompt on one real task every working day. Test the easiest quick win and note the minutes each AI-assisted task saved.</div></div><div class="actions"><button class="btn ghost" onclick="go(3)">Back</button><button class="btn primary" onclick="save('submit');toast('Workbook submitted to the facilitator sheet.')">Submit my workbook</button></div></section>
 </main><footer>EDMECA · AI Enablement Programme · From Framework to Execution to Evidence · <a target="_blank" rel="noreferrer" href="https://www.edmeca.co.za">www.edmeca.co.za</a></footer><div class="toast" id="toast"></div>
 <script>
-const state={name:'',business:'',area:'Operations',ideas:[],rating:0,session2Priorities:[],session2Notes:'',processes:[{name:'',trigger:'',steps:[]},{name:'',trigger:'',steps:[]}],chosenProcess:null,sopPrompt:'',sopText:'',baselineBefore:'',baselineAfter:'',checklist:{},pilot:{}};const areas=['Operations','Sales & Clients','Money','People','Marketing','Data & Decisions'];const blocks=[['task','Task - what must it do?','Draft a maintenance quotation'],['context','Context - the situation','Commercial client, two chillers, six month service'],['role','Role - who should it be?','You are an experienced HVAC estimator'],['requirements','Requirements - format, style, scope','Short email with a line-item table'],['reasoning','Reasoning - show its thinking','List your assumptions before you price anything'],['boundaries','Boundaries - what it may not do','Do not invent prices. Mark unknown rates TO CONFIRM']];const $=id=>document.getElementById(id);function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t.timer);t.timer=setTimeout(()=>t.classList.remove('show'),3000)}function go(n){document.querySelectorAll('section').forEach(s=>s.classList.remove('show'));$('s'+n).classList.add('show');document.querySelectorAll('.step').forEach((s,i)=>{s.classList.toggle('active',i===n);s.classList.toggle('done',i<n)});if(n>0){state.step=n;syncState();}if(n===4)summary();scrollTo({top:0,behavior:'smooth'})}function signIn(){const newName=$('name').value.trim();const newBusiness=$('business').value.trim();if(!newName||!newBusiness)return toast('Please enter your name and business name.');clearWorkspace();state.name=newName;state.business=newBusiness;$('who').textContent=state.name+' · '+state.business;updateTabLocks();load().then(foundOnSheet=>{toast(foundOnSheet?('Welcome back, '+state.name.split(' ')[0]+'. Picking up where you left off.'):('Welcome '+state.name.split(' ')[0]));const resumeSession=(foundOnSheet&&state.session)?state.session:1;if(resumeSession===2)session2Step=state.session2Step||0;selectSession(resumeSession);if(resumeSession===1)showSession1Exercise((foundOnSheet&&state.step)?Math.min(Math.max(state.step-1,0),3):0)})}function data(){return{q1:$('q1').value,q2:$('q2').value,q3:$('q3').value,task:$('task').value,context:$('context').value,role:$('role').value,requirements:$('requirements').value,reasoning:$('reasoning').value,boundaries:$('boundaries').value,prompt:$('prompt').innerText,rating:state.rating,notes:$('e2notes').value,ideas:state.ideas,partnerNotes:$('e3notes').value}}function save(ex){const payload={name:state.name,business:state.business,exercise:ex==='submit'?'submit':'e'+ex,data:data(),state:{...state,data:data()},timestamp:new Date().toISOString()};localStorage.setItem('edmeca:'+state.name.toLowerCase()+'|'+state.business.toLowerCase(),JSON.stringify(payload));fetch('/api/bridge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});toast('Saved locally'+(ex==='submit'?' and submitted':'')+'.')}function syncState(){if(!state.name||!state.business)return;const payload={name:state.name,business:state.business,state:{...state,data:data()},timestamp:new Date().toISOString()};localStorage.setItem('edmeca:'+state.name.toLowerCase()+'|'+state.business.toLowerCase(),JSON.stringify(payload));fetch('/api/bridge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{})}async function load(){const key='edmeca:'+state.name.toLowerCase()+'|'+state.business.toLowerCase();let foundOnSheet=false;try{const local=JSON.parse(localStorage.getItem(key)||'null');if(local?.state)restore(local.state);const r=await fetch('/api/bridge?'+new URLSearchParams({action:'load',name:state.name,business:state.business}));const remote=await r.json();if(remote.found){restore(remote.state);foundOnSheet=true}}catch(_){}return foundOnSheet}function restore(s){Object.assign(state,s);let d=s.data;if(!d&&(s.e1||s.e2||s.e3)){d={...(s.e1||{}),...(s.e2||{})};if(s.e2&&s.e2.notes!=null)d.e2notes=s.e2.notes;if(s.e3){d.e3notes=s.e3.notes||'';state.ideas=(s.e3.ideas||[]).map(i=>({text:i.text||i.txt||'',area:i.area||'',impact:i.impact||i.imp||'',effort:i.effort||i.eff||'',priority:!!(i.priority||i.top)}))}if(s.e2&&s.e2.rating!=null)state.rating=s.e2.rating}d=d||s||{};['q1','q2','q3','e2notes','e3notes'].forEach(id=>{if(d[id]!=null&&$(id))$(id).value=d[id]});blocks.forEach(([id])=>{if(d[id]!=null)$(id).value=d[id]});if($('rating'))document.querySelectorAll('#rating button').forEach((b,n)=>b.classList.toggle('selected',n<(state.rating||0)));build();renderIdeas()}function build(){const text=blocks.map(([id])=>$(id).value.trim()).filter(Boolean).join('\n\n');$('prompt').innerHTML=text?text.replaceAll('&','&amp;').replaceAll('<','&lt;'):'<span class="placeholder">Your prompt appears here as you fill in the blocks...</span>';$('blockCount').textContent=blocks.filter(([id])=>$(id).value.trim()).length+' of 6 blocks used'}function copyPrompt(){navigator.clipboard?.writeText($('prompt').innerText).then(()=>toast('Prompt copied.'))}function quadrant(i){const im={High:3,Medium:2,Low:1}[i.impact],ef={High:3,Medium:2,Low:1}[i.effort];if(im>=2&&ef<=1)return['QUICK WIN','win'];if(im>=2.5&&ef>=2)return['BIG BET','bet'];if(im<=1.5&&ef>=2.5)return['TIME SINK','sink'];if(im<=2&&ef<=2)return['FILL-IN','fill'];return['PLAN','bet']}function addIdea(){const text=$('ideaText').value.trim();if(!text)return toast('Describe the task first.');state.ideas.push({text,area:state.area,impact:$('impact').value,effort:$('effort').value,priority:false});$('ideaText').value='';renderIdeas()}function renderIdeas(){$('ideas').innerHTML=state.ideas.map((i,n)=>{const[q,c]=quadrant(i);return`<div class="idea"><button class="star ${i.priority?'selected':''}" onclick="priority(${n})">★</button><div class="text">${i.text}<small>${i.area} · Impact ${i.impact} · Effort ${i.effort}</small></div><span class="tag ${c}">${q}</span><button onclick="state.ideas.splice(${n},1);renderIdeas()">X</button></div>`}).join('');$('ideaCount').textContent=state.ideas.length+' (aim for 8-12)';$('topCount').textContent=state.ideas.filter(i=>i.priority).length+' (pick 3-5)';document.querySelectorAll('.dot').forEach(d=>d.remove());state.ideas.forEach((i,n)=>{const d=document.createElement('div');d.className='dot '+quadrant(i)[1]+(i.priority?' priority':'');d.style.left=((({Low:1,Medium:2,High:3}[i.effort]-1)/2)*70+15)+'%';d.style.top=((1-(({Low:1,Medium:2,High:3}[i.impact]-1)/2))*70+15)+'%';d.textContent=n+1;$('matrix').appendChild(d)})}function priority(n){if(!state.ideas[n].priority&&state.ideas.filter(i=>i.priority).length>=5)return toast('Five priorities is the limit.');state.ideas[n].priority=!state.ideas[n].priority;renderIdeas()}function summary(){const d=data(),tops=state.ideas.filter(i=>i.priority).map(i=>'★ '+i.text).join('\n')||'(none starred yet)';$('summary').innerHTML=`<div class="review"><h4>Participant</h4><p>${state.name} · ${state.business}</p></div><div class="review"><h4>Exercise 1 · Leadership Snapshot</h4><p>${[d.q1,d.q2,d.q3].filter(Boolean).join('\n')||'(not completed)'}</p></div><div class="review"><h4>Exercise 2 · Business Prompt - rated ${state.rating||'-'}/10</h4><p>${d.prompt.slice(0,500)||'(not completed)'}</p></div><div class="review"><h4>Exercise 3 · Opportunity Map - ${state.ideas.length} ideas</h4><p>${tops}</p></div>`}
+function blankSession3(){return{gtmWho:'',gtmKnownFor:'',gtmWhere:'',opportunities:[],chosenOpportunity:null,evidence:[],sort:{},sector:'',capPrompt:'',capText:'',rubric:{},quoteBlocks:{},quotePrefilled:false,quotePrompt:'',quoteText:'',exampleText:'',exampleSource:'',gaps:[],commsPrompt:'',commsText:'',rhythm:{},pilot:{}}}
+const state={name:'',business:'',area:'Operations',ideas:[],rating:0,session2Priorities:[],session2Notes:'',processes:[{name:'',trigger:'',steps:[]},{name:'',trigger:'',steps:[]}],chosenProcess:null,sopPrompt:'',sopText:'',baselineBefore:'',baselineAfter:'',checklist:{},pilot:{},session3:blankSession3()};const areas=['Operations','Sales & Clients','Money','People','Marketing','Data & Decisions'];const blocks=[['task','Task - what must it do?','Draft a maintenance quotation'],['context','Context - the situation','Commercial client, two chillers, six month service'],['role','Role - who should it be?','You are an experienced HVAC estimator'],['requirements','Requirements - format, style, scope','Short email with a line-item table'],['reasoning','Reasoning - show its thinking','List your assumptions before you price anything'],['boundaries','Boundaries - what it may not do','Do not invent prices. Mark unknown rates TO CONFIRM']];const $=id=>document.getElementById(id);function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t.timer);t.timer=setTimeout(()=>t.classList.remove('show'),3000)}function go(n){document.querySelectorAll('section').forEach(s=>s.classList.remove('show'));$('s'+n).classList.add('show');document.querySelectorAll('.step').forEach((s,i)=>{s.classList.toggle('active',i===n);s.classList.toggle('done',i<n)});if(n>0){state.step=n;syncState();}if(n===4)summary();scrollTo({top:0,behavior:'smooth'})}function signIn(){const newName=$('name').value.trim();const newBusiness=$('business').value.trim();if(!newName||!newBusiness)return toast('Please enter your name and business name.');clearWorkspace();state.name=newName;state.business=newBusiness;$('who').textContent=state.name+' · '+state.business;updateTabLocks();load().then(foundOnSheet=>{toast(foundOnSheet?('Welcome back, '+state.name.split(' ')[0]+'. Picking up where you left off.'):('Welcome '+state.name.split(' ')[0]));const resumeSession=(foundOnSheet&&state.session)?state.session:1;if(resumeSession===2)session2Step=state.session2Step||0;if(resumeSession===3)session3Step=state.session3Step||0;selectSession(resumeSession);if(resumeSession===1)showSession1Exercise((foundOnSheet&&state.step)?Math.min(Math.max(state.step-1,0),3):0)})}function data(){return{q1:$('q1').value,q2:$('q2').value,q3:$('q3').value,task:$('task').value,context:$('context').value,role:$('role').value,requirements:$('requirements').value,reasoning:$('reasoning').value,boundaries:$('boundaries').value,prompt:$('prompt').innerText,rating:state.rating,notes:$('e2notes').value,ideas:state.ideas,partnerNotes:$('e3notes').value}}function save(ex){const payload={name:state.name,business:state.business,exercise:ex==='submit'?'submit':'e'+ex,data:data(),state:{...state,data:data()},timestamp:new Date().toISOString()};localStorage.setItem('edmeca:'+state.name.toLowerCase()+'|'+state.business.toLowerCase(),JSON.stringify(payload));fetch('/api/bridge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});toast('Saved locally'+(ex==='submit'?' and submitted':'')+'.')}function syncState(){if(!state.name||!state.business)return;const payload={name:state.name,business:state.business,state:{...state,data:data()},timestamp:new Date().toISOString()};localStorage.setItem('edmeca:'+state.name.toLowerCase()+'|'+state.business.toLowerCase(),JSON.stringify(payload));fetch('/api/bridge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{})}async function load(){const key='edmeca:'+state.name.toLowerCase()+'|'+state.business.toLowerCase();let foundOnSheet=false;try{const local=JSON.parse(localStorage.getItem(key)||'null');if(local?.state)restore(local.state);const r=await fetch('/api/bridge?'+new URLSearchParams({action:'load',name:state.name,business:state.business}));const remote=await r.json();if(remote.found){restore(remote.state);foundOnSheet=true}}catch(_){}return foundOnSheet}function restore(s){Object.assign(state,s);state.session3={...blankSession3(),...(s.session3||{})};let d=s.data;if(!d&&(s.e1||s.e2||s.e3)){d={...(s.e1||{}),...(s.e2||{})};if(s.e2&&s.e2.notes!=null)d.e2notes=s.e2.notes;if(s.e3){d.e3notes=s.e3.notes||'';state.ideas=(s.e3.ideas||[]).map(i=>({text:i.text||i.txt||'',area:i.area||'',impact:i.impact||i.imp||'',effort:i.effort||i.eff||'',priority:!!(i.priority||i.top)}))}if(s.e2&&s.e2.rating!=null)state.rating=s.e2.rating}d=d||s||{};['q1','q2','q3','e2notes','e3notes'].forEach(id=>{if(d[id]!=null&&$(id))$(id).value=d[id]});blocks.forEach(([id])=>{if(d[id]!=null)$(id).value=d[id]});if($('rating'))document.querySelectorAll('#rating button').forEach((b,n)=>b.classList.toggle('selected',n<(state.rating||0)));build();renderIdeas()}function build(){const text=blocks.map(([id])=>$(id).value.trim()).filter(Boolean).join('\n\n');$('prompt').innerHTML=text?text.replaceAll('&','&amp;').replaceAll('<','&lt;'):'<span class="placeholder">Your prompt appears here as you fill in the blocks...</span>';$('blockCount').textContent=blocks.filter(([id])=>$(id).value.trim()).length+' of 6 blocks used'}function copyPrompt(){navigator.clipboard?.writeText($('prompt').innerText).then(()=>toast('Prompt copied.'))}function quadrant(i){const im={High:3,Medium:2,Low:1}[i.impact],ef={High:3,Medium:2,Low:1}[i.effort];if(im>=2&&ef<=1)return['QUICK WIN','win'];if(im>=2.5&&ef>=2)return['BIG BET','bet'];if(im<=1.5&&ef>=2.5)return['TIME SINK','sink'];if(im<=2&&ef<=2)return['FILL-IN','fill'];return['PLAN','bet']}function addIdea(){const text=$('ideaText').value.trim();if(!text)return toast('Describe the task first.');state.ideas.push({text,area:state.area,impact:$('impact').value,effort:$('effort').value,priority:false});$('ideaText').value='';renderIdeas()}function renderIdeas(){$('ideas').innerHTML=state.ideas.map((i,n)=>{const[q,c]=quadrant(i);return`<div class="idea"><button class="star ${i.priority?'selected':''}" onclick="priority(${n})">★</button><div class="text">${i.text}<small>${i.area} · Impact ${i.impact} · Effort ${i.effort}</small></div><span class="tag ${c}">${q}</span><button onclick="state.ideas.splice(${n},1);renderIdeas()">X</button></div>`}).join('');$('ideaCount').textContent=state.ideas.length+' (aim for 8-12)';$('topCount').textContent=state.ideas.filter(i=>i.priority).length+' (pick 3-5)';document.querySelectorAll('.dot').forEach(d=>d.remove());state.ideas.forEach((i,n)=>{const d=document.createElement('div');d.className='dot '+quadrant(i)[1]+(i.priority?' priority':'');d.style.left=((({Low:1,Medium:2,High:3}[i.effort]-1)/2)*70+15)+'%';d.style.top=((1-(({Low:1,Medium:2,High:3}[i.impact]-1)/2))*70+15)+'%';d.textContent=n+1;$('matrix').appendChild(d)})}function priority(n){if(!state.ideas[n].priority&&state.ideas.filter(i=>i.priority).length>=5)return toast('Five priorities is the limit.');state.ideas[n].priority=!state.ideas[n].priority;renderIdeas()}function summary(){const d=data(),tops=state.ideas.filter(i=>i.priority).map(i=>'★ '+i.text).join('\n')||'(none starred yet)';$('summary').innerHTML=`<div class="review"><h4>Participant</h4><p>${state.name} · ${state.business}</p></div><div class="review"><h4>Exercise 1 · Leadership Snapshot</h4><p>${[d.q1,d.q2,d.q3].filter(Boolean).join('\n')||'(not completed)'}</p></div><div class="review"><h4>Exercise 2 · Business Prompt - rated ${state.rating||'-'}/10</h4><p>${d.prompt.slice(0,500)||'(not completed)'}</p></div><div class="review"><h4>Exercise 3 · Opportunity Map - ${state.ideas.length} ideas</h4><p>${tops}</p></div>`}
 $('steps').innerHTML=['Start|Sign in','Exercise 1|Snapshot','Exercise 2|Prompt','Exercise 3|Opportunity Map','Finish|Review'].map((x,i)=>{const[a,b]=x.split('|');return`<div class="step" onclick="${i?'go('+i+')':'go(0)'}"><small>${a}</small>${b}</div>`}).join('');$('exerciseList').innerHTML=[['EX 1 · 10 MIN','Your Leadership Snapshot','Three questions on where your time goes'],['EX 2 · 20 MIN','Create a Business Prompt','Build a prompt with six blocks'],['EX 3 · 40 MIN','Your AI Opportunity Map','Scan, score and pick your top ideas']].map(x=>`<div class="card"><span class="time">${x[0]}</span><h3>${x[1]}</h3><div class="hint">${x[2]}</div></div>`).join('');$('blockFields').innerHTML=blocks.map(([id,label,ph])=>`<label>${label}</label><input id="${id}" placeholder="${ph}" oninput="build()">`).join('');$('rating').innerHTML=Array.from({length:10},(_,i)=>`<button onclick="state.rating=${i+1};document.querySelectorAll('.rating button').forEach((b,n)=>b.classList.toggle('selected',n<state.rating))">${i+1}</button>`).join('');$('areas').innerHTML=areas.map(a=>`<button class="chip ${a===state.area?'selected':''}" onclick="state.area='${a}';$('areas').querySelectorAll('.chip').forEach(c=>c.classList.toggle('selected',c.textContent===state.area))">${a}</button>`).join('');
 </script>
 <script>
@@ -65,9 +95,9 @@ function signedIn(){return !!(state.name&&state.business)}
 function updateTabLocks(){document.querySelectorAll('.session-tab').forEach(tab=>{if(!tab.classList.contains('login-tab'))tab.classList.toggle('locked',!signedIn())});const signOutBtn=$('signOutBtn');if(signOutBtn)signOutBtn.style.display=signedIn()?'':'none'}
 function clearWorkspace(){
 	clearTimeout(draftTimer);
-	delete state.step;delete state.session2Step;
-	Object.assign(state,{name:'',business:'',area:'Operations',ideas:[],rating:0,session2Priorities:[],session2Notes:'',processes:[{name:'',trigger:'',steps:[]},{name:'',trigger:'',steps:[]}],chosenProcess:null,sopPrompt:'',sopText:'',baselineBefore:'',baselineAfter:'',checklist:{},pilot:{},session:1});
-	session2Step=0;
+	delete state.step;delete state.session2Step;delete state.session3Step;
+	Object.assign(state,{name:'',business:'',area:'Operations',ideas:[],rating:0,session2Priorities:[],session2Notes:'',processes:[{name:'',trigger:'',steps:[]},{name:'',trigger:'',steps:[]}],chosenProcess:null,sopPrompt:'',sopText:'',baselineBefore:'',baselineAfter:'',checklist:{},pilot:{},session3:blankSession3(),session:1});
+	session2Step=0;session3Step=0;
 	['q1','q2','q3','task','context','role','requirements','reasoning','boundaries','e2notes','e3notes','ideaText'].forEach(id=>{if($(id))$(id).value=''});
 	document.querySelectorAll('.rating button').forEach(b=>b.classList.remove('selected'));
 	build();
@@ -105,12 +135,20 @@ selectSession=function(number){
 		showSession1Exercise(0);
 	}else if(number===2){
 		document.getElementById('session2Content').style.display='';
+		document.getElementById('session3Content').style.display='none';
 		document.getElementById('comingSoon').style.display='none';
 		renderSession2();
+		if(signedIn())syncState();
+	}else if(number===3){
+		document.getElementById('session2Content').style.display='none';
+		document.getElementById('session3Content').style.display='';
+		document.getElementById('comingSoon').style.display='none';
+		renderSession3();
 		if(signedIn())syncState();
 	}else{
 		document.getElementById('steps').style.display='none';
 		document.getElementById('session2Content').style.display='none';
+		document.getElementById('session3Content').style.display='none';
 		document.getElementById('comingSoon').style.display='block';
 		if(signedIn())syncState();
 	}
@@ -279,6 +317,373 @@ function saveS2Pilot(){
 	if(!state.pilot.process||!state.pilot.owner||!state.pilot.nextStepDate)return toast('Name the process, the owner and a date before saving.');
 	postSession2('s2_pilot',state.pilot);
 	toast('Pilot saved. Nice work.');
+}
+</script>
+<script>
+/* Session 3 · Market Access — "Winning the Work", quotation-first.
+   Follows the facilitator deck's arc (Choose Where to Compete -> Build the Assets with AI -> Make the Pipeline Work),
+   pointed at the enquiry-to-quote flow the cohort actually runs. A formal RFQ or tender is one buyer type, not the frame. */
+const buyerTypes=[['new','New client enquiry','Someone who found you, and is comparing you with two others.'],['repeat','Existing client, repeat work','A client you already serve, asking for the next job.'],['contractor','Main contractor or panel','Pricing a package for a main contractor, or a call-off from a framework.'],['rfq','Formal RFQ or tender','A written request with a closing date, returnables and a scoring sheet.']];
+const sortItems=[['price','Price, rates and commercial terms','yours'],['method','Scope description and how you will do the work','ai'],['naming','Document naming and filing','mech'],['claims','Any claim about what you have done','yours'],['capcv','Capability statement and CVs','ai'],['reminders','Follow-up reminders and validity dates','mech'],['dates','Delivery dates you commit to','yours'],['reformat','Reformatting into the client’s RFQ or order format','ai'],['pipeline','Pipeline stage updates','mech'],['conversation','The client conversation itself','yours'],['returnables','Checking the quote answers everything they asked for','ai'],['covering','Standard quote covering notes','mech']];
+const sortColumns=[['yours','Stays yours'],['ai','AI assists'],['mech','Mechanical']];
+const rubricItems=[['delivery','It leads with delivery, not with history'],['values','Every project carries a value and a client type'],['checkable','The numbers are checkable, not adjectives'],['team','The team is named, with real tickets'],['length','It fits on two pages and reads in four minutes']];
+const rhythmItems=[['daily1','daily','Reply to every enquiry the same day'],['daily2','daily','Log every new enquiry you hear about'],['weekly1','weekly','Move every quote one stage, or kill it'],['weekly2','weekly','Send the follow-ups that are due'],['monthly1','monthly','Add the month’s new work to your statement'],['monthly2','monthly','Review the win rate and where the losses came from']];
+const pipelineStages=[['1','Identified','You have heard about it','Score it on the three questions','This week'],['2','Qualified','It passed the score','Decide to quote, and name who owns it','48 hours'],['3','Quoted','It is with the client','Log the date, set the follow-up','On the day'],['4','In discussion','They came back to you','Answer fast, and answer in writing','Same day'],['5','Won or lost','A decision was made','Ask why, either way, and write it down','Always']];
+const quoteRecipe=[['role','Role','An estimator and quote writer in your sector','You are an experienced estimator for a mechanical services contractor'],['task','Task','What the quote must contain','Draft the covering note, scope of work, assumptions and exclusions'],['context','Context','The enquiry and your evidence','Uses the enquiry you picked and your evidence table'],['requirements','Requirements','What the client asked for, and your terms','Validity 30 days. Payment terms. Lead time. Anything they specified'],['format','Format','Your quote layout, or theirs','Covering note, scope table, assumptions, exclusions, validity. Price table left blank for me'],['example','Example','One quote you were happy with','e.g. Match the tone and layout of the quote below, not its prices']];
+const commsMessages=['A follow-up that gives them a reason to reply','A quote covering note, in your voice','An escalation that stays professional','A holding reply for when you need more time','A thank-you that asks for the next job'];
+const session3Steps=['Choose Your Ground','Your Evidence','Capability Statement','Quotation Template','Follow-up & Pilot'];
+let session3Step=0;
+function esc(v){return String(v==null?'':v).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;')}
+function s3(){if(!state.session3)state.session3=blankSession3();return state.session3}
+function postSession3(exercise,payloadData){
+	const payload={name:state.name,business:state.business,exercise,data:payloadData,state:{...state,data:data()},timestamp:new Date().toISOString()};
+	localStorage.setItem('edmeca:'+state.name.toLowerCase()+'|'+state.business.toLowerCase(),JSON.stringify(payload));
+	fetch('/api/bridge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
+}
+function renderSession3(){
+	if(!state.name||!state.business)return selectLogin();
+	document.getElementById('steps').style.display='flex';
+	document.getElementById('steps').innerHTML=session3Steps.map((label,i)=>`<div class="step ${i===session3Step?'active':''} ${i<session3Step?'done':''}" onclick="goSession3(${i})"><small>Part ${i+1}</small>${label}</div>`).join('');
+	renderSession3Step();
+	window.scrollTo({top:0,behavior:'smooth'});
+}
+function goSession3(i){session3Step=i;state.session3Step=i;renderSession3();syncState()}
+function session3Next(){if(session3Step<session3Steps.length-1){session3Step++;state.session3Step=session3Step;renderSession3();syncState()}}
+function session3Back(){if(session3Step>0){session3Step--;state.session3Step=session3Step;renderSession3();syncState()}}
+function renderSession3Step(){
+	const el=document.getElementById('session3Content');
+	const renderers=[renderS3Ground,renderS3Evidence,renderS3Statement,renderS3Quotation,renderS3FollowUp];
+	el.innerHTML=renderers[session3Step]();
+	if(session3Step===0)renderS3Matrix();
+	if(session3Step===2){const t=document.getElementById('capText');if(t)t.value=s3().capText||'';renderS3Prompt('capPromptBox','capPrompt')}
+	if(session3Step===3){const t=document.getElementById('quoteText');if(t)t.value=s3().quoteText||'';const x=document.getElementById('exampleText');if(x)x.value=s3().exampleText||'';renderS3Prompt('quotePromptBox','quotePrompt')}
+	if(session3Step===4){const t=document.getElementById('commsText');if(t)t.value=s3().commsText||'';renderS3Prompt('commsPromptBox','commsPrompt')}
+}
+function s3OppName(i){const o=s3().opportunities[i];return o?(o.name||('Quote '+(i+1))):''}
+function s3Chosen(){const d=s3();return d.chosenOpportunity!=null?d.opportunities[d.chosenOpportunity]||null:null}
+function s3BuyerLabel(o){const row=o&&o.buyerType?buyerTypes.find(b=>b[0]===o.buyerType):null;return row?row[1]:''}
+function s3Total(o){const n=v=>Number(v)||0;return n(o.win)+n(o.value)+n(o.deliver)}
+function s3EvidenceLines(){return s3().evidence.map((r,i)=>`${i+1}. ${[r.client,r.scope,r.value,r.date,r.outcome].filter(Boolean).join(' — ')}`).join('\n')}
+
+/* Part 1 · Exercise 1 — Choose Your Ground (deck slides 20, 24, 25, 26) */
+function renderS3Ground(){
+	const d=s3();
+	const scoreSel=(i,field,val)=>`<select onchange="setS3Score(${i},'${field}',this.value)">${['','0','1','2','3','4','5'].map(v=>`<option value="${v}" ${String(val||'')===v?'selected':''}>${v===''?'—':v}</option>`).join('')}</select>`;
+	const opps=d.opportunities.map((o,i)=>{
+		const chosen=d.chosenOpportunity===i;
+		const types=buyerTypes.map(([val,label])=>`<option value="${val}" ${o.buyerType===val?'selected':''}>${label}</option>`).join('');
+		return `<div class="opp ${chosen?'chosen':''}"><div class="opp-head"><span class="num">${i+1}</span><input value="${esc(o.name)}" placeholder="e.g. Growthpoint — quarterly HVAC service, three sites" oninput="s3().opportunities[${i}].name=this.value"><button class="rowdel" type="button" onclick="removeS3Opp(${i})">✕</button></div><div class="grid2" style="margin-top:10px"><div><label>Who is asking?</label><select onchange="s3().opportunities[${i}].buyerType=this.value"><option value="">Choose the buyer type…</option>${types}</select></div><div><label>They want it by</label><input type="date" value="${esc(o.date)}" oninput="s3().opportunities[${i}].date=this.value"></div></div><div class="scorerow"><div><label>Winnability /5</label>${scoreSel(i,'win',o.win)}</div><div><label>Value /5</label>${scoreSel(i,'value',o.value)}</div><div><label>Deliverability /5</label>${scoreSel(i,'deliver',o.deliver)}</div><div class="total" id="s3total${i}">${s3Total(o)}/15</div></div><button class="btn ${chosen?'primary':'ghost'}" style="margin-top:12px" type="button" onclick="chooseS3Opp(${i})">${chosen?'✓ Taking this one through this afternoon':'Take this one through this afternoon'}</button></div>`;
+	}).join('');
+	const positioning=(d.gtmKnownFor||'').toLowerCase();
+	const weakWord=['quality','professional'].find(w=>positioning.includes(w));
+	const everyone=(d.gtmWho||'').toLowerCase().includes('everyone');
+	return `<div class="lead"><span class="time">EXERCISE 1 · 20 MINUTES</span><h1><b>Part 1:</b> Choose Your Ground</h1><p>Two outputs in twenty minutes. Your go-to-market outline first, then two live quote requests scored and ranked.</p></div>
+<div class="card"><h3>1 · Go to market, in three questions</h3><div class="hint">Targeting, positioning and channels. Answer these three and most of your quoting decisions make themselves.</div>
+<label>Who you serve</label><div class="hint">The client type you are built to deliver for, not everyone with a budget.</div><input value="${esc(d.gtmWho)}" placeholder="e.g. Facilities managers at listed property funds, Gauteng" oninput="s3().gtmWho=this.value">${everyone?'<div class="hint" style="color:var(--red);margin-top:6px">“Everyone” is not a market — it is an absence of a decision. Name the client type you are actually built to serve.</div>':''}
+<label>What you are known for</label><div class="hint">The one thing you do better, said in words a client would use — without the words “quality” or “professional”.</div><input value="${esc(d.gtmKnownFor)}" placeholder="e.g. After-hours response inside two hours, every time" oninput="s3().gtmKnownFor=this.value;renderS3Step0Warnings()"><div class="hint" id="s3WeakWord" style="color:var(--red);margin-top:6px;${weakWord?'':'display:none'}">${weakWord?'“'+weakWord+'” says nothing a competitor would not also claim. Say what you actually do.':''}</div>
+<label>Where they find you</label><div class="hint">The channels where that client actually looks for someone like you.</div><input value="${esc(d.gtmWhere)}" placeholder="e.g. Referrals, framework panels, LinkedIn, walk-in enquiries" oninput="s3().gtmWhere=this.value"></div>
+<div class="card"><h3>2 · What is live right now</h3><div class="hint">Every real enquiry, quote request or RFQ in front of you, named. Aim for four or five, then score two of them out of five on each question: <b>Can we win it? Is it worth winning? Can we deliver it?</b></div>
+<div style="margin-top:14px">${opps}</div>${d.opportunities.length?'':'<div class="hint" style="padding:14px 0">Nothing listed yet. Add the enquiry or quote request you brought with you.</div>'}
+<button class="btn purple" style="margin-top:6px" type="button" onclick="addS3Opp()">Add a quote request</button></div>
+<div class="grid2"><div class="card"><h3>3 · Where should you quote first?</h3><div class="hint">Value up the side, winnability across. Top right is where you quote: worth winning and winnable. Deliverability decides which one in that box you start with.</div><div class="matrix" id="s3matrix"><div class="quad q1">Long shots · build the relationship</div><div class="quad q2">Quote here first</div><div class="quad q3">Leave them</div><div class="quad q4">Quick quotes · low effort</div></div><div class="hint" style="margin-top:12px"><b>A warning worth taking:</b> do not open with the biggest, most contested request on the board. The odds are poor, and one lost quote kills the appetite for the next five. Win a smaller one first.</div></div>
+<div class="card"><h3>Five kinds of wasted quote</h3><div class="hint">Every quote you lost that you should never have written is one of these five, or a combination of them. Count last year's losses against them.</div><div class="dims" style="margin-top:12px">${[['Wrong client','They were never going to buy from a firm your size'],['Wrong scale','Too big to deliver, or too small to be worth the paperwork'],['Wrong margin','You can win it, and it will cost you money to do it'],['Wrong timing','Priced against a budget that was fixed before you were asked'],['No relationship','Your first contact was the request itself']].map(([t,s])=>`<div class="review" style="margin-bottom:10px"><h4>${t}</h4><p style="font-size:13px">${s}</p></div>`).join('')}</div></div></div>
+<div class="actions"><span class="hint">Output: a go-to-market outline, and two quote requests scored and ranked.</span><button class="btn primary" onclick="saveS3Ground();session3Next()">Save &amp; continue -&gt;</button></div>`;
+}
+function renderS3Step0Warnings(){
+	const el=document.getElementById('s3WeakWord');if(!el)return;
+	const w=['quality','professional'].find(x=>(s3().gtmKnownFor||'').toLowerCase().includes(x));
+	el.style.display=w?'':'none';
+	if(w)el.textContent='“'+w+'” says nothing a competitor would not also claim. Say what you actually do.';
+}
+function addS3Opp(){s3().opportunities.push({name:'',buyerType:'',date:'',win:'',value:'',deliver:'',stage:''});renderSession3Step()}
+function removeS3Opp(i){const d=s3();d.opportunities.splice(i,1);if(d.chosenOpportunity===i)d.chosenOpportunity=null;else if(d.chosenOpportunity>i)d.chosenOpportunity--;renderSession3Step()}
+function chooseS3Opp(i){s3().chosenOpportunity=i;renderSession3Step()}
+function setS3Score(i,field,value){
+	const d=s3();d.opportunities[i][field]=value;
+	const totalEl=document.getElementById('s3total'+i);
+	if(totalEl)totalEl.textContent=s3Total(d.opportunities[i])+'/15';
+	renderS3Matrix();
+}
+function renderS3Matrix(){
+	const box=document.getElementById('s3matrix');if(!box)return;
+	box.querySelectorAll('.dot').forEach(dot=>dot.remove());
+	s3().opportunities.forEach((o,i)=>{
+		if(o.win===''||o.value===''||o.win==null||o.value==null)return;
+		const win=Number(o.win),val=Number(o.value);
+		const dot=document.createElement('div');
+		dot.className='dot'+(win>=3&&val>=3?' win':'')+(s3().chosenOpportunity===i?' priority':'');
+		dot.style.left=((win/5)*70+15)+'%';
+		dot.style.top=((1-val/5)*70+15)+'%';
+		dot.textContent=i+1;
+		dot.title=o.name||('Quote '+(i+1));
+		box.appendChild(dot);
+	});
+}
+function saveS3Ground(){
+	const d=s3();
+	postSession3('s3_gtm',{who:d.gtmWho,knownFor:d.gtmKnownFor,where:d.gtmWhere});
+	postSession3('s3_opportunities',{opportunities:d.opportunities,chosen:d.chosenOpportunity!=null?s3OppName(d.chosenOpportunity):''});
+	toast('Go-to-market outline and quote requests saved.');
+}
+
+/* Part 2 · Your evidence + what stays yours (deck slides 28, 29) */
+function renderS3Evidence(){
+	const d=s3();
+	const rows=d.evidence.map((r,i)=>`<div class="evrow"><input value="${esc(r.client)}" placeholder="Client" oninput="s3().evidence[${i}].client=this.value"><input value="${esc(r.scope)}" placeholder="Scope" oninput="s3().evidence[${i}].scope=this.value"><input value="${esc(r.value)}" placeholder="R" oninput="s3().evidence[${i}].value=this.value"><input value="${esc(r.date)}" placeholder="2024" oninput="s3().evidence[${i}].date=this.value"><input value="${esc(r.outcome)}" placeholder="Outcome" oninput="s3().evidence[${i}].outcome=this.value"><button class="rowdel" type="button" onclick="removeS3Evidence(${i})">✕</button></div>`).join('');
+	const n=d.evidence.length;
+	const sorted=sortItems.map(([key,label,answer])=>{
+		const picked=d.sort[key]||'';
+		const opts=sortColumns.map(([val,text])=>{
+			const on=picked===val;
+			const wrong=on&&key==='price'&&val!=='yours';
+			return `<button type="button" class="${on?'on':''} ${wrong?'warn':''}" onclick="setS3Sort('${key}','${val}')">${text}</button>`;
+		}).join('');
+		return `<div class="sortrow"><div>${label}${picked&&picked!==answer?'<small style="display:block;color:var(--red);font-size:11px">Have another look at this one.</small>':''}</div><div class="sortopts">${opts}</div></div>`;
+	}).join('');
+	return `<div class="lead"><span class="time">EXERCISE 2 · STEP 1</span><h1><b>Part 2:</b> You already have the evidence</h1><p>Ten to fourteen jobs, with a client, a value and a date. Nothing invented — AI cannot invent your track record, and you must not let it try. It can only organise what you give it.</p></div>
+<div class="card"><h3>Your track record</h3><div class="hint">Work down the evidence ladder in order: <b>the jobs</b> (client, scope, value, date, outcome), <b>the people</b>, <b>the proof</b>, <b>the numbers</b>, <b>the words</b>. Every rung is something you already own and have probably never written down. This is what goes out behind every quote.</div>
+<div style="overflow-x:auto;margin-top:16px"><div style="min-width:640px"><div class="evhead"><div>Client</div><div>Scope</div><div>Value</div><div>Date</div><div>Outcome</div><div></div></div>${rows}</div></div>
+${n?'':'<div class="hint" style="padding:14px 0">No jobs captured yet. Start with your invoice list — the last three years.</div>'}
+<div class="actions" style="margin-top:14px;justify-content:flex-start;gap:10px"><button class="btn purple" type="button" onclick="addS3Evidence()">Add a job</button><span class="hint" style="align-self:center">${n} captured · aim for 10 to 14</span></div></div>
+<div class="card"><h3>What stays yours, what AI drafts</h3><div class="hint">Go through a quote you send section by section and put every part into one of these three columns. Keep the price and the promises. Give away the typing.</div><div style="margin-top:10px">${sorted}</div><div class="hint" style="margin-top:14px">A claim you cannot evidence is a claim you delete. A number you did not work out yourself is a number you do not send.</div></div>
+<div class="actions"><button class="btn ghost" onclick="session3Back()">Back</button><button class="btn primary" onclick="saveS3Evidence();session3Next()">Save &amp; continue -&gt;</button></div>`;
+}
+function addS3Evidence(){s3().evidence.push({client:'',scope:'',value:'',date:'',outcome:''});renderSession3Step()}
+function removeS3Evidence(i){s3().evidence.splice(i,1);renderSession3Step()}
+function setS3Sort(key,value){s3().sort[key]=value;renderSession3Step()}
+function saveS3Evidence(){
+	const d=s3();
+	if(!d.evidence.length)return toast('Capture at least one real job before you continue.');
+	postSession3('s3_evidence',{evidence:d.evidence});
+	postSession3('s3_sort',{sort:d.sort});
+	toast('Evidence and sort saved.');
+}
+
+/* Part 3 · The capability statement (deck slides 33, 34) */
+function renderS3Statement(){
+	const d=s3();
+	const rubric=rubricItems.map(([key,text])=>`<label style="display:flex;align-items:center;gap:8px;font-weight:400;margin:10px 0"><input type="checkbox" style="width:auto" ${d.rubric[key]?'checked':''} onchange="s3().rubric['${key}']=this.checked"> ${text}</label>`).join('');
+	return `<div class="lead"><span class="time">EXERCISE 2 · STEP 2</span><h1><b>Part 3:</b> Your capability statement</h1><p>Two pages a client can read in four minutes. It goes out with every quote, so refine it until a stranger would shortlist you.</p></div>
+<div class="card"><h3>Build the prompt</h3><div class="hint">The prompt runs on the ${d.evidence.length} job${d.evidence.length===1?'':'s'} you captured in Part 2. Name the sector you are writing for, build the prompt, run it in your AI tool, then paste the result back in.</div>
+<label>Writing for a client in which sector?</label><input id="s3Sector" value="${esc(d.sector)}" placeholder="e.g. commercial property, facilities management" oninput="s3().sector=this.value">
+<div class="actions" style="justify-content:flex-start;gap:10px;margin:16px 0"><button class="btn purple" type="button" onclick="buildS3CapPrompt()">Build prompt</button><button class="btn ghost" type="button" onclick="copyS3('capPrompt')">Copy prompt</button></div>
+<div class="prompt" id="capPromptBox"><span class="placeholder">Click Build prompt to turn your evidence into a capability-statement prompt...</span></div>
+<label style="margin-top:14px">Your capability statement</label><textarea id="capText" style="min-height:200px" placeholder="Paste what your AI tool produced, then edit it until it is true and it is yours..."></textarea></div>
+<div class="card"><h3>Would a stranger shortlist you?</h3><div class="hint">The test is simple: could a client who has never met you decide to shortlist you from this page alone? Tick what is genuinely true of your draft.</div>${rubric}<div class="hint" style="margin-top:12px">What should <b>not</b> be on the page: adjectives, mission statements, and stock photographs.</div></div>
+<div class="actions"><button class="btn ghost" onclick="session3Back()">Back</button><button class="btn primary" onclick="saveS3Statement();session3Next()">Save &amp; continue -&gt;</button></div>`;
+}
+function buildS3CapPrompt(){
+	const d=s3();
+	d.sector=document.getElementById('s3Sector').value.trim();
+	if(!d.evidence.length)return toast('Capture your jobs in Part 2 first.');
+	const count=d.evidence.length;
+	d.capPrompt=`Turn these ${count} project${count===1?'':'s'} and this company background into a two-page capability statement for a ${d.sector||'[sector]'} client. Use their language, not mine. Lead with what we have delivered, not with how long we have existed. Flag anything you had to assume.\n\nCOMPANY: ${state.business}\nWHO WE SERVE: ${d.gtmWho||'(not yet stated)'}\nWHAT WE ARE KNOWN FOR: ${d.gtmKnownFor||'(not yet stated)'}\n\nOUR PROJECTS:\n${s3EvidenceLines()}\n\nInclude: one line saying exactly what we do; capability areas in a client's language; the project list with values and dates; the team with tickets and years; and a differentiator stated in one sentence. Do not invent a project, a value or a date I have not given you.`;
+	renderS3Prompt('capPromptBox','capPrompt');
+	toast('Prompt built from your evidence.');
+}
+function renderS3Prompt(boxId,field){
+	const el=document.getElementById(boxId);if(!el)return;
+	const text=s3()[field];
+	el.innerHTML=text?esc(text):'<span class="placeholder">Click Build prompt to assemble this from what you have entered...</span>';
+}
+function copyS3(field){const text=s3()[field];if(!text)return toast('Build the prompt first.');navigator.clipboard?.writeText(text).then(()=>toast('Prompt copied.'))}
+function saveS3Statement(){
+	const d=s3();
+	d.sector=document.getElementById('s3Sector').value.trim();
+	d.capText=document.getElementById('capText').value;
+	postSession3('s3_statement',{sector:d.sector,prompt:d.capPrompt||'',text:d.capText,rubric:d.rubric});
+	toast('Capability statement saved.');
+}
+
+/* Part 4 · The quotation template and the completeness check (deck slides 31, 35, 37, pointed at a quote) */
+/* Four of the six blocks can be derived from what Parts 1 to 3 already captured.
+   Requirements and Format are deliberately not derived — they come off the enquiry itself. */
+function s3DerivedBlocks(){
+	const d=s3();
+	const chosen=s3Chosen();
+	const oppName=chosen?(chosen.name||'').trim():'';
+	const buyer=s3BuyerLabel(chosen);
+	const taskByBuyer={new:'Draft the covering note, scope of work, and assumptions and exclusions for a first quote to a new client',repeat:'Draft a short covering note and scope for a repeat job, referencing the work we have already done for them',contractor:'Draft the scope, inclusions and exclusions for a package price to a main contractor',rfq:'Draft the response sections the RFQ asks for — scope, how we will do the work, and a checklist of everything they require'};
+	const out={};
+	out.role='You are an experienced estimator and quote writer for '+(state.business||'our business')+(d.sector?', working with '+d.sector+' clients':'')+'.';
+	out.task=(chosen&&taskByBuyer[chosen.buyerType])||'Draft the covering note, scope of work, and assumptions and exclusions for this quote';
+	const ctx=[];
+	if(oppName)ctx.push('The enquiry is '+oppName+(buyer?' — '+(chosen.buyerType==='repeat'?'an ':'a ')+buyer.toLowerCase():'')+(chosen&&chosen.date?', wanted by '+chosen.date:'')+'.');
+	if(d.gtmWho)ctx.push('We serve '+d.gtmWho+'.');
+	if(d.gtmKnownFor)ctx.push('We are known for '+d.gtmKnownFor+'.');
+	if(d.evidence.length)ctx.push('Use the '+d.evidence.length+' job'+(d.evidence.length===1?'':'s')+' in our evidence list as the only source for anything we claim about ourselves.');
+	out.context=ctx.join(' ');
+	if((d.exampleText||'').trim())out.example=s3ExampleLineQuote;else if((d.capText||'').trim())out.example=s3ExampleLineStatement;
+	return out;
+}
+function prefillS3Quote(force){
+	const d=s3(),derived=s3DerivedBlocks();
+	let filled=0;
+	Object.keys(derived).forEach(key=>{
+		if(!derived[key])return;
+		if(force||!(d.quoteBlocks[key]||'').trim()){d.quoteBlocks[key]=derived[key];filled++}
+	});
+	return filled;
+}
+function rebuildS3Blocks(){
+	const n=prefillS3Quote(true);
+	renderSession3Step();
+	toast(n?'Role, Task, Context and Example rebuilt from Parts 1 to 3.':'Fill in Parts 1 to 3 first — there is nothing to carry forward yet.');
+}
+/* The Example block accepts a past quote as a file. It is read in the browser — pdf.js for PDF, mammoth for .docx,
+   FileReader for plain text — and only the extracted text is kept, capped so StateJSON stays inside a Sheets cell. */
+const s3ExampleCap=6000;
+const s3ExampleLineQuote='Match the tone and structure of the past quote included below, not its prices.';
+const s3ExampleLineStatement='Match the tone of our capability statement, included below.';
+const s3Libs={pdf:{src:'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',worker:'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js',ready:()=>window.pdfjsLib},docx:{src:'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js',ready:()=>window.mammoth}};
+function s3LoadLib(key){
+	const lib=s3Libs[key];
+	if(lib.ready())return Promise.resolve(lib.ready());
+	if(!lib.promise)lib.promise=new Promise((resolve,reject)=>{const tag=document.createElement('script');tag.src=lib.src;tag.onload=()=>resolve(lib.ready());tag.onerror=()=>{lib.promise=null;reject(new Error('load'))};document.head.appendChild(tag)});
+	return lib.promise;
+}
+function s3ReadAs(file,method){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(reader.error||new Error('read'));reader[method](file)})}
+async function s3ExtractText(file){
+	const name=(file.name||'').toLowerCase();
+	if(name.endsWith('.pdf')||file.type==='application/pdf'){
+		const pdfjs=await s3LoadLib('pdf');
+		pdfjs.GlobalWorkerOptions.workerSrc=s3Libs.pdf.worker;
+		const doc=await pdfjs.getDocument({data:await s3ReadAs(file,'readAsArrayBuffer')}).promise;
+		const pages=[];
+		for(let p=1;p<=doc.numPages;p++){const page=await doc.getPage(p);const content=await page.getTextContent();pages.push(content.items.map(item=>item.str).join(' '))}
+		return pages.join('\n\n');
+	}
+	if(name.endsWith('.docx')){const mammoth=await s3LoadLib('docx');return (await mammoth.extractRawText({arrayBuffer:await s3ReadAs(file,'readAsArrayBuffer')})).value}
+	if(name.endsWith('.doc'))throw new Error('doc');
+	return String(await s3ReadAs(file,'readAsText')||'');
+}
+async function s3ReadExample(file){
+	if(!file)return;
+	if(file.size>15*1024*1024)return toast('That file is over 15 MB. Paste the section you want instead.');
+	toast('Reading '+file.name+'…');
+	try{
+		const text=(await s3ExtractText(file)).replace(/[ \t]+\n/g,'\n').replace(/\n{3,}/g,'\n\n').trim();
+		if(!text)return toast('No text found in that file — if it is a scanned PDF, paste the text instead.');
+		s3SetExampleText(text,file.name);
+		toast(text.length>s3ExampleCap?'Read '+file.name+' — kept the first '+s3ExampleCap.toLocaleString()+' characters.':'Read '+file.name+'.');
+	}catch(err){
+		toast(err&&err.message==='doc'?'Old .doc files are not supported — save it as .docx or PDF, or paste the text.':err&&err.message==='load'?'Could not load the file reader — check your connection, or paste the text instead.':'Could not read that file. Paste the text instead.');
+	}
+}
+function s3SetExampleText(text,sourceName){
+	const d=s3();
+	d.exampleText=String(text||'').slice(0,s3ExampleCap);
+	d.exampleSource=d.exampleText?(sourceName||''):'';
+	const current=(d.quoteBlocks.example||'').trim();
+	if(!current||current===s3ExampleLineStatement||current===s3ExampleLineQuote)d.quoteBlocks.example=s3DerivedBlocks().example||'';
+	renderSession3Step();
+}
+function s3ExampleNote(){
+	const d=s3();const n=(d.exampleText||'').length;
+	if(!n)return 'Nothing attached yet. The prompt will lean on your capability statement for tone instead.';
+	return n.toLocaleString()+' characters'+(d.exampleSource?' from '+d.exampleSource:'')+(n>=s3ExampleCap?' — trimmed to the first '+s3ExampleCap.toLocaleString()+', which is plenty for tone':'')+'. Take the client’s name and the prices out before you build the prompt.';
+}
+function s3ExampleZone(){
+	return `<div class="drop" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="event.preventDefault();this.classList.remove('over');s3ReadExample(event.dataTransfer.files[0])"><b>Drop a quote you sent and were happy with</b> — PDF, Word (.docx) or text — or <label>choose a file<input type="file" accept=".pdf,.docx,.txt,.md" style="display:none" onchange="s3ReadExample(this.files[0]);this.value=''"></label>.<small>It is read on your own laptop and only the text is kept. Nothing is uploaded.</small></div><textarea id="exampleText" style="min-height:120px" placeholder="…or paste the quote here. Client name and prices can come out — it is the shape and the voice we want." oninput="s3SetExampleTextQuiet(this.value)"></textarea><div class="hint" id="exampleNote">${esc(s3ExampleNote())}</div>`;
+}
+function s3SetExampleTextQuiet(text){
+	const d=s3();d.exampleText=String(text||'').slice(0,s3ExampleCap);if(!d.exampleText)d.exampleSource='';
+	const note=document.getElementById('exampleNote');if(note)note.textContent=s3ExampleNote();
+}
+function renderS3Quotation(){
+	const d=s3();
+	if(!d.quotePrefilled){prefillS3Quote(false);d.quotePrefilled=true}
+	const derived=s3DerivedBlocks();
+	const chosen=d.chosenOpportunity!=null?s3OppName(d.chosenOpportunity):'';
+	const fields=quoteRecipe.map(([id,label,what,ph])=>{
+		const carried=derived[id]&&(d.quoteBlocks[id]||'').trim()===derived[id];
+		return `<label>${label} — ${what}${carried?' <span style="font-weight:600;color:var(--green)">· carried forward</span>':''}</label><input value="${esc(d.quoteBlocks[id])}" placeholder="${esc(ph)}" oninput="s3().quoteBlocks['${id}']=this.value">`+(id==='example'?s3ExampleZone():'');
+	}).join('');
+	const gaps=d.gaps.map((g,i)=>`<div class="gaprow"><input value="${esc(g.missing)}" placeholder="What they asked for that isn't answered yet — e.g. an after-hours rate" oninput="s3().gaps[${i}].missing=this.value"><input value="${esc(g.who)}" placeholder="Who supplies it — one name" oninput="s3().gaps[${i}].who=this.value"><button class="rowdel" type="button" onclick="removeS3Gap(${i})">✕</button></div>`).join('');
+	return `<div class="lead"><span class="time">EXERCISE 2 · STEPS 3 AND 4</span><h1><b>Part 4:</b> Your quotation template &amp; completeness check</h1><p>${chosen?'Working on <b>'+esc(chosen)+'</b>.':'Pick your quote request back in Part 1 to name what you are working on.'} Keep the structure, change the substance. The price is yours — you are automating the words around the number, never the number.</p></div>
+<div class="card"><h3>Point the recipe at a quote</h3><div class="hint">The prompt recipe from Session 1, now pointed at the words around your quote — the covering note, the scope, the assumptions and the exclusions. The context block is the one that matters most today, because that is where your evidence goes.<br><br><b>Role, Task, Context and Example are filled in from Parts 1 to 3</b> — your enquiry, your positioning, your evidence and your capability statement. Edit any of them. <b>Requirements and Format are the two only you can supply</b>: they come off the enquiry in front of you and your own terms, so nothing is guessed for you here.</div>${fields}
+<div class="actions" style="justify-content:flex-start;gap:10px;margin:18px 0;flex-wrap:wrap"><button class="btn purple" type="button" onclick="buildS3QuotePrompt()">Build prompt</button><button class="btn ghost" type="button" onclick="copyS3('quotePrompt')">Copy prompt</button><button class="btn ghost" type="button" onclick="rebuildS3Blocks()">Rebuild from Parts 1-3</button></div>
+<div class="hint" style="margin:-8px 0 14px">Rebuild replaces Role, Task, Context and Example with fresh values from your earlier answers. It leaves Requirements and Format exactly as you wrote them.</div>
+<div class="prompt" id="quotePromptBox"><span class="placeholder">Fill the blocks, then click Build prompt...</span></div>
+<label style="margin-top:14px">Your quotation template</label><textarea id="quoteText" style="min-height:200px" placeholder="Paste what your AI tool produced. Every price should still read [PRICE] — you fill those in. Keep the structure: it is what you reuse on the next quote..."></textarea></div>
+<div class="card"><h3>Check it against the enquiry</h3><div class="hint">Read it back against what the client actually asked for. List what they asked for that this quote does not yet answer, and name who supplies it. A quote that misses one line item loses to one that didn't, whatever the price.</div>
+<div style="margin-top:14px">${gaps}</div>${d.gaps.length?'':'<div class="hint" style="padding:10px 0">Nothing listed yet.</div>'}
+<button class="btn purple" style="margin-top:6px" type="button" onclick="addS3Gap()">Add a gap</button></div>
+<div class="actions"><button class="btn ghost" onclick="session3Back()">Back</button><button class="btn primary" onclick="saveS3Quotation();session3Next()">Save &amp; continue -&gt;</button></div>`;
+}
+function addS3Gap(){s3().gaps.push({missing:'',who:''});renderSession3Step()}
+function removeS3Gap(i){s3().gaps.splice(i,1);renderSession3Step()}
+function buildS3QuotePrompt(){
+	const d=s3();
+	const b=d.quoteBlocks;
+	const filled=quoteRecipe.filter(([id])=>(b[id]||'').trim());
+	if(!filled.length)return toast('Fill in at least one block first.');
+	const chosen=d.chosenOpportunity!=null?s3OppName(d.chosenOpportunity):'';
+	const evidence=s3EvidenceLines();
+	const statement=(d.capText||'').trim();
+	const example=(d.exampleText||'').trim();
+	d.quotePrompt=filled.map(([id,label])=>`${label.toUpperCase()}: ${b[id].trim()}`).join('\n\n')+(chosen?`\n\nTHE ENQUIRY: ${chosen}`:'')+(evidence?`\n\nMY EVIDENCE — use only these, and do not invent any others:\n${evidence}`:'')+(statement?`\n\nOUR CAPABILITY STATEMENT — for tone, and for the facts about us:\n${statement}`:'')+(example?`\n\nA PAST QUOTE I WAS HAPPY WITH — match its tone and structure, not its prices:\n${example}`:'')+`\n\nLeave every price, rate and total as [PRICE] for me to fill in. Do not estimate a number. List every assumption you made, and mark anything you could not answer from what I gave you as TO CONFIRM.`;
+	renderS3Prompt('quotePromptBox','quotePrompt');
+	toast('Prompt built from your six blocks.');
+}
+function saveS3Quotation(){
+	const d=s3();
+	d.quoteText=document.getElementById('quoteText').value;
+	const chosen=d.chosenOpportunity!=null?s3OppName(d.chosenOpportunity):'';
+	postSession3('s3_quotation',{opportunity:chosen,blocks:d.quoteBlocks,prompt:d.quotePrompt||'',text:d.quoteText,exampleText:d.exampleText||'',exampleSource:d.exampleSource||''});
+	postSession3('s3_gaps',{opportunity:chosen,gaps:d.gaps});
+	toast('Quotation template and completeness check saved.');
+}
+
+/* Part 5 · Follow up, measure it, set the date (deck slides 32, 41, 42, 43) */
+function renderS3FollowUp(){
+	const d=s3();
+	const chosen=d.chosenOpportunity!=null?s3OppName(d.chosenOpportunity):'';
+	const pilot=d.pilot||{};
+	const messages=commsMessages.map((m,i)=>`<div class="review" style="margin-bottom:8px"><h4 style="font-size:14px">${i+1} · ${m}</h4></div>`).join('');
+	const stageRows=pipelineStages.map(([n,name,means,moves,target])=>`<tr><td>${n} ${name}</td><td>${means}</td><td>${moves}</td><td>${target}</td></tr>`).join('');
+	const oppStages=d.opportunities.map((o,i)=>`<div class="dim"><span>${i+1}. ${esc(o.name||'Untitled quote')}</span><select onchange="s3().opportunities[${i}].stage=this.value"><option value="">Not staged…</option>${pipelineStages.map(([n,name])=>`<option value="${n}" ${o.stage===n?'selected':''}>${n} · ${name}</option>`).join('')}</select></div>`).join('');
+	const groups=[['daily','DAILY'],['weekly','WEEKLY'],['monthly','MONTHLY']].map(([key,label])=>{
+		const rows=rhythmItems.filter(i=>i[1]===key).map(([id,,text])=>`<label style="display:flex;align-items:center;gap:8px;font-weight:400;margin:10px 0"><input type="checkbox" style="width:auto" ${d.rhythm[id]?'checked':''} onchange="s3().rhythm['${id}']=this.checked"> ${text}</label>`).join('');
+		return `<div class="card"><h3>${label}</h3>${rows}</div>`;
+	}).join('');
+	return `<div class="lead"><span class="time">PART 4 · MAKE THE PIPELINE WORK</span><h1><b>Part 5:</b> Follow up, measure it, set the date</h1><p>More work is lost to silence after the quote goes out than to a weak quote. This part is the silence, fixed.</p></div>
+<div class="card"><h3>Your follow-up pack</h3><div class="hint">Five messages you send every week, written once in your voice and reused for years. The prompt is built from the quote you picked; run it, then paste the five back in and edit until they sound like you.</div><div style="margin:14px 0 4px">${messages}</div>
+<div class="actions" style="justify-content:flex-start;gap:10px;margin:14px 0"><button class="btn purple" type="button" onclick="buildS3CommsPrompt()">Build prompt</button><button class="btn ghost" type="button" onclick="copyS3('commsPrompt')">Copy prompt</button></div>
+<div class="prompt" id="commsPromptBox"><span class="placeholder">Click Build prompt to draft the five messages around your quote...</span></div>
+<label style="margin-top:14px">Your five messages</label><textarea id="commsText" style="min-height:180px" placeholder="Paste the five messages back in. Ask for each one firmer, then warmer, and keep the register that sounds like you..."></textarea></div>
+<div class="card"><h3>Your pipeline in five stages</h3><div style="overflow-x:auto"><table class="ptable"><thead><tr><th>Stage</th><th>What it means</th><th>What moves it on</th><th>Target</th></tr></thead><tbody>${stageRows}</tbody></table></div>
+${d.opportunities.length?`<label style="margin-top:20px">Put your quotes on the board</label><div class="dims">${oppStages}</div>`:'<div class="hint" style="margin-top:16px">Add your quote requests in Part 1 and they will appear here to stage.</div>'}</div>
+<div class="lead" style="margin-top:26px"><span class="time">THE WHOLE POINT OF TODAY</span><h1>Pick your <b>pilot</b></h1><p>One quote. Six fields. Without an owner and two dates this stays a good intention instead of becoming a quote that went out.</p></div>
+<div class="card"><div class="grid2"><div><label>The quote — which one, named exactly</label><input id="s3PilotOpp" value="${esc(pilot.opportunity||chosen)}"></div><div><label>The asset — the statement or template you use</label><input id="s3PilotAsset" value="${esc(pilot.asset)}" placeholder="e.g. Capability statement + quotation template"></div></div>
+<label>The action — what you send, in one sentence</label><input id="s3PilotAction" value="${esc(pilot.action)}" placeholder="e.g. Send the quote with the covering note and the capability statement attached">
+<div class="grid2" style="margin-top:14px"><div><label>The owner — one name, not “the team”</label><input id="s3PilotOwner" value="${esc(pilot.owner)}"></div><div><label>The date — when the quote goes out, this week</label><input id="s3PilotDate" type="date" value="${esc(pilot.date)}"></div></div>
+<div class="grid2" style="margin-top:14px"><div><label>The follow-up — the day you chase it, in your diary</label><input id="s3PilotFollowUp" type="date" value="${esc(pilot.followUp)}"></div><div></div></div></div>
+<div class="lead" style="margin-top:26px"><span class="time">THE ONGOING TOOL</span><h1>Your <b>business development rhythm</b></h1><p>A one-page rhythm you can run in about fifteen minutes a week.</p></div>
+<div class="grid3">${groups}</div>
+<div class="card" style="background:var(--green-tint);border-color:#cbe9be"><h3>Before Session 4: keep the momentum</h3><div class="hint"><b>Send the pilot</b> on the date you wrote, to the client you named. <b>Fill the pipeline</b> — every live quote on the page and scored, five minutes on Friday. <b>Finish the pack</b> — the five messages and a second quotation template, from the same evidence.<br><br>Next session is Costing, Pricing and Financial Intelligence. Bring the pricing on the quote you built today — we find out whether it actually makes money.</div></div>
+<div class="actions"><button class="btn ghost" onclick="session3Back()">Back</button><button class="btn primary" onclick="saveS3FollowUp()">Save my pilot</button></div>`;
+}
+function buildS3CommsPrompt(){
+	const d=s3();
+	const chosen=s3Chosen();
+	const oppName=chosen?(chosen.name||'').trim():'';
+	const list=commsMessages.map((m,i)=>`${i+1}. ${m}`).join('\n');
+	d.commsPrompt=`Write five short messages I can reuse for every quote I send. Plain, direct, in my voice — no sales language, nothing that sounds desperate.\n\nWHO WE ARE: ${state.business}${d.gtmKnownFor?', known for '+d.gtmKnownFor:''}.\nWHO WE SERVE: ${d.gtmWho||'(not yet stated)'}\nTHE CURRENT QUOTE: ${oppName||'(name it in Part 1)'}${chosen&&chosen.date?', wanted by '+chosen.date:''}. Use “Client A” for the client’s name; I will put the real name back in.\n\nTHE FIVE:\n${list}\n\nEach one under 120 words, ready to paste into email or WhatsApp. Give each one a reason for the client to reply, not just a nudge. Then give me the follow-up and the escalation again, once firmer and once warmer, so I can pick the register.`;
+	renderS3Prompt('commsPromptBox','commsPrompt');
+	toast('Prompt built around your quote.');
+}
+function saveS3FollowUp(){
+	const d=s3();
+	d.commsText=document.getElementById('commsText').value;
+	d.pilot={opportunity:document.getElementById('s3PilotOpp').value.trim(),action:document.getElementById('s3PilotAction').value.trim(),asset:document.getElementById('s3PilotAsset').value.trim(),owner:document.getElementById('s3PilotOwner').value.trim(),date:document.getElementById('s3PilotDate').value,followUp:document.getElementById('s3PilotFollowUp').value};
+	if(!d.pilot.opportunity||!d.pilot.owner||!d.pilot.date)return toast('Name the quote, the owner and a send date before saving.');
+	const chosen=d.chosenOpportunity!=null?s3OppName(d.chosenOpportunity):'';
+	postSession3('s3_followup',{opportunity:chosen,prompt:d.commsPrompt||'',text:d.commsText});
+	postSession3('s3_pipeline',{opportunities:d.opportunities});
+	postSession3('s3_rhythm',{rhythm:d.rhythm});
+	postSession3('s3_pilot',d.pilot);
+	toast('Pilot saved. Now send the quote.');
 }
 </script>
 </body>

@@ -12,7 +12,24 @@ var TABS = {
   S2_SOP: ['Timestamp','Name','Business','ChosenProcess','SOPPrompt','SOPText'],
   S2_Baseline: ['Timestamp','Name','Business','ChosenProcess','BeforeMinutes','AfterMinutes','SavedMinutes'],
   S2_Checklist: ['Timestamp','Name','Business','AdoptedItems'],
-  S2_Pilot: ['Timestamp','Name','Business','Process','Intervention','Tool','Owner','BaselineMinutes','NextStep','NextStepDate']
+  S2_Pilot: ['Timestamp','Name','Business','Process','Intervention','Tool','Owner','BaselineMinutes','NextStep','NextStepDate'],
+  S3_GTM: ['Timestamp','Name','Business','WhoYouServe','KnownFor','WhereTheyFindYou'],
+  S3_Opportunities: ['Timestamp','SaveId','Name','Business','OpportunityNumber','Opportunity','BuyerType','CloseDate','Winnability','Value','Deliverability','TotalOutOf15','Chosen'],
+  S3_Evidence: ['Timestamp','SaveId','Name','Business','RowNumber','Client','Scope','JobValue','JobDate','Outcome'],
+  S3_Sort: ['Timestamp','Name','Business','SortDecisions','CorrectOutOf12'],
+  S3_Statement: ['Timestamp','Name','Business','Sector','StatementPrompt','StatementText','RubricTicked'],
+  S3_Quotation: ['Timestamp','Name','Business','Quote','Role','Task','Context','Requirements','Format','Example','AssembledPrompt','QuoteTemplate','ExampleQuote','ExampleSource'],
+  S3_Gaps: ['Timestamp','SaveId','Name','Business','Quote','GapNumber','AskedForNotYetAnswered','WhoSuppliesIt'],
+  S3_FollowUp: ['Timestamp','Name','Business','Quote','FollowUpPrompt','FiveMessages'],
+  S3_Pipeline: ['Timestamp','SaveId','Name','Business','QuoteNumber','Quote','Stage'],
+  S3_Rhythm: ['Timestamp','Name','Business','AdoptedItems'],
+  S3_Pilot: ['Timestamp','Name','Business','Quote','Action','Asset','Owner','SendDate','FollowUpDate']
+};
+
+var S3_SORT_ANSWERS = {
+  price: 'yours', claims: 'yours', dates: 'yours', conversation: 'yours',
+  method: 'ai', capcv: 'ai', reformat: 'ai', returnables: 'ai',
+  naming: 'mech', reminders: 'mech', pipeline: 'mech', covering: 'mech'
 };
 
 function sheet(name) {
@@ -115,6 +132,53 @@ function doPost(event) {
       sheet('S2_Checklist').appendRow([timestamp, name, business, JSON.stringify(data.checklist || {})]);
     } else if (exercise === 's2_pilot') {
       sheet('S2_Pilot').appendRow([timestamp, name, business, data.process || '', data.intervention || '', data.tool || '', data.owner || '', data.baseline || '', data.nextStep || '', data.nextStepDate || '']);
+
+    // Session 3
+    } else if (exercise === 's3_gtm') {
+      sheet('S3_GTM').appendRow([timestamp, name, business, data.who || '', data.knownFor || '', data.where || '']);
+    } else if (exercise === 's3_opportunities') {
+      var oppSaveId = Utilities.getUuid().slice(0, 8);
+      var oppSheet = sheet('S3_Opportunities');
+      (data.opportunities || []).forEach(function (opp, index) {
+        var total = (Number(opp.win) || 0) + (Number(opp.value) || 0) + (Number(opp.deliver) || 0);
+        oppSheet.appendRow([timestamp, oppSaveId, name, business, index + 1, opp.name || '', opp.buyerType || '', opp.date || '', opp.win || '', opp.value || '', opp.deliver || '', total, opp.name && opp.name === data.chosen ? 'YES' : '']);
+      });
+    } else if (exercise === 's3_evidence') {
+      var evSaveId = Utilities.getUuid().slice(0, 8);
+      var evSheet = sheet('S3_Evidence');
+      (data.evidence || []).forEach(function (row, index) {
+        evSheet.appendRow([timestamp, evSaveId, name, business, index + 1, row.client || '', row.scope || '', row.value || '', row.date || '', row.outcome || '']);
+      });
+    } else if (exercise === 's3_sort') {
+      var sort = data.sort || {};
+      var correct = 0;
+      Object.keys(S3_SORT_ANSWERS).forEach(function (key) { if (sort[key] === S3_SORT_ANSWERS[key]) correct++; });
+      sheet('S3_Sort').appendRow([timestamp, name, business, JSON.stringify(sort), correct]);
+    } else if (exercise === 's3_statement') {
+      var rubric = data.rubric || {};
+      var ticked = Object.keys(rubric).filter(function (key) { return rubric[key]; }).join(' | ');
+      sheet('S3_Statement').appendRow([timestamp, name, business, data.sector || '', data.prompt || '', data.text || '', ticked]);
+    } else if (exercise === 's3_quotation') {
+      var blocks = data.blocks || {};
+      sheet('S3_Quotation').appendRow([timestamp, name, business, data.opportunity || '', blocks.role || '', blocks.task || '', blocks.context || '', blocks.requirements || '', blocks.format || '', blocks.example || '', data.prompt || '', data.text || '', data.exampleText || '', data.exampleSource || '']);
+    } else if (exercise === 's3_gaps') {
+      var gapSaveId = Utilities.getUuid().slice(0, 8);
+      var gapSheet = sheet('S3_Gaps');
+      (data.gaps || []).forEach(function (gap, index) {
+        gapSheet.appendRow([timestamp, gapSaveId, name, business, data.opportunity || '', index + 1, gap.missing || '', gap.who || '']);
+      });
+    } else if (exercise === 's3_followup') {
+      sheet('S3_FollowUp').appendRow([timestamp, name, business, data.opportunity || '', data.prompt || '', data.text || '']);
+    } else if (exercise === 's3_pipeline') {
+      var pipeSaveId = Utilities.getUuid().slice(0, 8);
+      var pipeSheet = sheet('S3_Pipeline');
+      (data.opportunities || []).forEach(function (opp, index) {
+        pipeSheet.appendRow([timestamp, pipeSaveId, name, business, index + 1, opp.name || '', opp.stage || '']);
+      });
+    } else if (exercise === 's3_rhythm') {
+      sheet('S3_Rhythm').appendRow([timestamp, name, business, JSON.stringify(data.rhythm || {})]);
+    } else if (exercise === 's3_pilot') {
+      sheet('S3_Pilot').appendRow([timestamp, name, business, data.opportunity || '', data.action || '', data.asset || '', data.owner || '', data.date || '', data.followUp || '']);
     }
 
     return json({ ok: true });
