@@ -39,6 +39,18 @@
 .drop small{display:block;color:var(--faint);font-size:11px;margin-top:4px}
 .drop label{display:inline;margin:0;color:var(--purple);cursor:pointer;font-weight:750;font-size:13px}
 @media(max-width:760px){.scorerow{grid-template-columns:1fr 1fr}.evrow,.evhead,.gaprow{grid-template-columns:1fr}.evhead{display:none}.sortrow{grid-template-columns:1fr}.sortopts{flex-wrap:wrap}}
+/* Session 4 */
+.s4table{width:100%;border-collapse:collapse;font-size:13px}.s4table th{text-align:left;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--faint);padding:6px 4px;border-bottom:1px solid var(--line)}.s4table td{padding:4px 4px;vertical-align:middle;border-bottom:1px solid #f1f5f9}.s4table input,.s4table select{padding:7px 8px;font-size:13px}.s4table td.num{text-align:right;font-weight:800;color:var(--deep);white-space:nowrap;padding-right:8px}
+.hide-amounts .amt{display:none!important}
+.s4band{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--purple-tint);border-radius:9px;padding:8px 12px;margin:18px 0 8px;color:var(--deep);font-weight:800}
+.pill{display:inline-block;border-radius:99px;font-size:11px;font-weight:800;padding:4px 10px;text-transform:uppercase;letter-spacing:.6px}.pill.ok{background:var(--green-tint);color:var(--green)}.pill.todo{background:#f1f5f9;color:var(--soft)}
+.err{color:var(--red);font-size:13px;font-weight:700;margin-top:6px}
+.outrow{display:flex;justify-content:space-between;align-items:baseline;gap:10px;border-bottom:1px solid var(--line);padding:8px 0}.outrow .val{font-weight:800;color:var(--deep);white-space:nowrap}.outrow details{font-size:12px;color:var(--soft);max-width:420px}.outrow summary{cursor:pointer;color:var(--purple);font-weight:700;font-size:12px;list-style:none}.outrow summary::after{content:" ▾"}
+.status-ok{background:var(--green-tint);color:var(--green);border-radius:10px;padding:12px 14px;font-weight:750;margin-top:12px}.status-bad{background:#fee2e2;color:var(--red);border-radius:10px;padding:12px 14px;font-weight:750;margin-top:12px}
+.four{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.four .tile{border-radius:12px;padding:16px;border:1px solid var(--line)}.tile .k{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase}.tile .v{font-size:26px;font-weight:800;margin:6px 0 2px;white-space:nowrap}.tile .s{font-size:11px;color:var(--soft)}
+.step.complete small{color:var(--green)}
+.chart svg{width:100%;height:auto;display:block}.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--soft);margin:6px 0}.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+@media(max-width:760px){.four{grid-template-columns:1fr 1fr}.tile .v{font-size:20px}.s4band{flex-direction:column;align-items:flex-start;gap:4px}}
 </style>
 </head>
 <body>
@@ -46,15 +58,17 @@
 <nav class="session-nav"><div class="wrap session-tabs" id="sessionTabs"></div><div class="wrap steps" id="steps"></div></nav>
 <main class="wrap">
 <section class="show" id="s0"><div class="hero"><div class="kicker" style="color:#c9f2bc">Property Point · Growthpoint Enterprise Development · Cohort Seven</div><h1>Welcome, Digital Leader.</h1><p>This workbook walks you through today's three exercises. Your answers save as you go, and you can come back to them on any device.</p><div class="meta">Facilitated by EDMECA · From Framework to Execution to Evidence</div></div><div class="grid3" id="exerciseList"></div><div class="card"><h3>Who are you?</h3><div class="hint">Use the same name and business every time so the workbook can find your saved answers.</div><div class="grid2"><div><label>Your name</label><input id="name" placeholder="e.g. Sipho Dlamini"></div><div><label>Business name</label><input id="business" placeholder="e.g. Dlamini Electrical"></div></div><button class="btn primary" style="margin-top:18px" onclick="signIn()">Start the exercises -&gt;</button></div></section>
-<section id="sessionPlaceholder"><div id="session2Content"></div><div id="session3Content"></div><div class="session-placeholder" id="comingSoon" style="display:none"><h1>Session <span id="placeholderNumber">3</span> is coming soon</h1><p>This part of the workbook isn't built yet.</p></div></section>
+<section id="sessionPlaceholder"><div id="session2Content"></div><div id="session3Content"></div><div id="session4Content"></div><div class="session-placeholder" id="comingSoon" style="display:none"><h1>Session <span id="placeholderNumber">3</span> is coming soon</h1><p>This part of the workbook isn't built yet.</p></div></section>
 <section id="s1"><div class="lead"><span class="time">10 MINUTES · WORKING ALONE</span><h1><b>Exercise 1:</b> Your Leadership Snapshot</h1><p>Short answers are fine. You will share one answer with the group.</p></div><div class="card"><label>1 · Where does your time go?</label><textarea id="q1" placeholder="Quotes and follow-ups: 6 hrs/week, site reports: 4 hrs..."></textarea><label>2 · What would you do with 10 extra hours a week?</label><textarea id="q2" placeholder="More site visits, two more tenders a month, home by 17:00..."></textarea><label>3 · What is one thing a competitor does better or faster?</label><textarea id="q3" placeholder="They turn quotes around same-day..."></textarea></div><div class="actions"><span class="hint">Answers auto-save when you continue.</span><button class="btn primary" onclick="save(1);go(2)">Save &amp; continue -&gt;</button></div></section>
 <section id="s2"><div class="lead"><span class="time">20 MINUTES · YOUR LAPTOP OR PHONE</span><h1><b>Exercise 2:</b> Create a Business Prompt</h1><p>Pick one time-drain task. Fill in the blocks, run the prompt, judge the result, then refine it.</p></div><div class="blocks"><div class="card"><h3>The six building blocks</h3><div class="hint">Your prompt assembles itself on the right as you type.</div><div id="blockFields"></div></div><div><div class="card"><h3>Your assembled prompt</h3><div class="prompt" id="prompt"><span class="placeholder">Your prompt appears here as you fill in the blocks...</span></div><div class="actions" style="margin-top:10px"><span class="hint" id="blockCount">0 of 6 blocks used</span><button class="btn purple" onclick="copyPrompt()">Copy prompt</button></div></div><div class="card"><h3>How did it go?</h3><label>Rate your best result out of 10</label><div class="rating" id="rating"></div><label>What changed between your first and best run?</label><textarea id="e2notes" placeholder="Adding Boundaries stopped it inventing prices..."></textarea></div></div></div><div class="actions"><button class="btn ghost" onclick="go(1)">Back</button><button class="btn primary" onclick="save(2);go(3)">Save &amp; continue -&gt;</button></div></section>
 <section id="s3"><div class="lead"><span class="time">40 MINUTES · SCAN → SCORE → SELECT → SHARE</span><h1><b>Exercise 3:</b> Your AI Opportunity Map</h1><p>Capture 8 to 12 raw ideas, score impact and effort, then star your top 3 to 5.</p></div><div class="card"><h3>1 · Capture ideas</h3><div class="hint" style="margin-bottom:12px">Pick an area, describe the task, and score it. The grid plots it for you.<br>Impact = time, money or stress it would save if fixed. Effort = how hard or costly it is to actually set up.</div><div class="chips" id="areas"></div><div class="grid3"><div><label>The task</label><input id="ideaText" placeholder="Quotation cover notes rewritten for every client"></div><div><label>Impact</label><select id="impact"><option>High</option><option>Medium</option><option>Low</option></select></div><div><label>Effort</label><select id="effort"><option>Low</option><option>Medium</option><option>High</option></select></div></div><button class="btn purple" style="margin-top:18px" onclick="addIdea()">Add idea</button><div class="ideas" id="ideas"></div></div><div class="grid2"><div class="card"><h3>2 · Your grid</h3><div class="hint">Green dots are quick wins. Star an idea to mark it as a priority.</div><div class="matrix" id="matrix"><div class="quad q1">Quick wins · do first</div><div class="quad q2">Big bets · plan</div><div class="quad q3">Fill-ins · maybe</div><div class="quad q4">Time sinks · avoid</div></div></div><div class="card"><h3>3 · Pressure-test</h3><label>Ideas captured: <span id="ideaCount">0</span> · Priorities starred: <span id="topCount">0</span></label><label style="color:var(--faint)">What did your partner challenge, and what changed? <span style="font-weight:400">(retired — no longer collected)</span></label><textarea id="e3notes" placeholder="Thandi asked how many hours the tender checklist really saves..." disabled style="opacity:.55;cursor:not-allowed"></textarea></div></div><div class="actions"><button class="btn ghost" onclick="go(2)">Back</button><button class="btn primary" onclick="save(3);go(4)">Save &amp; continue -&gt;</button></div></section>
 <section id="s4"><div class="lead"><h1><b>Done.</b> Your Session 1 artefacts</h1><p>Everything below is saved against your name. Bring it to Session 2 - Operations - where we automate one of these.</p></div><div class="card" id="summary"></div><div class="card" style="background:var(--green-tint);border-color:#cbe9be"><h3>Before Session 2: keep the momentum</h3><div class="hint">Run your Exercise 2 prompt on one real task every working day. Test the easiest quick win and note the minutes each AI-assisted task saved.</div></div><div class="actions"><button class="btn ghost" onclick="go(3)">Back</button><button class="btn primary" onclick="save('submit');toast('Workbook submitted to the facilitator sheet.')">Submit my workbook</button></div></section>
 </main><footer>EDMECA · AI Enablement Programme · From Framework to Execution to Evidence · <a target="_blank" rel="noreferrer" href="https://www.edmeca.co.za">www.edmeca.co.za</a></footer><div class="toast" id="toast"></div>
 <script>
+function blankSession4(){return{job:{sector:'',line:'',client:'Client A',quoted:'',duration:'',durationUnit:'weeks',status:''},lines:[],hideAmounts:false,interviewPrompt:'',rounds:[],price:{overhead:'',method:'A',months:'',share:100,avgDirect:'',avgSales:'',targetMargin:20,minMargin:0},scenario:{service:'',costIdx:8,chargedIdx:12,prompt:'',answer:'',chosen:''},cash:{deposit:30,progress:40,final:30,progressWeek:'',terms:30,materials:'upfront',weeks:'',try50:false},pilot:{quote:'',owner:'',date:'',whatsapp:''},fileGenerated:'',submitted:''}}
+function mergeSession4(s){const b=blankSession4();s=s||{};return{...b,...s,job:{...b.job,...(s.job||{})},price:{...b.price,...(s.price||{})},scenario:{...b.scenario,...(s.scenario||{})},cash:{...b.cash,...(s.cash||{})},pilot:{...b.pilot,...(s.pilot||{})},lines:Array.isArray(s.lines)?s.lines:[],rounds:Array.isArray(s.rounds)?s.rounds:[]}}
 function blankSession3(){return{gtmWho:'',gtmKnownFor:'',gtmWhere:'',opportunities:[],chosenOpportunity:null,evidence:[],sort:{},sector:'',capPrompt:'',capText:'',rubric:{},quoteBlocks:{},quotePrefilled:false,quotePrompt:'',quoteText:'',exampleText:'',exampleSource:'',gaps:[],commsPrompt:'',commsText:'',rhythm:{},pilot:{}}}
-const state={name:'',business:'',area:'Operations',ideas:[],rating:0,session2Priorities:[],session2Notes:'',processes:[{name:'',trigger:'',steps:[]},{name:'',trigger:'',steps:[]}],chosenProcess:null,sopPrompt:'',sopText:'',baselineBefore:'',baselineAfter:'',checklist:{},pilot:{},session3:blankSession3()};const areas=['Operations','Sales & Clients','Money','People','Marketing','Data & Decisions'];const blocks=[['task','Task - what must it do?','Draft a maintenance quotation'],['context','Context - the situation','Commercial client, two chillers, six month service'],['role','Role - who should it be?','You are an experienced HVAC estimator'],['requirements','Requirements - format, style, scope','Short email with a line-item table'],['reasoning','Reasoning - show its thinking','List your assumptions before you price anything'],['boundaries','Boundaries - what it may not do','Do not invent prices. Mark unknown rates TO CONFIRM']];const $=id=>document.getElementById(id);function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t.timer);t.timer=setTimeout(()=>t.classList.remove('show'),3000)}function go(n){document.querySelectorAll('section').forEach(s=>s.classList.remove('show'));$('s'+n).classList.add('show');document.querySelectorAll('.step').forEach((s,i)=>{s.classList.toggle('active',i===n);s.classList.toggle('done',i<n)});if(n>0){state.step=n;syncState();}if(n===4)summary();scrollTo({top:0,behavior:'smooth'})}function signIn(){const newName=$('name').value.trim();const newBusiness=$('business').value.trim();if(!newName||!newBusiness)return toast('Please enter your name and business name.');clearWorkspace();state.name=newName;state.business=newBusiness;$('who').textContent=state.name+' · '+state.business;updateTabLocks();load().then(foundOnSheet=>{toast(foundOnSheet?('Welcome back, '+state.name.split(' ')[0]+'. Picking up where you left off.'):('Welcome '+state.name.split(' ')[0]));const resumeSession=(foundOnSheet&&state.session)?state.session:1;if(resumeSession===2)session2Step=state.session2Step||0;if(resumeSession===3)session3Step=state.session3Step||0;selectSession(resumeSession);if(resumeSession===1)showSession1Exercise((foundOnSheet&&state.step)?Math.min(Math.max(state.step-1,0),3):0)})}function data(){return{q1:$('q1').value,q2:$('q2').value,q3:$('q3').value,task:$('task').value,context:$('context').value,role:$('role').value,requirements:$('requirements').value,reasoning:$('reasoning').value,boundaries:$('boundaries').value,prompt:$('prompt').innerText,rating:state.rating,notes:$('e2notes').value,ideas:state.ideas,partnerNotes:$('e3notes').value}}function save(ex){const payload={name:state.name,business:state.business,exercise:ex==='submit'?'submit':'e'+ex,data:data(),state:{...state,data:data()},timestamp:new Date().toISOString()};localStorage.setItem('edmeca:'+state.name.toLowerCase()+'|'+state.business.toLowerCase(),JSON.stringify(payload));fetch('/api/bridge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});toast('Saved locally'+(ex==='submit'?' and submitted':'')+'.')}function syncState(){if(!state.name||!state.business)return;const payload={name:state.name,business:state.business,state:{...state,data:data()},timestamp:new Date().toISOString()};localStorage.setItem('edmeca:'+state.name.toLowerCase()+'|'+state.business.toLowerCase(),JSON.stringify(payload));fetch('/api/bridge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{})}async function load(){const key='edmeca:'+state.name.toLowerCase()+'|'+state.business.toLowerCase();let foundOnSheet=false;try{const local=JSON.parse(localStorage.getItem(key)||'null');if(local?.state)restore(local.state);const r=await fetch('/api/bridge?'+new URLSearchParams({action:'load',name:state.name,business:state.business}));const remote=await r.json();if(remote.found){restore(remote.state);foundOnSheet=true}}catch(_){}return foundOnSheet}function restore(s){Object.assign(state,s);state.session3={...blankSession3(),...(s.session3||{})};let d=s.data;if(!d&&(s.e1||s.e2||s.e3)){d={...(s.e1||{}),...(s.e2||{})};if(s.e2&&s.e2.notes!=null)d.e2notes=s.e2.notes;if(s.e3){d.e3notes=s.e3.notes||'';state.ideas=(s.e3.ideas||[]).map(i=>({text:i.text||i.txt||'',area:i.area||'',impact:i.impact||i.imp||'',effort:i.effort||i.eff||'',priority:!!(i.priority||i.top)}))}if(s.e2&&s.e2.rating!=null)state.rating=s.e2.rating}d=d||s||{};['q1','q2','q3','e2notes','e3notes'].forEach(id=>{if(d[id]!=null&&$(id))$(id).value=d[id]});blocks.forEach(([id])=>{if(d[id]!=null)$(id).value=d[id]});if($('rating'))document.querySelectorAll('#rating button').forEach((b,n)=>b.classList.toggle('selected',n<(state.rating||0)));build();renderIdeas()}function build(){const text=blocks.map(([id])=>$(id).value.trim()).filter(Boolean).join('\n\n');$('prompt').innerHTML=text?text.replaceAll('&','&amp;').replaceAll('<','&lt;'):'<span class="placeholder">Your prompt appears here as you fill in the blocks...</span>';$('blockCount').textContent=blocks.filter(([id])=>$(id).value.trim()).length+' of 6 blocks used'}function copyPrompt(){navigator.clipboard?.writeText($('prompt').innerText).then(()=>toast('Prompt copied.'))}function quadrant(i){const im={High:3,Medium:2,Low:1}[i.impact],ef={High:3,Medium:2,Low:1}[i.effort];if(im>=2&&ef<=1)return['QUICK WIN','win'];if(im>=2.5&&ef>=2)return['BIG BET','bet'];if(im<=1.5&&ef>=2.5)return['TIME SINK','sink'];if(im<=2&&ef<=2)return['FILL-IN','fill'];return['PLAN','bet']}function addIdea(){const text=$('ideaText').value.trim();if(!text)return toast('Describe the task first.');state.ideas.push({text,area:state.area,impact:$('impact').value,effort:$('effort').value,priority:false});$('ideaText').value='';renderIdeas()}function renderIdeas(){$('ideas').innerHTML=state.ideas.map((i,n)=>{const[q,c]=quadrant(i);return`<div class="idea"><button class="star ${i.priority?'selected':''}" onclick="priority(${n})">★</button><div class="text">${i.text}<small>${i.area} · Impact ${i.impact} · Effort ${i.effort}</small></div><span class="tag ${c}">${q}</span><button onclick="state.ideas.splice(${n},1);renderIdeas()">X</button></div>`}).join('');$('ideaCount').textContent=state.ideas.length+' (aim for 8-12)';$('topCount').textContent=state.ideas.filter(i=>i.priority).length+' (pick 3-5)';document.querySelectorAll('.dot').forEach(d=>d.remove());state.ideas.forEach((i,n)=>{const d=document.createElement('div');d.className='dot '+quadrant(i)[1]+(i.priority?' priority':'');d.style.left=((({Low:1,Medium:2,High:3}[i.effort]-1)/2)*70+15)+'%';d.style.top=((1-(({Low:1,Medium:2,High:3}[i.impact]-1)/2))*70+15)+'%';d.textContent=n+1;$('matrix').appendChild(d)})}function priority(n){if(!state.ideas[n].priority&&state.ideas.filter(i=>i.priority).length>=5)return toast('Five priorities is the limit.');state.ideas[n].priority=!state.ideas[n].priority;renderIdeas()}function summary(){const d=data(),tops=state.ideas.filter(i=>i.priority).map(i=>'★ '+i.text).join('\n')||'(none starred yet)';$('summary').innerHTML=`<div class="review"><h4>Participant</h4><p>${state.name} · ${state.business}</p></div><div class="review"><h4>Exercise 1 · Leadership Snapshot</h4><p>${[d.q1,d.q2,d.q3].filter(Boolean).join('\n')||'(not completed)'}</p></div><div class="review"><h4>Exercise 2 · Business Prompt - rated ${state.rating||'-'}/10</h4><p>${d.prompt.slice(0,500)||'(not completed)'}</p></div><div class="review"><h4>Exercise 3 · Opportunity Map - ${state.ideas.length} ideas</h4><p>${tops}</p></div>`}
+const state={name:'',business:'',area:'Operations',ideas:[],rating:0,session2Priorities:[],session2Notes:'',processes:[{name:'',trigger:'',steps:[]},{name:'',trigger:'',steps:[]}],chosenProcess:null,sopPrompt:'',sopText:'',baselineBefore:'',baselineAfter:'',checklist:{},pilot:{},session3:blankSession3(),session4:blankSession4()};const areas=['Operations','Sales & Clients','Money','People','Marketing','Data & Decisions'];const blocks=[['task','Task - what must it do?','Draft a maintenance quotation'],['context','Context - the situation','Commercial client, two chillers, six month service'],['role','Role - who should it be?','You are an experienced HVAC estimator'],['requirements','Requirements - format, style, scope','Short email with a line-item table'],['reasoning','Reasoning - show its thinking','List your assumptions before you price anything'],['boundaries','Boundaries - what it may not do','Do not invent prices. Mark unknown rates TO CONFIRM']];const $=id=>document.getElementById(id);function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t.timer);t.timer=setTimeout(()=>t.classList.remove('show'),3000)}function go(n){document.querySelectorAll('section').forEach(s=>s.classList.remove('show'));$('s'+n).classList.add('show');document.querySelectorAll('.step').forEach((s,i)=>{s.classList.toggle('active',i===n);s.classList.toggle('done',i<n)});if(n>0){state.step=n;syncState();}if(n===4)summary();scrollTo({top:0,behavior:'smooth'})}function signIn(){const newName=$('name').value.trim();const newBusiness=$('business').value.trim();if(!newName||!newBusiness)return toast('Please enter your name and business name.');clearWorkspace();state.name=newName;state.business=newBusiness;$('who').textContent=state.name+' · '+state.business;updateTabLocks();load().then(foundOnSheet=>{toast(foundOnSheet?('Welcome back, '+state.name.split(' ')[0]+'. Picking up where you left off.'):('Welcome '+state.name.split(' ')[0]));const resumeSession=(foundOnSheet&&state.session)?state.session:1;if(resumeSession===2)session2Step=state.session2Step||0;if(resumeSession===3)session3Step=state.session3Step||0;if(resumeSession===4)session4Step=state.session4Step||0;selectSession(resumeSession);if(resumeSession===1)showSession1Exercise((foundOnSheet&&state.step)?Math.min(Math.max(state.step-1,0),3):0)})}function data(){return{q1:$('q1').value,q2:$('q2').value,q3:$('q3').value,task:$('task').value,context:$('context').value,role:$('role').value,requirements:$('requirements').value,reasoning:$('reasoning').value,boundaries:$('boundaries').value,prompt:$('prompt').innerText,rating:state.rating,notes:$('e2notes').value,ideas:state.ideas,partnerNotes:$('e3notes').value}}function save(ex){const payload={name:state.name,business:state.business,exercise:ex==='submit'?'submit':'e'+ex,data:data(),state:{...state,data:data()},timestamp:new Date().toISOString()};localStorage.setItem('edmeca:'+state.name.toLowerCase()+'|'+state.business.toLowerCase(),JSON.stringify(payload));fetch('/api/bridge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});toast('Saved locally'+(ex==='submit'?' and submitted':'')+'.')}function syncState(){if(!state.name||!state.business)return;const payload={name:state.name,business:state.business,state:{...state,data:data()},timestamp:new Date().toISOString()};localStorage.setItem('edmeca:'+state.name.toLowerCase()+'|'+state.business.toLowerCase(),JSON.stringify(payload));fetch('/api/bridge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{})}async function load(){const key='edmeca:'+state.name.toLowerCase()+'|'+state.business.toLowerCase();let foundOnSheet=false;try{const local=JSON.parse(localStorage.getItem(key)||'null');if(local?.state)restore(local.state);const r=await fetch('/api/bridge?'+new URLSearchParams({action:'load',name:state.name,business:state.business}));const remote=await r.json();if(remote.found){restore(remote.state);foundOnSheet=true}}catch(_){}return foundOnSheet}function restore(s){Object.assign(state,s);state.session3={...blankSession3(),...(s.session3||{})};state.session4=mergeSession4(s.session4);let d=s.data;if(!d&&(s.e1||s.e2||s.e3)){d={...(s.e1||{}),...(s.e2||{})};if(s.e2&&s.e2.notes!=null)d.e2notes=s.e2.notes;if(s.e3){d.e3notes=s.e3.notes||'';state.ideas=(s.e3.ideas||[]).map(i=>({text:i.text||i.txt||'',area:i.area||'',impact:i.impact||i.imp||'',effort:i.effort||i.eff||'',priority:!!(i.priority||i.top)}))}if(s.e2&&s.e2.rating!=null)state.rating=s.e2.rating}d=d||s||{};['q1','q2','q3','e2notes','e3notes'].forEach(id=>{if(d[id]!=null&&$(id))$(id).value=d[id]});blocks.forEach(([id])=>{if(d[id]!=null)$(id).value=d[id]});if($('rating'))document.querySelectorAll('#rating button').forEach((b,n)=>b.classList.toggle('selected',n<(state.rating||0)));build();renderIdeas()}function build(){const text=blocks.map(([id])=>$(id).value.trim()).filter(Boolean).join('\n\n');$('prompt').innerHTML=text?text.replaceAll('&','&amp;').replaceAll('<','&lt;'):'<span class="placeholder">Your prompt appears here as you fill in the blocks...</span>';$('blockCount').textContent=blocks.filter(([id])=>$(id).value.trim()).length+' of 6 blocks used'}function copyPrompt(){navigator.clipboard?.writeText($('prompt').innerText).then(()=>toast('Prompt copied.'))}function quadrant(i){const im={High:3,Medium:2,Low:1}[i.impact],ef={High:3,Medium:2,Low:1}[i.effort];if(im>=2&&ef<=1)return['QUICK WIN','win'];if(im>=2.5&&ef>=2)return['BIG BET','bet'];if(im<=1.5&&ef>=2.5)return['TIME SINK','sink'];if(im<=2&&ef<=2)return['FILL-IN','fill'];return['PLAN','bet']}function addIdea(){const text=$('ideaText').value.trim();if(!text)return toast('Describe the task first.');state.ideas.push({text,area:state.area,impact:$('impact').value,effort:$('effort').value,priority:false});$('ideaText').value='';renderIdeas()}function renderIdeas(){$('ideas').innerHTML=state.ideas.map((i,n)=>{const[q,c]=quadrant(i);return`<div class="idea"><button class="star ${i.priority?'selected':''}" onclick="priority(${n})">★</button><div class="text">${i.text}<small>${i.area} · Impact ${i.impact} · Effort ${i.effort}</small></div><span class="tag ${c}">${q}</span><button onclick="state.ideas.splice(${n},1);renderIdeas()">X</button></div>`}).join('');$('ideaCount').textContent=state.ideas.length+' (aim for 8-12)';$('topCount').textContent=state.ideas.filter(i=>i.priority).length+' (pick 3-5)';document.querySelectorAll('.dot').forEach(d=>d.remove());state.ideas.forEach((i,n)=>{const d=document.createElement('div');d.className='dot '+quadrant(i)[1]+(i.priority?' priority':'');d.style.left=((({Low:1,Medium:2,High:3}[i.effort]-1)/2)*70+15)+'%';d.style.top=((1-(({Low:1,Medium:2,High:3}[i.impact]-1)/2))*70+15)+'%';d.textContent=n+1;$('matrix').appendChild(d)})}function priority(n){if(!state.ideas[n].priority&&state.ideas.filter(i=>i.priority).length>=5)return toast('Five priorities is the limit.');state.ideas[n].priority=!state.ideas[n].priority;renderIdeas()}function summary(){const d=data(),tops=state.ideas.filter(i=>i.priority).map(i=>'★ '+i.text).join('\n')||'(none starred yet)';$('summary').innerHTML=`<div class="review"><h4>Participant</h4><p>${state.name} · ${state.business}</p></div><div class="review"><h4>Exercise 1 · Leadership Snapshot</h4><p>${[d.q1,d.q2,d.q3].filter(Boolean).join('\n')||'(not completed)'}</p></div><div class="review"><h4>Exercise 2 · Business Prompt - rated ${state.rating||'-'}/10</h4><p>${d.prompt.slice(0,500)||'(not completed)'}</p></div><div class="review"><h4>Exercise 3 · Opportunity Map - ${state.ideas.length} ideas</h4><p>${tops}</p></div>`}
 $('steps').innerHTML=['Start|Sign in','Exercise 1|Snapshot','Exercise 2|Prompt','Exercise 3|Opportunity Map','Finish|Review'].map((x,i)=>{const[a,b]=x.split('|');return`<div class="step" onclick="${i?'go('+i+')':'go(0)'}"><small>${a}</small>${b}</div>`}).join('');$('exerciseList').innerHTML=[['EX 1 · 10 MIN','Your Leadership Snapshot','Three questions on where your time goes'],['EX 2 · 20 MIN','Create a Business Prompt','Build a prompt with six blocks'],['EX 3 · 40 MIN','Your AI Opportunity Map','Scan, score and pick your top ideas']].map(x=>`<div class="card"><span class="time">${x[0]}</span><h3>${x[1]}</h3><div class="hint">${x[2]}</div></div>`).join('');$('blockFields').innerHTML=blocks.map(([id,label,ph])=>`<label>${label}</label><input id="${id}" placeholder="${ph}" oninput="build()">`).join('');$('rating').innerHTML=Array.from({length:10},(_,i)=>`<button onclick="state.rating=${i+1};document.querySelectorAll('.rating button').forEach((b,n)=>b.classList.toggle('selected',n<state.rating))">${i+1}</button>`).join('');$('areas').innerHTML=areas.map(a=>`<button class="chip ${a===state.area?'selected':''}" onclick="state.area='${a}';$('areas').querySelectorAll('.chip').forEach(c=>c.classList.toggle('selected',c.textContent===state.area))">${a}</button>`).join('');
 </script>
 <script>
@@ -95,9 +109,9 @@ function signedIn(){return !!(state.name&&state.business)}
 function updateTabLocks(){document.querySelectorAll('.session-tab').forEach(tab=>{if(!tab.classList.contains('login-tab'))tab.classList.toggle('locked',!signedIn())});const signOutBtn=$('signOutBtn');if(signOutBtn)signOutBtn.style.display=signedIn()?'':'none'}
 function clearWorkspace(){
 	clearTimeout(draftTimer);
-	delete state.step;delete state.session2Step;delete state.session3Step;
-	Object.assign(state,{name:'',business:'',area:'Operations',ideas:[],rating:0,session2Priorities:[],session2Notes:'',processes:[{name:'',trigger:'',steps:[]},{name:'',trigger:'',steps:[]}],chosenProcess:null,sopPrompt:'',sopText:'',baselineBefore:'',baselineAfter:'',checklist:{},pilot:{},session3:blankSession3(),session:1});
-	session2Step=0;session3Step=0;
+	delete state.step;delete state.session2Step;delete state.session3Step;delete state.session4Step;
+	Object.assign(state,{name:'',business:'',area:'Operations',ideas:[],rating:0,session2Priorities:[],session2Notes:'',processes:[{name:'',trigger:'',steps:[]},{name:'',trigger:'',steps:[]}],chosenProcess:null,sopPrompt:'',sopText:'',baselineBefore:'',baselineAfter:'',checklist:{},pilot:{},session3:blankSession3(),session4:blankSession4(),session:1});
+	session2Step=0;session3Step=0;session4Step=0;
 	['q1','q2','q3','task','context','role','requirements','reasoning','boundaries','e2notes','e3notes','ideaText'].forEach(id=>{if($(id))$(id).value=''});
 	document.querySelectorAll('.rating button').forEach(b=>b.classList.remove('selected'));
 	build();
@@ -136,19 +150,29 @@ selectSession=function(number){
 	}else if(number===2){
 		document.getElementById('session2Content').style.display='';
 		document.getElementById('session3Content').style.display='none';
+		document.getElementById('session4Content').style.display='none';
 		document.getElementById('comingSoon').style.display='none';
 		renderSession2();
 		if(signedIn())syncState();
 	}else if(number===3){
 		document.getElementById('session2Content').style.display='none';
 		document.getElementById('session3Content').style.display='';
+		document.getElementById('session4Content').style.display='none';
 		document.getElementById('comingSoon').style.display='none';
 		renderSession3();
+		if(signedIn())syncState();
+	}else if(number===4){
+		document.getElementById('session2Content').style.display='none';
+		document.getElementById('session3Content').style.display='none';
+		document.getElementById('session4Content').style.display='';
+		document.getElementById('comingSoon').style.display='none';
+		renderSession4();
 		if(signedIn())syncState();
 	}else{
 		document.getElementById('steps').style.display='none';
 		document.getElementById('session2Content').style.display='none';
 		document.getElementById('session3Content').style.display='none';
+		document.getElementById('session4Content').style.display='none';
 		document.getElementById('comingSoon').style.display='block';
 		if(signedIn())syncState();
 	}
@@ -259,7 +283,7 @@ function renderS2Redesign(){
 	}).join('');
 	const before=state.baselineBefore||'',after=state.baselineAfter||'';
 	const saved=(before&&after)?Math.max(before-after,0):null;
-	return `<div class="lead"><span class="time">PART 3 · 35 MIN</span><h1><b>Exercise 2:</b> Redesign and standardise</h1><p>Working on <b>${proc.name||'your chosen process'}</b>. Simplify before you automate, then decide what stays human.</p></div><div class="card"><h3>Simplify &amp; split</h3><div class="hint">Walk the ladder — Eliminate, Simplify or Combine — before you go near a tool. Then decide who owns each step.</div><div class="dims" style="margin-top:12px">${rows}</div></div><div class="card"><h3>Build the SOP</h3><div class="hint">Tag every step above, then commit those decisions into the prompt. Paste it into your AI tool, then paste the result back in below.</div><div class="actions" style="justify-content:flex-start;gap:10px;margin:14px 0"><button class="btn purple" type="button" onclick="buildSopPrompt()">Build prompt</button><button class="btn ghost" type="button" onclick="copySopPrompt()">Copy prompt</button></div><div class="prompt" id="sopPromptBox"><span class="placeholder">Click Build prompt to turn your Simplify &amp; split decisions into a prompt...</span></div><label style="margin-top:14px">Your SOP</label><textarea id="sopText" placeholder="Paste the SOP your AI tool produced..."></textarea></div><div class="card"><h3>Baseline</h3><div class="hint">How long does this take today, and how long after the redesign?</div><div class="grid2"><div><label>Before (minutes)</label><input id="baselineBefore" type="number" min="0" value="${before}" oninput="updateBaseline()"></div><div><label>After (minutes)</label><input id="baselineAfter" type="number" min="0" value="${after}" oninput="updateBaseline()"></div></div><div class="hint" style="margin-top:10px" id="baselineSaved">${saved!=null?saved+' minutes saved':'Fill in both to see the minutes saved.'}</div></div><div class="actions"><button class="btn ghost" onclick="session2Back()">Back</button><button class="btn primary" onclick="saveS2Redesign();session2Next()">Save &amp; continue -&gt;</button></div>`;
+	return `<div class="lead"><span class="time">PART 3 · 35 MIN</span><h1><b>Exercise 2:</b> Redesign and standardise</h1><p>Working on <b>${proc.name||'your chosen process'}</b>. Simplify before you automate, then decide what stays human.</p></div><div class="card"><h3>Simplify &amp; split</h3><div class="hint">Walk the ladder — Eliminate, Simplify or Combine — before you go near a tool. Then decide who owns each step.</div><div class="dims" style="margin-top:12px">${rows}</div></div><div class="card"><h3>Build the SOP</h3><div class="hint">Tag every step above, then commit those decisions into the prompt. Paste it into your AI tool, then paste the result back in below.</div><div class="actions" style="justify-content:flex-start;gap:10px;margin:14px 0"><button class="btn purple" type="button" onclick="buildSopPrompt()">Build prompt</button><button class="btn ghost" type="button" onclick="copySopPrompt()">Copy prompt</button></div><div class="prompt" id="sopPromptBox"><span class="placeholder">Click Build prompt to turn your Simplify &amp; split decisions into a prompt...</span></div><label style="margin-top:14px">Your SOP</label><textarea id="sopText" placeholder="Paste the SOP your AI tool produced..." oninput="s4FlagEcho(this,looksLikePrompt(this.value,state.sopPrompt))"></textarea></div><div class="card"><h3>Baseline</h3><div class="hint">How long does this take today, and how long after the redesign?</div><div class="grid2"><div><label>Before (minutes)</label><input id="baselineBefore" type="number" min="0" value="${before}" oninput="updateBaseline()"></div><div><label>After (minutes)</label><input id="baselineAfter" type="number" min="0" value="${after}" oninput="updateBaseline()"></div></div><div class="hint" style="margin-top:10px" id="baselineSaved">${saved!=null?saved+' minutes saved':'Fill in both to see the minutes saved.'}</div></div><div class="actions"><button class="btn ghost" onclick="session2Back()">Back</button><button class="btn primary" onclick="if(saveS2Redesign()!==false)session2Next()">Save &amp; continue -&gt;</button></div>`;
 }
 function updateBaseline(){
 	state.baselineBefore=document.getElementById('baselineBefore').value;
@@ -285,13 +309,14 @@ function renderSopPrompt(){
 function copySopPrompt(){if(!state.sopPrompt)return toast('Build the prompt first.');navigator.clipboard?.writeText(state.sopPrompt).then(()=>toast('Prompt copied.'))}
 function saveS2Redesign(){
 	state.sopText=document.getElementById('sopText').value;
+	if(looksLikePrompt(state.sopText,state.sopPrompt)){s4FlagEcho('sopText',true);toast(s4EchoMsg);return false}
 	updateBaseline();
 	const proc=state.processes[state.chosenProcess];
 	const label=proc.name||('Process '+(state.chosenProcess+1));
 	postSession2('s2_redesign',{chosenProcess:label,steps:proc.steps||[]});
 	postSession2('s2_sop',{chosenProcess:label,sopPrompt:state.sopPrompt||'',sopText:state.sopText});
 	postSession2('s2_baseline',{chosenProcess:label,before:state.baselineBefore,after:state.baselineAfter});
-	toast('Redesign, SOP and baseline saved.');
+	toast('Redesign, SOP and baseline saved.');return true;
 }
 
 // Part 4 · Digital operations checklist
@@ -468,9 +493,9 @@ function renderS3Statement(){
 <label>Writing for a client in which sector?</label><input id="s3Sector" value="${esc(d.sector)}" placeholder="e.g. commercial property, facilities management" oninput="s3().sector=this.value">
 <div class="actions" style="justify-content:flex-start;gap:10px;margin:16px 0"><button class="btn purple" type="button" onclick="buildS3CapPrompt()">Build prompt</button><button class="btn ghost" type="button" onclick="copyS3('capPrompt')">Copy prompt</button></div>
 <div class="prompt" id="capPromptBox"><span class="placeholder">Click Build prompt to turn your evidence into a capability-statement prompt...</span></div>
-<label style="margin-top:14px">Your capability statement</label><textarea id="capText" style="min-height:200px" placeholder="Paste what your AI tool produced, then edit it until it is true and it is yours..."></textarea></div>
+<label style="margin-top:14px">Your capability statement</label><textarea id="capText" style="min-height:200px" placeholder="Paste what your AI tool produced, then edit it until it is true and it is yours..." oninput="s4FlagEcho(this,looksLikePrompt(this.value,s3().capPrompt))"></textarea></div>
 <div class="card"><h3>Would a stranger shortlist you?</h3><div class="hint">The test is simple: could a client who has never met you decide to shortlist you from this page alone? Tick what is genuinely true of your draft.</div>${rubric}<div class="hint" style="margin-top:12px">What should <b>not</b> be on the page: adjectives, mission statements, and stock photographs.</div></div>
-<div class="actions"><button class="btn ghost" onclick="session3Back()">Back</button><button class="btn primary" onclick="saveS3Statement();session3Next()">Save &amp; continue -&gt;</button></div>`;
+<div class="actions"><button class="btn ghost" onclick="session3Back()">Back</button><button class="btn primary" onclick="if(saveS3Statement()!==false)session3Next()">Save &amp; continue -&gt;</button></div>`;
 }
 function buildS3CapPrompt(){
 	const d=s3();
@@ -491,8 +516,9 @@ function saveS3Statement(){
 	const d=s3();
 	d.sector=document.getElementById('s3Sector').value.trim();
 	d.capText=document.getElementById('capText').value;
+	if(looksLikePrompt(d.capText,d.capPrompt)){s4FlagEcho('capText',true);toast(s4EchoMsg);return false}
 	postSession3('s3_statement',{sector:d.sector,prompt:d.capPrompt||'',text:d.capText,rubric:d.rubric});
-	toast('Capability statement saved.');
+	toast('Capability statement saved.');return true;
 }
 
 /* Part 4 · The quotation template and the completeness check (deck slides 31, 35, 37, pointed at a quote) */
@@ -605,11 +631,11 @@ function renderS3Quotation(){
 <div class="actions" style="justify-content:flex-start;gap:10px;margin:18px 0;flex-wrap:wrap"><button class="btn purple" type="button" onclick="buildS3QuotePrompt()">Build prompt</button><button class="btn ghost" type="button" onclick="copyS3('quotePrompt')">Copy prompt</button><button class="btn ghost" type="button" onclick="rebuildS3Blocks()">Rebuild from Parts 1-3</button></div>
 <div class="hint" style="margin:-8px 0 14px">Rebuild replaces Role, Task, Context and Example with fresh values from your earlier answers. It leaves Requirements and Format exactly as you wrote them.</div>
 <div class="prompt" id="quotePromptBox"><span class="placeholder">Fill the blocks, then click Build prompt...</span></div>
-<label style="margin-top:14px">Your quotation template</label><textarea id="quoteText" style="min-height:200px" placeholder="Paste what your AI tool produced. Every price should still read [PRICE] — you fill those in. Keep the structure: it is what you reuse on the next quote..."></textarea></div>
+<label style="margin-top:14px">Your quotation template</label><textarea id="quoteText" style="min-height:200px" placeholder="Paste what your AI tool produced. Every price should still read [PRICE] — you fill those in. Keep the structure: it is what you reuse on the next quote..." oninput="s4FlagEcho(this,looksLikePrompt(this.value,s3().quotePrompt))"></textarea></div>
 <div class="card"><h3>Check it against the enquiry</h3><div class="hint">Read it back against what the client actually asked for. List what they asked for that this quote does not yet answer, and name who supplies it. A quote that misses one line item loses to one that didn't, whatever the price.</div>
 <div style="margin-top:14px">${gaps}</div>${d.gaps.length?'':'<div class="hint" style="padding:10px 0">Nothing listed yet.</div>'}
 <button class="btn purple" style="margin-top:6px" type="button" onclick="addS3Gap()">Add a gap</button></div>
-<div class="actions"><button class="btn ghost" onclick="session3Back()">Back</button><button class="btn primary" onclick="saveS3Quotation();session3Next()">Save &amp; continue -&gt;</button></div>`;
+<div class="actions"><button class="btn ghost" onclick="session3Back()">Back</button><button class="btn primary" onclick="if(saveS3Quotation()!==false)session3Next()">Save &amp; continue -&gt;</button></div>`;
 }
 function addS3Gap(){s3().gaps.push({missing:'',who:''});renderSession3Step()}
 function removeS3Gap(i){s3().gaps.splice(i,1);renderSession3Step()}
@@ -629,10 +655,11 @@ function buildS3QuotePrompt(){
 function saveS3Quotation(){
 	const d=s3();
 	d.quoteText=document.getElementById('quoteText').value;
+	if(looksLikePrompt(d.quoteText,d.quotePrompt)){s4FlagEcho('quoteText',true);toast(s4EchoMsg);return false}
 	const chosen=d.chosenOpportunity!=null?s3OppName(d.chosenOpportunity):'';
 	postSession3('s3_quotation',{opportunity:chosen,blocks:d.quoteBlocks,prompt:d.quotePrompt||'',text:d.quoteText,exampleText:d.exampleText||'',exampleSource:d.exampleSource||''});
 	postSession3('s3_gaps',{opportunity:chosen,gaps:d.gaps});
-	toast('Quotation template and completeness check saved.');
+	toast('Quotation template and completeness check saved.');return true;
 }
 
 /* Part 5 · Follow up, measure it, set the date (deck slides 32, 41, 42, 43) */
@@ -651,7 +678,7 @@ function renderS3FollowUp(){
 <div class="card"><h3>Your follow-up pack</h3><div class="hint">Five messages you send every week, written once in your voice and reused for years. The prompt is built from the quote you picked; run it, then paste the five back in and edit until they sound like you.</div><div style="margin:14px 0 4px">${messages}</div>
 <div class="actions" style="justify-content:flex-start;gap:10px;margin:14px 0"><button class="btn purple" type="button" onclick="buildS3CommsPrompt()">Build prompt</button><button class="btn ghost" type="button" onclick="copyS3('commsPrompt')">Copy prompt</button></div>
 <div class="prompt" id="commsPromptBox"><span class="placeholder">Click Build prompt to draft the five messages around your quote...</span></div>
-<label style="margin-top:14px">Your five messages</label><textarea id="commsText" style="min-height:180px" placeholder="Paste the five messages back in. Ask for each one firmer, then warmer, and keep the register that sounds like you..."></textarea></div>
+<label style="margin-top:14px">Your five messages</label><textarea id="commsText" style="min-height:180px" placeholder="Paste the five messages back in. Ask for each one firmer, then warmer, and keep the register that sounds like you..." oninput="s4FlagEcho(this,looksLikePrompt(this.value,s3().commsPrompt))"></textarea></div>
 <div class="card"><h3>Your pipeline in five stages</h3><div style="overflow-x:auto"><table class="ptable"><thead><tr><th>Stage</th><th>What it means</th><th>What moves it on</th><th>Target</th></tr></thead><tbody>${stageRows}</tbody></table></div>
 ${d.opportunities.length?`<label style="margin-top:20px">Put your quotes on the board</label><div class="dims">${oppStages}</div>`:'<div class="hint" style="margin-top:16px">Add your quote requests in Part 1 and they will appear here to stage.</div>'}</div>
 <div class="lead" style="margin-top:26px"><span class="time">THE WHOLE POINT OF TODAY</span><h1>Pick your <b>pilot</b></h1><p>One quote. Six fields. Without an owner and two dates this stays a good intention instead of becoming a quote that went out.</p></div>
@@ -661,7 +688,7 @@ ${d.opportunities.length?`<label style="margin-top:20px">Put your quotes on the 
 <div class="grid2" style="margin-top:14px"><div><label>The follow-up — the day you chase it, in your diary</label><input id="s3PilotFollowUp" type="date" value="${esc(pilot.followUp)}"></div><div></div></div></div>
 <div class="lead" style="margin-top:26px"><span class="time">THE ONGOING TOOL</span><h1>Your <b>business development rhythm</b></h1><p>A one-page rhythm you can run in about fifteen minutes a week.</p></div>
 <div class="grid3">${groups}</div>
-<div class="card" style="background:var(--green-tint);border-color:#cbe9be"><h3>Before Session 4: keep the momentum</h3><div class="hint"><b>Send the pilot</b> on the date you wrote, to the client you named. <b>Fill the pipeline</b> — every live quote on the page and scored, five minutes on Friday. <b>Finish the pack</b> — the five messages and a second quotation template, from the same evidence.<br><br>Next session is Costing, Pricing and Financial Intelligence. Bring the pricing on the quote you built today — we find out whether it actually makes money.</div></div>
+<div class="card" style="background:var(--green-tint);border-color:#cbe9be"><h3>Before Session 4: keep the momentum</h3><div class="hint"><b>Send the pilot</b> on the date you wrote, to the client you named. <b>Fill the pipeline</b> — every live quote on the page and scored, five minutes on Friday. <b>Finish the pack</b> — the five messages and a second quotation template, from the same evidence.<br><br>Next session is Costing, Pricing and Financial Intelligence: one job, costed properly. Bring one real job — the last quote you sent or the one you are about to send — with what you charged, what you paid people, what you bought, what you drove and how long it took. Nothing from today is needed; everyone starts from one job and a blank cost sheet.</div></div>
 <div class="actions"><button class="btn ghost" onclick="session3Back()">Back</button><button class="btn primary" onclick="saveS3FollowUp()">Save my pilot</button></div>`;
 }
 function buildS3CommsPrompt(){
@@ -676,6 +703,7 @@ function buildS3CommsPrompt(){
 function saveS3FollowUp(){
 	const d=s3();
 	d.commsText=document.getElementById('commsText').value;
+	if(looksLikePrompt(d.commsText,d.commsPrompt)){s4FlagEcho('commsText',true);return toast(s4EchoMsg)}
 	d.pilot={opportunity:document.getElementById('s3PilotOpp').value.trim(),action:document.getElementById('s3PilotAction').value.trim(),asset:document.getElementById('s3PilotAsset').value.trim(),owner:document.getElementById('s3PilotOwner').value.trim(),date:document.getElementById('s3PilotDate').value,followUp:document.getElementById('s3PilotFollowUp').value};
 	if(!d.pilot.opportunity||!d.pilot.owner||!d.pilot.date)return toast('Name the quote, the owner and a send date before saving.');
 	const chosen=d.chosenOpportunity!=null?s3OppName(d.chosenOpportunity):'';
@@ -685,6 +713,683 @@ function saveS3FollowUp(){
 	postSession3('s3_pilot',d.pilot);
 	toast('Pilot saved. Now send the quote.');
 }
+</script>
+<script>
+/* Session 4 · Costing, Pricing and Financial Intelligence — "One Job, Costed Properly".
+   Six cards, per EDMECA_Session4_App_Spec_v0.1 (approved 17 September 2026): Your Job -> Round 1 known costs (layers 1 to 3) ->
+   Round 2 the hidden cost interview (layers 4 and 5 found) -> Round 3 from cost to price -> Cash line -> Four numbers, pilot and file.
+   The app is the calculation surface. Claude is only ever asked to ask; every rand on the sheet is one the participant typed.
+   Item names go to the AI, amounts never do. Card 6 generates the participant's own Excel cost sheet in the browser (ExcelJS). */
+const s4Layers=[[1,'People','Wages, casuals, subcontractors, and your own time on the job','e.g. General workers'],[2,'Materials','Everything you buy that ends up on site or in the product','e.g. Compost'],[3,'Vehicles and machines','Running cost per day, fuel, hire, wear on equipment','e.g. Bakkie and trailer'],[4,"The job's own overheads",'Disposal, permits, inductions, PPE, compliance, rework, warranty','e.g. Green waste disposal'],[5,'Your share of the business','Rent, accountant, insurance, phones, software, admin time','']];
+const s4Units=['day','hour','m3','km','load','each','month','lump sum'];
+const s4Sources=[['invoice','Invoice'],['bank','Bank statement'],['wagebook','Wage book'],['supplier','Supplier quote'],['ownrate','Own rate'],['other','Other']];
+const s4Statuses=[['won','Sent and won'],['lost','Sent and lost'],['pending','About to send']];
+const s4Methods=[['A','A · By time — share of your team\'s month this job uses'],['B','B · By direct cost — overhead as a % of what jobs cost you'],['C','C · By revenue — overhead as a % of what you invoice']];
+const s4Materials=[['upfront','Up front, in week 1'],['spread','Spread across the job'],['completion','On completion']];
+const session4Steps=['Your Job','Round 1 · Known Costs','Round 2 · Interview','Round 3 · Price','Cash Line','Four Numbers & Pilot'];
+const s4PilotDeadline='2026-09-30';
+const s4EchoMsg='This looks like your prompt, not Claude\'s reply. Paste what Claude sent back.';
+const s4XlsxSrc='https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js';
+let session4Step=0,s4SyncTimer,s4ExcelPromise=null,s4Listening=false;
+function s4(){if(!state.session4)state.session4=blankSession4();return state.session4}
+function s4Rand(n,dp){if(n==null||!isFinite(n))return '—';const neg=n<0;const v=Math.abs(n);const s=dp?v.toFixed(dp):String(Math.round(v));const[int,frac]=s.split('.');return (neg?'-R ':'R ')+int.replace(/\B(?=(\d{3})+(?!\d))/g,' ')+(frac?'.'+frac:'')}
+function s4Pct(x,dp){return x==null||!isFinite(x)?'—':(x*100).toFixed(dp==null?1:dp)+'%'}
+function s4Short(v){const a=Math.abs(v);const s=a>=1e6?(a/1e6).toFixed(1).replace(/\.0$/,'')+'m':a>=1e3?Math.round(a/1e3)+'k':String(Math.round(a));return (v<0?'-R':'R')+s}
+function postSession4(exercise,payloadData){
+	const payload={name:state.name,business:state.business,exercise,data:payloadData,state:{...state,data:data()},timestamp:new Date().toISOString()};
+	localStorage.setItem('edmeca:'+state.name.toLowerCase()+'|'+state.business.toLowerCase(),JSON.stringify(payload));
+	fetch('/api/bridge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
+}
+/* Autosave: every change on a Session 4 card is written locally at once (the shared draft listener) and to the State tab after a short pause. */
+function s4Touch(){clearTimeout(s4SyncTimer);s4SyncTimer=setTimeout(()=>syncState(),2500)}
+function s4LoadExcel(){
+	if(window.ExcelJS)return Promise.resolve(window.ExcelJS);
+	if(!s4ExcelPromise)s4ExcelPromise=new Promise((resolve,reject)=>{const tag=document.createElement('script');tag.src=s4XlsxSrc;tag.onload=()=>resolve(window.ExcelJS);tag.onerror=()=>{s4ExcelPromise=null;reject(new Error('load'))};document.head.appendChild(tag)});
+	return s4ExcelPromise;
+}
+function s4FlagEcho(id,on){
+	const el=typeof id==='string'?document.getElementById(id):id;if(!el)return;
+	let msg=el.nextElementSibling;
+	if(!msg||!msg.classList.contains('echo-msg')){msg=document.createElement('div');msg.className='err echo-msg';el.insertAdjacentElement('afterend',msg)}
+	msg.textContent=on?s4EchoMsg:'';msg.style.display=on?'':'none';el.style.borderColor=on?'var(--red)':'';
+}
+/* ---------- completeness ---------- */
+function s4Missing(n){
+	const d=s4(),job=d.job,miss=[];
+	if(n===1){if(!job.sector.trim())miss.push('the sector');if(!job.line.trim())miss.push('the job in one line');if(!job.client.trim())miss.push('a client label');if(!(s4Num(job.quoted)>0))miss.push('what you charged');if(!(s4Num(job.duration)>0))miss.push('the duration');if(!job.status)miss.push('the status')}
+	if(n===2){const good=d.lines.filter(l=>[1,2,3].includes(Number(l.layer))&&(l.item||'').trim()&&s4LineAmount(l)>0).length;if(good<3)miss.push((3-good)+' more cost line'+(3-good===1?'':'s')+' with an item and an amount (three across layers 1 to 3)')}
+	if(n===3){const rounds=d.rounds||[];const full=rounds.filter(r=>(r.asked||'').trim()&&(r.answer||'').trim());if(full.length<3)miss.push((3-full.length)+' more round'+(3-full.length===1?'':'s')+' with both the question and your answer');if(rounds.some(r=>looksLikePrompt(r.asked,d.interviewPrompt)))miss.push('a real reply from Claude — one “AI asked” box holds your prompt')}
+	if(n===4){const c=s4Compute(d);if(!(s4Num(d.price.overhead)>0))miss.push('your monthly overhead');if(d.price.targetMargin===''||d.price.targetMargin==null)miss.push('a target margin');if(!(c.price>0))miss.push('a price (cost the job on cards 2 and 3 first)');if(!(c.walk>0))miss.push('a walk-away price');if(!(d.scenario.answer||'').trim())miss.push('Claude\'s scenario answer, pasted back');else if(looksLikePrompt(d.scenario.answer,d.scenario.prompt))miss.push('a real reply from Claude in the scenario box');if(!d.scenario.chosen)miss.push('the scenario you would offer')}
+	if(n===5){const cs=d.cash;if(Math.abs(s4Num(cs.deposit)+s4Num(cs.progress)+s4Num(cs.final)-100)>0.01)miss.push('a payment split that adds up to 100%');if(cs.terms===''||cs.terms==null)miss.push('payment terms');if(!(s4Num(cs.weeks)>0))miss.push('the job length in weeks');if(!(s4Compute(d).price>0))miss.push('a price from card 4')}
+	if(n===6){const p=d.pilot;if(!(p.quote||'').trim())miss.push('the next quote');if(!(p.owner||'').trim())miss.push('who prepares it');if(!p.date)miss.push('a date');else if(p.date>s4PilotDeadline)miss.push('a date on or before 30 September 2026');if(!(p.whatsapp||'').trim())miss.push('a WhatsApp number');if(!d.fileGenerated)miss.push('your cost sheet file (press Generate)')}
+	return miss;
+}
+function s4Complete(n){return s4Missing(n).length===0}
+function s4Pill(n){const miss=s4Missing(n);return miss.length?`<div style="margin:10px 0 4px"><span class="pill todo">Card ${n} · not yet complete</span><div class="hint" style="margin-top:6px">Still needed: ${esc(miss.join('; '))}.</div></div>`:`<div style="margin:10px 0 4px"><span class="pill ok">✓ Card ${n} complete</span></div>`}
+/* ---------- navigation ---------- */
+function renderSession4(){
+	if(!state.name||!state.business)return selectLogin();
+	document.getElementById('steps').style.display='flex';
+	document.getElementById('steps').innerHTML=session4Steps.map((label,i)=>`<div class="step ${i===session4Step?'active':''} ${i<session4Step?'done':''} ${s4Complete(i+1)?'complete':''}" onclick="goSession4(${i})"><small>${s4Complete(i+1)?'✓ ':''}Card ${i+1}</small>${label}</div>`).join('');
+	renderSession4Step();
+	s4LoadExcel().catch(()=>{});
+	window.scrollTo({top:0,behavior:'smooth'});
+}
+function goSession4(i){session4Step=i;state.session4Step=i;renderSession4();syncState()}
+function session4Next(){if(session4Step<session4Steps.length-1){session4Step++;state.session4Step=session4Step;renderSession4();syncState()}}
+function session4Back(){if(session4Step>0){session4Step--;state.session4Step=session4Step;renderSession4();syncState()}}
+function renderSession4Step(){
+	const el=document.getElementById('session4Content');
+	if(!s4Listening){el.addEventListener('input',s4Touch);el.addEventListener('change',s4Touch);s4Listening=true}
+	const renderers=[renderS4Job,renderS4Known,renderS4Interview,renderS4Price,renderS4Cash,renderS4Four];
+	el.className=s4().hideAmounts?'hide-amounts':'';
+	el.innerHTML=renderers[session4Step]();
+	if(session4Step===2)s4().rounds.forEach((r,i)=>{const a=document.getElementById('s4asked'+i);if(a)s4FlagEcho(a,looksLikePrompt(r.asked,s4().interviewPrompt))});
+	if(session4Step===3){const t=document.getElementById('s4scAnswer');if(t)s4FlagEcho(t,looksLikePrompt(s4().scenario.answer,s4().scenario.prompt))}
+	if(session4Step===4)s4RefreshCash();
+}
+function s4Steps(){document.querySelectorAll('#steps .step').forEach((st,i)=>{const ok=s4Complete(i+1);st.classList.toggle('complete',ok);const sm=st.querySelector('small');if(sm)sm.textContent=(ok?'✓ ':'')+'Card '+(i+1)})}
+/* ---------- Card 1 · Your job ---------- */
+function renderS4Job(){
+	const d=s4(),job=d.job;
+	if(!job.sector&&state.session3&&state.session3.sector)job.sector=state.session3.sector;
+	const statusOpts=s4Statuses.map(([v,l])=>`<option value="${v}" ${job.status===v?'selected':''}>${l}</option>`).join('');
+	const unitOpts=['days','weeks','months'].map(u=>`<option value="${u}" ${job.durationUnit===u?'selected':''}>${u}</option>`).join('');
+	return `<div class="lead"><span class="time">CARD 1 · PRE-START</span><h1><b>Card 1:</b> Your job</h1><p>One real job: the last quote you sent, or the one you are about to send. Everything today comes off it. All amounts in rand, excluding VAT.</p></div>
+<div class="card"><h3>The job on the table</h3><div class="hint">Nothing today needs your Session 3 work. Everyone starts from one real job and a blank cost sheet.</div>
+<div class="grid2"><div><label>Your sector</label><input id="s4Sector" value="${esc(job.sector)}" placeholder="e.g. landscaping, electrical, security, construction" oninput="s4().job.sector=this.value"></div><div><label>Client — do not use the real name</label><input value="${esc(job.client)}" placeholder="Client A" oninput="s4().job.client=this.value"></div></div>
+<label>The job in one line <span id="s4LineCount" style="font-weight:400;color:var(--faint)">${job.line.length}/120</span></label><input maxlength="120" value="${esc(job.line)}" placeholder="a six week estate rehabilitation job" oninput="s4().job.line=this.value;document.getElementById('s4LineCount').textContent=this.value.length+'/120'">
+<div class="grid3"><div><label>What you charged or will charge (R)</label><input type="number" min="0" step="any" inputmode="decimal" value="${esc(job.quoted)}" placeholder="238000" oninput="s4().job.quoted=this.value"></div><div><label>Duration</label><div style="display:flex;gap:8px"><input type="number" min="0" step="any" inputmode="decimal" value="${esc(job.duration)}" placeholder="6" oninput="s4().job.duration=this.value"><select style="width:auto" onchange="s4().job.durationUnit=this.value">${unitOpts}</select></div></div><div><label>Status</label><select onchange="s4().job.status=this.value"><option value="">Choose…</option>${statusOpts}</select></div></div>
+${s4Pill(1)}</div>
+<div class="card" style="background:var(--purple-tint);border-color:var(--purple-line)"><h3>Responsible AI with money in the room</h3><div class="hint"><b>Goes in, as it is:</b> the names of your cost items, quantities, your payment terms, the job description and the sector. <b>Never goes in:</b> rates and amounts (the workbook sends item names only), client and site names (use Client A), margin as rands (it goes in as an index: cost 100, price 125). <b>You sign the quote, so you check the number.</b> Your amounts are saved for EDMECA's programme reporting. No other participant sees them.</div></div>
+<div class="actions"><span class="hint">Card 2 next: the costs you already know. Claude stays closed.</span><button class="btn primary" onclick="if(saveS4Job())session4Next()">Save &amp; continue -&gt;</button></div>`;
+}
+function saveS4Job(){
+	const d=s4(),job=d.job;
+	const miss=s4Missing(1);
+	if(miss.length){toast('Still needed: '+miss.join(', ')+'.');return false}
+	postSession4('s4c1',{sector:job.sector.trim(),line:job.line.trim(),client:job.client.trim(),quoted:s4Num(job.quoted),duration:job.duration+' '+job.durationUnit,months:Number(s4MonthsFromDuration(job.duration,job.durationUnit).toFixed(2)),weeks:s4WeeksFromDuration(job.duration,job.durationUnit),status:job.status});
+	toast('Job saved.');return true;
+}
+/* ---------- Card 2 · Round 1, what you already know (layers 1 to 3) ---------- */
+function s4L(i){return s4().lines[i]}
+function s4LineRow(i,opts){
+	const l=s4L(i);opts=opts||{};
+	const layerMeta=s4Layers.find(x=>x[0]===Number(l.layer))||s4Layers[3];
+	const unitOpts=s4Units.map(u=>`<option value="${u}" ${l.unit===u?'selected':''}>${u}</option>`).join('');
+	const srcOpts=s4Sources.map(([v,t])=>`<option value="${v}" ${l.source===v?'selected':''}>${t}</option>`).join('');
+	const layerSel=opts.layerSelect?`<td><select style="width:auto" onchange="s4L(${i}).layer=Number(this.value);s4RefreshTotals()">${[1,2,3,4].map(n=>`<option value="${n}" ${Number(l.layer)===n?'selected':''}>${n}</option>`).join('')}</select></td>`:'';
+	return `<tr>${layerSel}<td><input value="${esc(l.item)}" placeholder="${esc(layerMeta[3])}" oninput="s4L(${i}).item=this.value">${l.round&&!opts.inRound?`<span class="tag bet" style="margin-left:4px">Round ${l.round}</span>`:''}</td><td><input type="number" min="0" step="any" inputmode="decimal" style="width:72px" value="${esc(l.qty)}" placeholder="0" oninput="s4L(${i}).qty=this.value;s4RefreshTotals()"></td><td><select style="width:auto" onchange="s4L(${i}).unit=this.value;s4RefreshTotals()">${unitOpts}</select></td><td class="amt"><input type="number" min="0" step="any" inputmode="decimal" style="width:100px" value="${esc(l.rate)}" placeholder="R" oninput="s4L(${i}).rate=this.value;s4RefreshTotals()"></td><td class="amt num" id="s4amt${i}">${s4Rand(s4LineAmount(l))}</td><td><select style="width:auto" onchange="s4L(${i}).source=this.value"><option value="">Source…</option>${srcOpts}</select></td><td style="white-space:nowrap"><label style="display:inline-flex;align-items:center;gap:5px;font-weight:400;font-size:12px;margin:0"><input type="checkbox" style="width:auto" ${l.estimate?'checked':''} onchange="s4L(${i}).estimate=this.checked;renderSession4Step()"> Est.</label> ${l.estimate?'<span class="tag fill">Estimate</span>':''}</td><td><button class="rowdel" type="button" onclick="removeS4Line(${i})">✕</button></td></tr>`;
+}
+function s4LineTable(indexes,opts){
+	opts=opts||{};
+	const head=`<tr>${opts.layerSelect?'<th>Layer</th>':''}<th>Item</th><th>Qty</th><th>Unit</th><th class="amt">Rate</th><th class="amt">Amount</th><th>Source</th><th>Estimate</th><th></th></tr>`;
+	return `<div style="overflow-x:auto"><table class="s4table" style="min-width:${opts.layerSelect?800:740}px"><thead>${head}</thead><tbody>${indexes.map(i=>s4LineRow(i,opts)).join('')}</tbody></table></div>`;
+}
+function addS4Line(layer,round){const d=s4();d.lines.push({layer,item:'',qty:'',unit:layer===2?'each':'day',rate:'',source:'',estimate:false,round:round||null});renderSession4Step();const rows=document.querySelectorAll('#session4Content tbody tr');const inputs=[...document.querySelectorAll('#session4Content tbody input[placeholder^="e.g."]')];const last=inputs.reverse().find(el=>!el.value);if(last)last.focus();s4Touch()}
+function removeS4Line(i){s4().lines.splice(i,1);renderSession4Step();s4Touch()}
+function s4RefreshTotals(){
+	const d=s4();
+	d.lines.forEach((l,i)=>{const cell=document.getElementById('s4amt'+i);if(cell)cell.textContent=s4Rand(s4LineAmount(l))});
+	[1,2,3,4].forEach(n=>{const t=document.getElementById('s4tot'+n);if(t)t.textContent=s4Rand(s4LayerTotal(d.lines,n))});
+	const known=document.getElementById('s4known');if(known)known.textContent=s4Rand([1,2,3].reduce((a,n)=>a+s4LayerTotal(d.lines,n),0));
+	const l14=document.getElementById('s4l14');if(l14)l14.textContent=s4Rand([1,2,3,4].reduce((a,n)=>a+s4LayerTotal(d.lines,n),0));
+	s4Steps();
+}
+function s4ToggleAmounts(){const d=s4();d.hideAmounts=!d.hideAmounts;renderSession4Step()}
+function renderS4Known(){
+	const d=s4();
+	const groups=[1,2,3].map(n=>{
+		const[,name,desc]=s4Layers[n-1];
+		const idx=d.lines.map((l,i)=>Number(l.layer)===n?i:-1).filter(i=>i>=0);
+		return `<div class="s4band"><span>${n} · ${name}<small style="display:block;font-weight:400;color:var(--soft);font-size:12px">${desc}</small></span><span class="amt">Layer ${n}: <span id="s4tot${n}">${s4Rand(s4LayerTotal(d.lines,n))}</span></span></div>
+${n===1?'<div class="hint" style="margin:0 0 8px"><b>Were you on site?</b> Add your own days at your own day rate. Your day is a cost line, even if you never pay it to yourself.</div>':''}
+${idx.length?s4LineTable(idx):'<div class="hint" style="padding:6px 0 10px">No lines yet.</div>'}
+<button class="btn ghost" type="button" style="padding:8px 14px;font-size:13px" onclick="addS4Line(${n})">+ Add a ${name.toLowerCase()} line</button>`;
+	}).join('');
+	return `<div class="lead"><span class="time">ROUND 1 · 15 MINUTES · NO AI YET</span><h1><b>Card 2:</b> What you already know it costs</h1><p>Layers 1 to 3: the costs you know or can look up. One line per cost, with a source. If you are guessing, tick Estimate and move on. <b>Claude is not used on this card.</b></p></div>
+<div class="card"><div class="actions" style="align-items:center;flex-wrap:wrap"><div><h3 style="margin:0">Your cost lines</h3><div class="hint">All amounts in rand, excluding VAT. Your amounts are saved for EDMECA's programme reporting. No other participant sees them.</div></div><button class="btn ${d.hideAmounts?'purple':'ghost'}" type="button" onclick="s4ToggleAmounts()">${d.hideAmounts?'Show amounts':'Hide amounts for the pair check'}</button></div>
+${d.hideAmounts?'<div class="hint" style="margin-top:10px;color:var(--purple)"><b>Amounts hidden.</b> Your partner reads the lines, not the money. Ask: what happens before the job starts, after it ends, and when something goes wrong?</div>':''}
+${groups}
+<div class="s4band amt" style="background:var(--green-tint);color:var(--green);margin-top:22px"><span>Known cost, layers 1 to 3</span><span id="s4known">${s4Rand([1,2,3].reduce((a,n)=>a+s4LayerTotal(d.lines,n),0))}</span></div>
+${s4Pill(2)}</div>
+<div class="actions"><button class="btn ghost" onclick="session4Back()">Back</button><button class="btn primary" onclick="if(saveS4Known())session4Next()">Save &amp; continue -&gt;</button></div>`;
+}
+function s4LinesPayload(){return s4().lines.map(l=>({layer:Number(l.layer),item:(l.item||'').trim(),qty:l.qty,unit:l.unit,rate:s4Num(l.rate),amount:s4LineAmount(l),source:l.source,estimate:!!l.estimate,round:l.round||''}))}
+function saveS4Known(){
+	const miss=s4Missing(2);
+	if(miss.length){toast('Still needed: '+miss.join(', ')+'.');return false}
+	postSession4('s4c2',{lines:s4LinesPayload()});
+	toast('Round 1 saved. Now open Claude.');return true;
+}
+/* ---------- Card 3 · Round 2, the hidden cost interview ---------- */
+function s4ItemNames(){return s4().lines.filter(l=>[1,2,3,4].includes(Number(l.layer))&&(l.item||'').trim()).map(l=>l.item.trim())}
+function s4BuildInterviewPrompt(){
+	const d=s4(),job=d.job;const items=s4ItemNames();
+	d.interviewPrompt=`You are an experienced estimator in ${job.sector.trim()||'[sector]'}. Here is my cost list for ${job.line.trim()||'[job line]'}: ${items.length?items.join(', '):'[no cost lines yet]'}. Ask me ONE question at a time about costs I may have missed. Wait for my answer before the next question. Do not suggest amounts. Do not write a quote. After my answer, tell me which of the five cost layers the cost belongs in: 1 people, 2 materials, 3 vehicles and machines, 4 the job's own overheads, 5 the business's overhead share.`;
+	return d.interviewPrompt;
+}
+function s4Copy(text,what){if(!text)return toast('Nothing to copy yet.');if(!navigator.clipboard)return toast('Select the prompt and copy it by hand — this browser blocks copy buttons.');navigator.clipboard.writeText(text).then(()=>toast('Copied. Paste it into Claude.')).catch(()=>toast('Select the prompt and copy it by hand.'))}
+function addS4Round(){s4().rounds.push({asked:'',answer:''});renderSession4Step();const t=document.getElementById('s4asked'+(s4().rounds.length-1));if(t)t.focus();s4Touch()}
+function removeS4Round(i){const d=s4();d.rounds.splice(i,1);d.lines.forEach(l=>{if(l.round===i+1)l.round=null;else if(l.round>i+1)l.round--});renderSession4Step();s4Touch()}
+function s4SetAsked(i,el){const d=s4();d.rounds[i].asked=el.value;s4FlagEcho(el,looksLikePrompt(el.value,d.interviewPrompt));s4RoundCounter()}
+function s4RoundCounter(){const d=s4();const full=d.rounds.filter(r=>(r.asked||'').trim()&&(r.answer||'').trim()).length;const el=document.getElementById('s4roundCount');if(el)el.textContent=`Round ${full} of 3 minimum`;s4Steps()}
+function renderS4Interview(){
+	const d=s4();s4BuildInterviewPrompt();
+	const full=d.rounds.filter(r=>(r.asked||'').trim()&&(r.answer||'').trim()).length;
+	const rounds=d.rounds.map((r,i)=>{
+		const found=d.lines.map((l,k)=>l.round===i+1?k:-1).filter(k=>k>=0);
+		return `<div class="opp"><div class="opp-head"><span class="num">Round ${i+1}</span><span style="flex:1"></span><button class="rowdel" type="button" onclick="removeS4Round(${i})">✕</button></div>
+<label>AI asked — paste Claude's question</label><textarea id="s4asked${i}" style="min-height:70px" placeholder="Paste the one question Claude sent back…" oninput="s4SetAsked(${i},this)">${esc(r.asked)}</textarea>
+<label>My answer — type it here, then paste it back into Claude</label><textarea style="min-height:60px" placeholder="Eight trailer loads to the municipal tip. I pay." oninput="s4().rounds[${i}].answer=this.value;s4RoundCounter()">${esc(r.answer)}</textarea>
+${found.length?`<div class="hint" style="margin-top:10px"><b>Found in this round</b> — you type the amount, never the AI. Layer 4 unless it belongs higher up.</div>${s4LineTable(found,{layerSelect:true,inRound:true})}`:''}
+<button class="btn ghost" type="button" style="margin-top:10px;padding:8px 14px;font-size:13px" onclick="addS4Line(4,${i+1})">+ Add as cost line</button></div>`;
+	}).join('');
+	return `<div class="lead"><span class="time">ROUND 2 · 20 MINUTES · CLAUDE OPEN</span><h1><b>Card 3:</b> Make the AI ask you the questions</h1><p>The costs you forget live in layers 4 and 5. The AI cannot know your rates, so it does not get them. It gets your item names and asks one question at a time. Write, run, read, answer, run again — at least three times round.</p></div>
+<div class="card"><h3>The interview prompt, built for you</h3><div class="hint">Role and format are already written. Your sector and job line come from card 1; the item names come from card 2, with no quantities, rates or amounts. Press Copy, paste it into Claude.</div>
+<div class="prompt" style="margin-top:12px">${esc(d.interviewPrompt)}</div>
+<div class="actions" style="justify-content:flex-start;gap:10px;margin-top:12px;flex-wrap:wrap"><button class="btn purple" type="button" onclick="s4Copy(s4().interviewPrompt)">Copy prompt</button><span class="hint" style="align-self:center">${s4ItemNames().length} item name${s4ItemNames().length===1?'':'s'} included · no amounts</span></div></div>
+<div class="card"><div class="actions" style="align-items:center"><h3 style="margin:0">Interview log</h3><span class="pill ${full>=3?'ok':'todo'}" id="s4roundCount">Round ${full} of 3 minimum</span></div>
+<div class="hint" style="margin:6px 0 12px">Type your answer here first, then paste it into Claude. Anything real becomes a cost line: layer 4 for the job's own overheads, or higher up if it belongs there. The business overhead share (layer 5) is worked out on card 4.</div>
+${rounds||'<div class="hint" style="padding:6px 0 10px">No rounds yet. Paste Claude\'s first question below.</div>'}
+<button class="btn purple" type="button" onclick="addS4Round()">+ Add round</button>
+<div class="hint" style="margin-top:14px;padding:10px 12px;border-left:4px solid var(--red);background:#fff5f5"><b>If Claude gives you a number,</b> reply: <i>do not suggest amounts, ask me the next question.</i> Your sheet only holds numbers you typed.</div>
+<div class="s4band amt" style="background:var(--green-tint);color:var(--green);margin-top:18px"><span>Running total, layers 1 to 4</span><span id="s4l14">${s4Rand([1,2,3,4].reduce((a,n)=>a+s4LayerTotal(d.lines,n),0))}</span></div>
+${s4Pill(3)}<div class="err" id="s4c3err" style="display:none"></div></div>
+<div class="actions"><button class="btn ghost" onclick="session4Back()">Back</button><button class="btn primary" onclick="if(saveS4Interview())session4Next()">Save &amp; continue -&gt;</button></div>`;
+}
+function saveS4Interview(){
+	const d=s4();const miss=s4Missing(3);const err=document.getElementById('s4c3err');
+	if(miss.length){if(err){err.textContent='Not yet: '+miss.join('; ')+'.';err.style.display=''}toast(d.rounds.some(r=>looksLikePrompt(r.asked,d.interviewPrompt))?s4EchoMsg:'Three rounds minimum. Nobody moves on until card 3 shows three questions and three answers.');return false}
+	postSession4('s4c3',{prompt:d.interviewPrompt,rounds:d.rounds.map((r,i)=>{const found=d.lines.filter(l=>l.round===i+1);return{round:i+1,asked:r.asked.trim(),answer:r.answer.trim(),added:found.length?'Y':'N',layer:[...new Set(found.map(l=>Number(l.layer)))].join(', ')}})});
+	postSession4('s4c2',{lines:s4LinesPayload()});
+	toast('Interview saved. Now, from cost to price.');return true;
+}
+/* ---------- Card 4 · Round 3, from cost to price (artefacts 14 and 15) ---------- */
+function s4SetPrice(field,value){s4().price[field]=value;s4RefreshPrice()}
+function s4Outputs(){
+	const d=s4(),c=s4Compute(d),p=d.price;
+	const f=(label,val,formula,strong)=>`<div class="outrow"><div><div style="font-weight:${strong?800:600}">${label}</div><details><summary>formula</summary>${formula}</details></div><div class="val" style="${strong?'font-size:18px':''}">${val}</div></div>`;
+	const methodF={A:`overhead × months × share = ${s4Rand(c.overhead)} × ${c.months.toFixed(2)} × ${s4Pct(c.share,0)}`,B:`overhead ÷ average monthly direct cost × direct cost = ${s4Rand(c.overhead)} ÷ ${s4Rand(s4Num(p.avgDirect))} × ${s4Rand(c.direct)}`,C:`overhead ÷ average monthly sales × quoted price = ${s4Rand(c.overhead)} ÷ ${s4Rand(s4Num(p.avgSales))} × ${s4Rand(c.quoted)}`}[p.method||'A'];
+	const status=c.quoted>0&&c.walk>0?(c.belowWalk?`<div class="status-bad">Your quote is below your walk-away price by ${s4Rand(c.shortfall)}. Win it and you are busy, paid in full, and ${s4Rand(c.shortfall)} poorer.</div>`:`<div class="status-ok">Your quote of ${s4Rand(c.quoted)} is above your walk-away price of ${s4Rand(c.walk)} — by ${s4Rand(c.quoted-c.walk)}.</div>`):'<div class="hint" style="margin-top:12px">Enter what you charged on card 1 to compare it with your walk-away price.</div>';
+	return f('Layer 5 · overhead share',s4Rand(c.L5),methodF)+f('Direct cost (layers 1 to 4)',s4Rand(c.direct),`${s4Rand(c.L[1])} + ${s4Rand(c.L[2])} + ${s4Rand(c.L[3])} + ${s4Rand(c.L[4])}`)+f('Full cost (layers 1 to 5)',s4Rand(c.full),`direct cost + layer 5 = ${s4Rand(c.direct)} + ${s4Rand(c.L5)}`,true)+f('Price at target margin',s4Rand(c.price),`full cost ÷ (1 − target margin) = ${s4Rand(c.full)} ÷ ${(1-c.targetMargin).toFixed(2)}`,true)+f('Walk-away price',s4Rand(c.walk),`full cost ÷ (1 − minimum margin) = ${s4Rand(c.full)} ÷ ${(1-c.minMargin).toFixed(2)}. Below it, you are paying to do the work.`,true)+f('Margin on what you quoted',s4Pct(c.marginQuoted),`(quoted − full cost) ÷ quoted = (${s4Rand(c.quoted)} − ${s4Rand(c.full)}) ÷ ${s4Rand(c.quoted)}`)+f('Markup equivalent',s4Pct(c.markup),`(price − full cost) ÷ full cost. Margin is kept from price; markup is added to cost. 25% markup is a 20% margin.`)+f('Margin after direct costs',s4Pct(c.marginDirect),`(price − direct cost) ÷ price = (${s4Rand(c.price)} − ${s4Rand(c.direct)}) ÷ ${s4Rand(c.price)}`)+f('Break-even revenue per month',s4Rand(c.breakEven),`monthly overhead ÷ margin after direct costs = ${s4Rand(c.overhead)} ÷ ${s4Pct(c.marginDirect)}. Below that line, every month costs you.`,true)+status;
+}
+function s4ScenarioTable(){
+	const d=s4(),c=s4Compute(d),rows=s4Scenarios(c,d.scenario);
+	const chosen=d.scenario.chosen;
+	return `<table class="ptable"><thead><tr><th>Scenario</th><th>Cost index</th><th>Price index</th><th>Margin</th><th class="amt">Rand price</th></tr></thead><tbody>${rows.map(r=>`<tr style="${r.key==='sent'&&r.margin!=null&&r.margin<0?'color:var(--red)':''}${chosen===r.key?'background:var(--green-tint)':''}"><td>${esc(r.label)}${chosen===r.key?' <span class="tick">✓</span>':''}</td><td>${r.costIdx.toFixed(1)}</td><td>${r.priceIdx.toFixed(1)}</td><td><b>${s4Pct(r.margin)}</b></td><td class="amt">${s4Rand(r.rand)}</td></tr>`).join('')}</tbody></table>`;
+}
+function s4RefreshPrice(){s4BuildScenarioPromptQuiet();const box=document.getElementById('s4scPromptBox');if(box)box.textContent=s4().scenario.prompt;const o=document.getElementById('s4outputs');if(o)o.innerHTML=s4Outputs();const t=document.getElementById('s4scenarios');if(t)t.innerHTML=s4ScenarioTable();const pill=document.getElementById('s4pill4');if(pill)pill.innerHTML=s4Pill(4);s4Steps()}
+function s4BuildScenarioPrompt(){
+	const d=s4(),c=s4Compute(d),sc=d.scenario;
+	const P=c.targetMargin<1?100/(1-c.targetMargin):0;
+	sc.prompt=`Here is my costed job as an index: cost 100, price ${P.toFixed(1)}. Show me three scenarios: charge 10 percent more, discount 10 percent, and add ${(sc.service||'').trim()||'[a service]'} costing ${s4Num(sc.costIdx)} and charged at ${s4Num(sc.chargedIdx)}. Show the margin on each as a percentage. Do not change my costs. Show your working.`;
+	const box=document.getElementById('s4scPromptBox');if(box)box.textContent=sc.prompt;
+	toast('Scenario prompt built — index figures only, no rands.');
+}
+function renderS4Price(){
+	const d=s4(),p=d.price,job=d.job;
+	const autoMonths=s4MonthsFromDuration(job.duration,job.durationUnit);
+	const monthsVal=(p.months!==''&&p.months!=null)?p.months:(autoMonths?Number(autoMonths.toFixed(2)):'');
+	if(p.months===''&&autoMonths)p.months=Number(autoMonths.toFixed(2));
+	const methodOpts=s4Methods.map(([v,l])=>`<option value="${v}" ${(p.method||'A')===v?'selected':''}>${l}</option>`).join('');
+	const scRows=s4Scenarios(s4Compute(d),d.scenario);
+	const chosenOpts=scRows.map(r=>`<option value="${r.key}" ${d.scenario.chosen===r.key?'selected':''}>${esc(r.label)} · ${s4Pct(r.margin)}</option>`).join('');
+	if(!d.scenario.prompt)s4BuildScenarioPromptQuiet();
+	return `<div class="lead"><span class="time">ROUND 3 · 25 MINUTES</span><h1><b>Card 4:</b> From cost to price</h1><p>Overhead share, margin, the walk-away price, and the monthly floor. Cost-plus tells you the floor. The market tells you the ceiling. The decision in between is yours.</p></div>
+<div class="grid2"><div class="card"><h3>Your inputs</h3>
+<label>Monthly business overhead (R)</label><div class="hint">The costs that stay if no job runs this month: rent, accountant, insurance, phones, software, admin time.</div><input type="number" min="0" step="any" inputmode="decimal" value="${esc(p.overhead)}" placeholder="42000" oninput="s4SetPrice('overhead',this.value)">
+<label>How you share overhead across jobs</label><select onchange="s4().price.method=this.value;renderSession4Step()">${methodOpts}</select>
+${(p.method||'A')==='A'?`<div class="grid2"><div><label>Months on this job</label><input type="number" min="0" step="any" inputmode="decimal" value="${esc(monthsVal)}" oninput="s4SetPrice('months',this.value)"><div class="hint">From card 1: ${autoMonths?autoMonths.toFixed(2)+' months':'set a duration first'}. Edit if the team is on it longer.</div></div><div><label>Share of your team this job uses (%)</label><input type="number" min="0" max="100" step="any" inputmode="decimal" value="${esc(p.share)}" oninput="s4SetPrice('share',this.value)"></div></div>`:''}
+${p.method==='B'?`<label>Average monthly direct cost (R)</label><div class="hint">What your jobs cost you in a typical month, layers 1 to 4.</div><input type="number" min="0" step="any" inputmode="decimal" value="${esc(p.avgDirect)}" oninput="s4SetPrice('avgDirect',this.value)">`:''}
+${p.method==='C'?`<label>Average monthly sales (R)</label><div class="hint">What you invoice in a typical month.</div><input type="number" min="0" step="any" inputmode="decimal" value="${esc(p.avgSales)}" oninput="s4SetPrice('avgSales',this.value)">`:''}
+<div class="grid2"><div><label>Target margin (%)</label><div class="hint">Kept from every rand billed. If you do not know, start at 20 and see what it does.</div><input type="number" min="0" max="99" step="any" inputmode="decimal" value="${esc(p.targetMargin)}" oninput="s4SetPrice('targetMargin',this.value)"></div><div><label>Minimum margin for walk-away (%)</label><div class="hint">Zero means the walk-away price is your full cost.</div><input type="number" min="0" max="99" step="any" inputmode="decimal" value="${esc(p.minMargin)}" oninput="s4SetPrice('minMargin',this.value)"></div></div>
+</div>
+<div class="card"><h3>What it works out to</h3><div class="hint">Tap “formula” on any line to see the working.</div><div id="s4outputs">${s4Outputs()}</div></div></div>
+<div class="card"><h3>Three what-ifs, your costs untouched</h3><div class="hint">The second prompt. Index figures keep rand amounts out of the AI: cost 100, price ${(s4Compute(d).targetMargin<1?100/(1-s4Compute(d).targetMargin):0).toFixed(1)}. Fill the service you could add, build the prompt, run it in Claude, paste the answer back, and check its working against the table.</div>
+<div class="grid3"><div><label>A service you could add</label><input value="${esc(d.scenario.service)}" placeholder="a monthly upkeep visit" oninput="s4().scenario.service=this.value;s4RefreshPrice()"></div><div><label>Its cost, as an index</label><input type="number" min="0" step="any" inputmode="decimal" value="${esc(d.scenario.costIdx)}" oninput="s4().scenario.costIdx=this.value;s4RefreshPrice()"></div><div><label>What you would charge for it, as an index</label><input type="number" min="0" step="any" inputmode="decimal" value="${esc(d.scenario.chargedIdx)}" oninput="s4().scenario.chargedIdx=this.value;s4RefreshPrice()"></div></div>
+<div class="actions" style="justify-content:flex-start;gap:10px;margin:16px 0;flex-wrap:wrap"><button class="btn purple" type="button" onclick="s4BuildScenarioPrompt()">Build prompt</button><button class="btn ghost" type="button" onclick="s4Copy(s4().scenario.prompt)">Copy prompt</button></div>
+<div class="prompt" id="s4scPromptBox">${esc(d.scenario.prompt)}</div>
+<label style="margin-top:14px">Claude's answer</label><textarea id="s4scAnswer" style="min-height:140px" placeholder="Paste the three scenarios and the working Claude sent back…" oninput="s4().scenario.answer=this.value;s4FlagEcho(this,looksLikePrompt(this.value,s4().scenario.prompt));s4RefreshPrice()">${esc(d.scenario.answer)}</textarea>
+<label style="margin-top:14px">Check the working — the workbook's own arithmetic</label><div style="overflow-x:auto" id="s4scenarios">${s4ScenarioTable()}</div>
+<label style="margin-top:14px">Scenario I would offer</label><select onchange="s4().scenario.chosen=this.value;s4RefreshPrice()"><option value="">Choose…</option>${chosenOpts}</select>
+<div id="s4pill4">${s4Pill(4)}</div></div>
+<div class="actions"><button class="btn ghost" onclick="session4Back()">Back</button><button class="btn primary" onclick="if(saveS4Price())session4Next()">Save &amp; continue -&gt;</button></div>`;
+}
+function s4BuildScenarioPromptQuiet(){const d=s4(),c=s4Compute(d),sc=d.scenario;const P=c.targetMargin<1?100/(1-c.targetMargin):0;sc.prompt=`Here is my costed job as an index: cost 100, price ${P.toFixed(1)}. Show me three scenarios: charge 10 percent more, discount 10 percent, and add ${(sc.service||'').trim()||'[a service]'} costing ${s4Num(sc.costIdx)} and charged at ${s4Num(sc.chargedIdx)}. Show the margin on each as a percentage. Do not change my costs. Show your working.`}
+function saveS4Price(){
+	const d=s4();const miss=s4Missing(4);
+	if(miss.length){toast('Still needed: '+miss.join('; ')+'.');return false}
+	const c=s4Compute(d),sc=d.scenario,rows=s4Scenarios(c,sc);
+	postSession4('s4c4',{layers:[1,2,3,4].map(n=>Math.round(c.L[n])).concat([Math.round(c.L5)]),fullCost:Math.round(c.full),method:d.price.method||'A',overhead:c.overhead,months:Number(c.months.toFixed(2)),share:c.share,targetMargin:c.targetMargin,minMargin:c.minMargin,price:Math.round(c.price),walkAway:Math.round(c.walk),marginOnQuoted:c.marginQuoted==null?'':Number(c.marginQuoted.toFixed(4)),breakEven:c.breakEven==null?'':Math.round(c.breakEven),belowWalkAway:c.belowWalk?'Y':'N',scenarioPrompt:sc.prompt,scenarioAnswer:sc.answer,scenarioChosen:(rows.find(r=>r.key===sc.chosen)||{}).label||sc.chosen});
+	toast('Price saved. Now the cash line.');return true;
+}
+/* ---------- Card 5 · Cash line (artefact 16) ---------- */
+function s4SetCash(field,value){s4().cash[field]=value;s4RefreshCash()}
+function s4CashChart(base,alt){
+	const W=640,H=250,pl=62,pr=14,pt=14,pb=30;
+	const series=[{rows:base.rows,color:'#4a3aaf',label:'Your terms'}];if(alt)series.push({rows:alt.rows,color:'#2e8b1e',label:'With a 50% deposit'});
+	const all=series.flatMap(s=>s.rows.map(r=>r.cum)).concat([0]);
+	let min=Math.min(...all),max=Math.max(...all);if(max-min<1){min-=1000;max+=1000}
+	const span=max-min;min-=span*0.06;max+=span*0.06;
+	const n=Math.max(1,base.horizon);
+	const x=w=>pl+(w/n)*(W-pl-pr),y=v=>pt+(max-v)/(max-min)*(H-pt-pb);
+	const raw=(max-min)/4,mag=Math.pow(10,Math.floor(Math.log10(raw))),step=[1,2,2.5,5,10].map(m=>m*mag).find(s=>s>=raw)||mag;
+	const ticks=[];for(let t=Math.ceil(min/step)*step;t<=max;t+=step)ticks.push(t);
+	const grid=ticks.map(t=>`<line x1="${pl}" x2="${W-pr}" y1="${y(t).toFixed(1)}" y2="${y(t).toFixed(1)}" stroke="#e2e8f0" stroke-width="1"/><text x="${pl-6}" y="${(y(t)+4).toFixed(1)}" text-anchor="end" font-size="10" fill="#64748b">${s4Short(t)}</text>`).join('');
+	const zero=`<line x1="${pl}" x2="${W-pr}" y1="${y(0).toFixed(1)}" y2="${y(0).toFixed(1)}" stroke="#94a3b8" stroke-width="1.5"/>`;
+	const every=n>24?4:n>12?2:1;
+	const xl=base.rows.filter(r=>r.week%every===0).map(r=>`<text x="${x(r.week).toFixed(1)}" y="${H-pb+16}" text-anchor="middle" font-size="10" fill="#64748b">${r.week}</text>`).join('')+`<text x="${(pl+(W-pl-pr)/2).toFixed(1)}" y="${H-4}" text-anchor="middle" font-size="10" fill="#94a3b8">week</text>`;
+	const paths=series.map(s=>{const dd=s.rows.map((r,i)=>(i?'L':'M')+x(r.week).toFixed(1)+' '+y(r.cum).toFixed(1)).join(' ');const last=s.rows[s.rows.length-1];return `<path d="${dd}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${x(last.week).toFixed(1)}" cy="${y(last.cum).toFixed(1)}" r="4" fill="${s.color}" stroke="#fff" stroke-width="2"/>`}).join('');
+	const gapRow=base.rows[base.gapWeek]||base.rows[0];
+	const gx=x(gapRow.week),gy=y(gapRow.cum);
+	const labelLeft=gx>W*0.6;
+	const gap=`<circle cx="${gx.toFixed(1)}" cy="${gy.toFixed(1)}" r="6" fill="#b91c1c" stroke="#fff" stroke-width="2"/><text x="${(labelLeft?gx-10:gx+10).toFixed(1)}" y="${(gy+(gy>H-pb-24?-10:16)).toFixed(1)}" text-anchor="${labelLeft?'end':'start'}" font-size="11" font-weight="700" fill="#b91c1c" paint-order="stroke" stroke="#fff" stroke-width="3" stroke-linejoin="round">Cash gap ${s4Rand(base.gap)} · week ${base.gapWeek}</text>`;
+	const hover=base.rows.map(r=>{const w=(W-pl-pr)/(n+1);const tip='Week '+r.week+': '+s4Rand(r.cum)+(alt?' · with 50% deposit '+s4Rand((alt.rows[r.week]||{}).cum):'')+' · in '+s4Rand(r.inflow)+' · out '+s4Rand(r.outflow);return `<rect x="${(x(r.week)-w/2).toFixed(1)}" y="${pt}" width="${w.toFixed(1)}" height="${H-pt-pb}" fill="transparent"><title>${esc(tip)}</title></rect>`}).join('');
+	const legend=alt?`<div class="legend">${series.map(s=>`<span><i style="background:${s.color}"></i>${s.label}</span>`).join('')}<span><i style="background:#b91c1c;height:8px;width:8px;border-radius:50%"></i>Deepest point</span></div>`:'';
+	return `${legend}<div class="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Cumulative cash position by week">${grid}${zero}${xl}${paths}${gap}${hover}</svg></div>`;
+}
+function s4RefreshCash(){
+	const d=s4(),c=s4Compute(d),cs=d.cash;const view=document.getElementById('s4cashView');if(!view)return;
+	const split=s4Num(cs.deposit)+s4Num(cs.progress)+s4Num(cs.final);
+	const splitMsg=Math.abs(split-100)>0.01?`<div class="err">Deposit, progress and final add up to ${split}%. They must total 100%.</div>`:'';
+	if(!(c.price>0)){view.innerHTML=splitMsg+'<div class="hint">Cost the job and set a margin on card 4 first — the cash line uses the card 4 price.</div>';return}
+	const base=s4CashLine(c,cs);
+	const alt=cs.try50?s4CashLine(c,cs,{deposit:50,progress:Math.max(0,100-50-s4Num(cs.final)),final:s4Num(cs.final)}):null;
+	const rows=base.rows.map(r=>`<tr style="${r.week===base.gapWeek?'color:var(--red);font-weight:700':''}"><td>${r.week}${r.week===base.gapWeek?' · deepest':''}</td><td>${r.inflow?s4Rand(r.inflow):''}</td><td>${r.outflow?s4Rand(r.outflow):''}</td><td><b>${s4Rand(r.cum)}</b></td></tr>`).join('');
+	const last=base.rows[base.rows.length-1];
+	view.innerHTML=splitMsg+`<div class="status-bad" style="font-size:15px">Cash gap ${s4Rand(base.gap)}, deepest in week ${base.gapWeek}.${alt?` With a 50% deposit: ${s4Rand(alt.gap)} in week ${alt.gapWeek}.`:''}</div>
+<div class="hint" style="margin:8px 0 12px">That is the cash this job needs from you before the client's money arrives. It ends at ${s4Rand(last.cum)} in week ${last.week}, the profit on the job. The cost sheet tells you if. The cash line tells you when.</div>
+${s4CashChart(base,alt)}
+<details style="margin-top:12px"><summary style="cursor:pointer;color:var(--purple);font-weight:700;font-size:13px">Week by week table</summary><div style="overflow-x:auto;margin-top:8px"><table class="ptable"><thead><tr><th>Week</th><th>Money in</th><th>Money out</th><th>Cumulative</th></tr></thead><tbody>${rows}</tbody></table></div><div class="hint" style="margin-top:8px">Progress claim in week ${base.claimWeek}, paid ${base.lag} week${base.lag===1?'':'s'} later. Final claim in week ${base.weeks}, paid in week ${base.weeks+base.lag}.</div></details>`;
+	const pill=document.getElementById('s4pill5');if(pill)pill.innerHTML=s4Pill(5);s4Steps();
+}
+function renderS4Cash(){
+	const d=s4(),cs=d.cash,job=d.job;
+	if(cs.weeks===''||cs.weeks==null){const w=s4WeeksFromDuration(job.duration,job.durationUnit);if(w)cs.weeks=w}
+	const weeks=Math.max(1,Math.round(s4Num(cs.weeks))||1);
+	const matOpts=s4Materials.map(([v,l])=>`<option value="${v}" ${(cs.materials||'upfront')===v?'selected':''}>${l}</option>`).join('');
+	return `<div class="lead"><span class="time">ROUND 3 · 10 MINUTES</span><h1><b>Card 5:</b> Profitable, and still short</h1><p>When this job's costs go out against when its money comes in. A job priced at a healthy margin can still need more cash than you have before the client pays.</p></div>
+<div class="grid2"><div class="card"><h3>Your terms</h3>
+<div class="grid3"><div><label>Deposit % (week 0)</label><input type="number" min="0" max="100" step="any" inputmode="decimal" value="${esc(cs.deposit)}" oninput="s4SetCash('deposit',this.value)"></div><div><label>Progress %</label><input type="number" min="0" max="100" step="any" inputmode="decimal" value="${esc(cs.progress)}" oninput="s4SetCash('progress',this.value)"></div><div><label>Final % (completion)</label><input type="number" min="0" max="100" step="any" inputmode="decimal" value="${esc(cs.final)}" oninput="s4SetCash('final',this.value)"></div></div>
+<div class="grid2"><div><label>Week the progress claim goes in</label><input type="number" min="0" step="1" value="${esc(cs.progressWeek!==''&&cs.progressWeek!=null?cs.progressWeek:Math.ceil(weeks/2))}" oninput="s4SetCash('progressWeek',this.value)"><div class="hint">Middle of the job by default.</div></div><div><label>Payment terms on claims (days)</label><input type="number" min="0" step="1" value="${esc(cs.terms)}" oninput="s4SetCash('terms',this.value)"></div></div>
+<div class="grid2"><div><label>When materials are paid</label><select onchange="s4SetCash('materials',this.value)">${matOpts}</select></div><div><label>Job length in weeks</label><input type="number" min="1" step="1" value="${esc(cs.weeks)}" oninput="s4SetCash('weeks',this.value)"><div class="hint">From card 1. Edit if it runs longer.</div></div></div>
+<label style="display:flex;align-items:center;gap:8px;margin-top:16px;font-weight:700"><input type="checkbox" style="width:auto" ${cs.try50?'checked':''} onchange="s4SetCash('try50',this.checked)"> Try a 50% deposit</label><div class="hint">Overlays a second line with 50% up front and the progress payment reduced to keep the total at 100%.</div>
+<div class="hint" style="margin-top:14px">Wages, vehicles and your overhead share go out evenly across the job weeks. The job's own overheads go out in the last week. The price is your card 4 price.</div></div>
+<div class="card"><h3>Your cash line</h3><div id="s4cashView"></div><div id="s4pill5">${s4Pill(5)}</div></div></div>
+<div class="actions"><button class="btn ghost" onclick="session4Back()">Back</button><button class="btn primary" onclick="if(saveS4Cash())session4Next()">Save &amp; continue -&gt;</button></div>`;
+}
+function saveS4Cash(){
+	const d=s4();const miss=s4Missing(5);
+	if(miss.length){toast('Still needed: '+miss.join('; ')+'.');return false}
+	const c=s4Compute(d),base=s4CashLine(c,d.cash);
+	postSession4('s4c5',{deposit:s4Num(d.cash.deposit),progress:s4Num(d.cash.progress),final:s4Num(d.cash.final),progressWeek:base.claimWeek,terms:s4Num(d.cash.terms),materials:d.cash.materials||'upfront',weeks:base.weeks,price:Math.round(c.price),cashGap:Math.round(base.gap),gapWeek:base.gapWeek});
+	toast('Cash line saved. Your four numbers are ready.');return true;
+}
+/* ---------- Card 6 · Four numbers, pilot and file (artefact 17) ---------- */
+function renderS4Four(){
+	const d=s4(),c=s4Compute(d),p=d.pilot;
+	const base=c.price>0?s4CashLine(c,d.cash):null;
+	const tiles=[['COST',s4Rand(c.full),'Full cost, layers 1 to 5','#1e293b','#f8fafc'],['PRICE',s4Rand(c.price),'At the margin you chose','#2e8b1e','var(--green-tint)'],['MARGIN',s4Pct(c.targetMargin,0),'Kept from every rand billed','#4a3aaf','var(--purple-tint)'],['CASH GAP',base?s4Rand(base.gap):'—',base?'Deepest point, week '+base.gapWeek:'Set your terms on card 5','#b91c1c','#fef2f2']].map(([k,v,s,col,bg])=>`<div class="tile" style="background:${bg}"><div class="k" style="color:${col}">${k}</div><div class="v" style="color:${col}">${v}</div><div class="s">${s}</div></div>`).join('');
+	const ready=c.full>0;
+	return `<div class="lead"><span class="time">CARD 6 · YOUR FOUR NUMBERS</span><h1><b>Card 6:</b> Four numbers, one pilot, your file</h1><p>Cost, price, margin, cash gap. On one card, off one job, and checked before the next quote goes out.</p></div>
+<div class="card"><div class="four">${tiles}</div>${ready?'':'<div class="hint" style="margin-top:12px">Cost the job on cards 2 to 4 to fill these in.</div>'}</div>
+<div class="card" style="border-color:var(--purple-line)"><h3>Generate my cost sheet</h3><div class="hint">Your own Excel file, built from what you entered: Cost Sheet, Interview, Scenarios, Cash Line, Four Numbers, a blank 90-Day Cash tab for Session 5, and How To Use. Every calculation is a live formula, so it keeps working on the next job. Opens in Excel, Google Sheets (upload it) and Numbers.</div>
+<div class="actions" style="justify-content:flex-start;gap:12px;margin-top:14px;flex-wrap:wrap;align-items:center"><button class="btn primary" type="button" onclick="s4GenerateFile()">Generate my cost sheet</button><span class="hint">${d.fileGenerated?'Generated '+new Date(d.fileGenerated).toLocaleString('en-ZA',{dateStyle:'medium',timeStyle:'short'})+'. Generate again any time — the newest file wins.':'Not generated yet. Check your Downloads folder once you press it.'}</span></div></div>
+<div class="lead" style="margin-top:26px"><span class="time">THE WHOLE POINT OF TODAY</span><h1>Next quote goes <b>through the sheet</b></h1><p>One real quote beats three exercises. No workbook homework. Session 5 opens with a show of hands on this.</p></div>
+<div class="card"><div class="grid2"><div><label>The next quote I will cost on this sheet</label><input id="s4PilotQuote" value="${esc(p.quote)}" placeholder="Name the next job you will quote"></div><div><label>Who prepares it</label><input id="s4PilotOwner" value="${esc(p.owner)}" placeholder="You, or the person who prepares quotes"></div></div>
+<div class="grid2" style="margin-top:14px"><div><label>By when — on or before Wednesday 30 September 2026</label><input id="s4PilotDate" type="date" max="${s4PilotDeadline}" value="${esc(p.date)}"></div><div><label>WhatsApp number for the day 7 check</label><input id="s4PilotWhatsapp" type="tel" inputmode="tel" value="${esc(p.whatsapp)}" placeholder="082 000 0000"></div></div>
+<div class="hint" style="margin-top:12px"><b>The test:</b> full cost and walk-away checked before it is sent. <b>Day 7 check, Wednesday 30 September:</b> one WhatsApp message from us, one question: did your next quote go through the cost sheet? Yes or no.</div>
+<div id="s4pill6">${s4Pill(6)}</div></div>
+<div class="card" style="background:var(--green-tint);border-color:#cbe9be"><h3>Before Session 5: Thursday 8 October 2026</h3><div class="hint"><b>Bring your pilot result</b> — did the next quote go through the sheet? <b>Bring your cost sheet file</b>, and the one scenario you would offer. Session 5 opens with fifteen minutes on the 90-day cash tab, then Service Innovation and Value Proposition Design: the add-a-service scenario is where it starts.</div></div>
+<div class="actions"><button class="btn ghost" onclick="session4Back()">Back</button><button class="btn primary" onclick="saveS4Pilot()">Save my pilot</button></div>`;
+}
+function s4ReadPilot(){const p=s4().pilot;p.quote=document.getElementById('s4PilotQuote').value.trim();p.owner=document.getElementById('s4PilotOwner').value.trim();p.date=document.getElementById('s4PilotDate').value;p.whatsapp=document.getElementById('s4PilotWhatsapp').value.trim();return p}
+async function s4GenerateFile(){
+	const d=s4(),c=s4Compute(d);
+	if(document.getElementById('s4PilotQuote'))s4ReadPilot();
+	if(!(c.full>0))return toast('Cost the job first — card 2 needs at least one line with an amount.');
+	toast('Building your cost sheet…');
+	let lib;try{lib=await s4LoadExcel()}catch(e){return toast('Could not load the spreadsheet builder. Check your connection and press the button again.')}
+	try{
+		s4BuildInterviewPrompt();if(!d.scenario.prompt)s4BuildScenarioPromptQuiet();
+		const cash=s4CashLine(c,d.cash);
+		const wb=s4BuildWorkbook(lib,d,c,cash,{business:state.business,participant:state.name,date:new Date()});
+		const buf=await wb.xlsx.writeBuffer();
+		const blob=new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+		const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=s4FileName(state.business,new Date());document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),20000);
+		d.fileGenerated=new Date().toISOString();
+		postSession4('s4file',{...d.pilot,fileGenerated:d.fileGenerated});
+		renderSession4Step();renderSession4();
+		toast('Cost sheet downloaded. Check your Downloads folder.');
+	}catch(e){console.error(e);toast('Something went wrong building the file. Save, then try again.')}
+}
+function saveS4Pilot(){
+	const d=s4();s4ReadPilot();
+	const miss=s4Missing(6);const pill=document.getElementById('s4pill6');if(pill)pill.innerHTML=s4Pill(6);s4Steps();
+	if(miss.length){toast('Still needed: '+miss.join('; ')+'.');return false}
+	postSession4('s4c6',{...d.pilot,fileGenerated:d.fileGenerated});
+	const all=[1,2,3,4,5,6].every(s4Complete);
+	if(all&&!d.submitted){d.submitted=new Date().toISOString();postSession4('s4submit',{artefacts:{14:s4Complete(2)&&s4Complete(3)?1:0.5,15:s4Complete(4)?1:0.5,16:s4Complete(5)?1:0.5,17:s4Complete(6)?1:0.5}});toast('Pilot saved and Session 4 marked complete. See you on 8 October.')}
+	else toast(all?'Pilot saved.':'Pilot saved. Finish the other cards to mark Session 4 complete.');
+	return true;
+}
+/* S4CALC:BEGIN — pure calculation, no DOM. Extracted by the test harness and run in node against the deck's worked example. */
+function s4Num(v){const n=Number(String(v==null?'':v).replace(/[^\d.\-]/g,''));return isFinite(n)?n:0}
+function s4LineAmount(l){if(String(l.unit||'').toLowerCase()==='lump sum')return s4Num(l.rate);return s4Num(l.qty)*s4Num(l.rate)}
+function s4LayerTotal(lines,layer){return (lines||[]).filter(l=>Number(l.layer)===layer).reduce((a,l)=>a+s4LineAmount(l),0)}
+function s4MonthsFromDuration(value,unit){const n=s4Num(value);if(!n)return 0;if(unit==='months')return n;if(unit==='days')return n/21.67;return n/4.33}
+function s4WeeksFromDuration(value,unit){const n=s4Num(value);if(!n)return 0;if(unit==='weeks')return Math.max(1,Math.round(n));if(unit==='days')return Math.max(1,Math.round(n/5));return Math.max(1,Math.round(n*4.33))}
+function s4Compute(d){
+	const L={};[1,2,3,4].forEach(n=>L[n]=s4LayerTotal(d.lines,n));
+	const direct=L[1]+L[2]+L[3]+L[4];
+	const p=d.price||{},job=d.job||{};
+	const overhead=s4Num(p.overhead),quoted=s4Num(job.quoted);
+	const months=(p.months!==''&&p.months!=null)?s4Num(p.months):s4MonthsFromDuration(job.duration,job.durationUnit);
+	const share=(p.share===''||p.share==null)?1:s4Num(p.share)/100;
+	let L5=0;
+	if(p.method==='B'){const avg=s4Num(p.avgDirect);L5=avg>0?overhead/avg*direct:0}
+	else if(p.method==='C'){const avg=s4Num(p.avgSales);L5=avg>0?overhead/avg*quoted:0}
+	else L5=overhead*months*share;
+	L[5]=L5;
+	const full=direct+L5;
+	const tm=s4Num(p.targetMargin)/100,mm=s4Num(p.minMargin)/100;
+	const price=tm<1?full/(1-tm):0;
+	const walk=mm<1?full/(1-mm):0;
+	const marginQuoted=quoted>0?(quoted-full)/quoted:null;
+	const markup=full>0?(price-full)/full:null;
+	const marginDirect=price>0?(price-direct)/price:null;
+	const breakEven=(marginDirect!=null&&marginDirect>0)?overhead/marginDirect:null;
+	return{L,direct,L5,full,price,walk,quoted,overhead,months,share,marginQuoted,markup,marginDirect,breakEven,targetMargin:tm,minMargin:mm,belowWalk:quoted>0&&walk>0&&quoted<walk,shortfall:Math.max(walk-quoted,0)};
+}
+function s4Scenarios(c,sc){
+	sc=sc||{};const m=c.targetMargin;const P=m<1?100/(1-m):0;const cost=s4Num(sc.costIdx),ch=s4Num(sc.chargedIdx);
+	const row=(key,label,ci,pi)=>({key,label,costIdx:ci,priceIdx:pi,margin:pi>0?(pi-ci)/pi:null,rand:c.full*pi/100});
+	const rows=[row('base','Your price at target margin',100,P),row('plus','Charge 10 percent more',100,P*1.1),row('minus','Discount 10 percent',100,P*0.9),row('add','Add '+((sc.service||'').trim()||'a service'),100+cost,P+ch)];
+	if(c.quoted>0&&c.full>0)rows.push(row('sent','The quote you sent',100,c.quoted/c.full*100));
+	return rows;
+}
+/* Weekly cash line, week 0 to completion + terms + 1. Money in: deposit week 0, progress at claim week + ceil(terms/7), final at last week + ceil(terms/7).
+   Money out: layer 2 by the chosen timing; layers 1, 3 and 5 spread evenly over the job weeks; layer 4 in the last job week. */
+function s4CashLine(c,cash,over){
+	cash=Object.assign({},cash||{},over||{});
+	const weeks=Math.max(1,Math.round(s4Num(cash.weeks))||1);
+	const dep=s4Num(cash.deposit)/100,prog=s4Num(cash.progress)/100,fin=s4Num(cash.final)/100;
+	const claimWeek=(cash.progressWeek===''||cash.progressWeek==null)?Math.ceil(weeks/2):Math.max(0,Math.round(s4Num(cash.progressWeek)));
+	const lag=Math.ceil(s4Num(cash.terms)/7);
+	const horizon=weeks+lag+1;
+	const price=c.price,L=c.L;
+	const perWeek=(L[1]+L[3]+L[5])/weeks;
+	const timing=cash.materials||'upfront';
+	const rows=[];let cum=0,gap=Infinity,gapWeek=0;
+	for(let w=0;w<=horizon;w++){
+		let inflow=0,outflow=0;
+		if(w===0)inflow+=dep*price;
+		if(w===claimWeek+lag)inflow+=prog*price;
+		if(w===weeks+lag)inflow+=fin*price;
+		if(timing==='spread'){if(w>=1&&w<=weeks)outflow+=L[2]/weeks}
+		else if(timing==='completion'){if(w===weeks)outflow+=L[2]}
+		else{if(w===1)outflow+=L[2]}
+		if(w>=1&&w<=weeks)outflow+=perWeek;
+		if(w===weeks)outflow+=L[4];
+		cum+=inflow-outflow;
+		if(cum<gap){gap=cum;gapWeek=w}
+		rows.push({week:w,inflow,outflow,cum});
+	}
+	return{rows,gap:gap===Infinity?0:gap,gapWeek,horizon,weeks,claimWeek,lag,totalIn:dep+prog+fin};
+}
+/* Output-equals-prompt check: normalised for whitespace and case. True when the output is the prompt, contains it whole, or contains more than 80 percent of it. */
+function s4Norm(t){return String(t||'').toLowerCase().replace(/\s+/g,' ').trim()}
+function looksLikePrompt(output,prompt){
+	const o=s4Norm(output),p=s4Norm(prompt);
+	if(!o||!p)return false;
+	if(o===p||o.includes(p))return true;
+	const words=p.split(' ');const n=6;if(words.length<n+2)return false;
+	let hits=0,total=0;
+	for(let i=0;i+n<=words.length;i++){total++;if(o.includes(words.slice(i,i+n).join(' ')))hits++}
+	return total>0&&hits/total>0.8;
+}
+/* S4CALC:END */
+/* S4XLSX:BEGIN — builds the participant's cost sheet with ExcelJS. No DOM; takes the library as an argument so the same code runs in the test harness.
+   Every calculated cell is a live formula. Input cells are shaded light yellow. Purple header rows, green totals, Calibri. */
+function s4BuildWorkbook(ExcelJSLib,d,c,cash,meta){
+	meta=meta||{};
+	const PURPLE='FF4A3AAF',DEEP='FF3A2D8F',GREEN='FF2E8B1E',GREEN_TINT='FFF0F9ED',PURPLE_TINT='FFF3F1FD',INPUT='FFFFF9C4',INK='FF1E293B',RED='FFB91C1C',WHITE='FFFFFFFF',GREY='FF64748B';
+	const RAND='"R "#,##0;[Red]"-R "#,##0;"R "0',PCT='0.0%',NUM='#,##0.##';
+	const wb=new ExcelJSLib.Workbook();
+	wb.creator='EDMECA';wb.created=new Date();
+	const footer='&C&8raymond@edmeca.co.za | www.edmeca.co.za';
+	const q=s=>"'"+String(s).replace(/'/g,"''")+"'";
+	const ref=(sheet,cell)=>q(sheet)+'!'+cell.replace(/([A-Z]+)(\d+)/,'$$$1$$$2');
+	function newSheet(name,widths){
+		const ws=wb.addWorksheet(name,{views:[{showGridLines:false}],pageSetup:{orientation:'landscape',fitToPage:true,fitToWidth:1,fitToHeight:0}});
+		ws.headerFooter.oddFooter=footer;ws.headerFooter.evenFooter=footer;
+		widths.forEach((w,i)=>ws.getColumn(i+1).width=w);
+		ws.properties.defaultRowHeight=18;
+		return ws;
+	}
+	const font=(o)=>Object.assign({name:'Calibri',size:11,color:{argb:INK}},o||{});
+	function fill(cell,argb){cell.fill={type:'pattern',pattern:'solid',fgColor:{argb}}}
+	function title(ws,text,sub,cols){
+		ws.mergeCells(1,1,1,cols);const t=ws.getCell('A1');t.value=text;t.font=font({size:16,bold:true,color:{argb:WHITE}});fill(t,PURPLE);t.alignment={vertical:'middle',indent:1};ws.getRow(1).height=30;
+		ws.mergeCells(2,1,2,cols);const s=ws.getCell('A2');s.value=sub;s.font=font({size:10,color:{argb:GREY},italic:true});s.alignment={indent:1};
+	}
+	function header(ws,row,labels){
+		labels.forEach((l,i)=>{const cell=ws.getCell(row,i+1);cell.value=l;cell.font=font({bold:true,color:{argb:WHITE}});fill(cell,PURPLE);cell.alignment={vertical:'middle',wrapText:true}});
+		ws.getRow(row).height=20;
+	}
+	function band(ws,row,text,cols){
+		ws.mergeCells(row,1,row,cols);const cell=ws.getCell(row,1);cell.value=text;cell.font=font({bold:true,color:{argb:DEEP}});fill(cell,PURPLE_TINT);cell.alignment={indent:1};
+	}
+	function input(cell,value,fmt){cell.value=value;fill(cell,INPUT);cell.border={bottom:{style:'hair',color:{argb:'FFCBD5E1'}}};if(fmt)cell.numFmt=fmt;cell.font=font()}
+	function label(cell,text,bold){cell.value=text;cell.font=font({bold:!!bold});cell.alignment={indent:1}}
+	function calc(cell,formula,fmt,bold){cell.value={formula};if(fmt)cell.numFmt=fmt;cell.font=font({bold:!!bold})}
+	function totalRow(ws,row,cols){for(let i=1;i<=cols;i++){const cell=ws.getCell(row,i);fill(cell,GREEN_TINT);cell.font=font({bold:true,color:{argb:GREEN}});cell.border={top:{style:'thin',color:{argb:'FFCBE9BE'}},bottom:{style:'thin',color:{argb:'FFCBE9BE'}}}}}
+	function note(ws,row,text,cols){ws.mergeCells(row,1,row,cols);const cell=ws.getCell(row,1);cell.value=text;cell.font=font({size:10,color:{argb:GREY},italic:true});cell.alignment={wrapText:true,vertical:'top',indent:1}}
+	const business=meta.business||'',participant=meta.participant||'',today=meta.date||new Date();
+	const stamp=today.toISOString().slice(0,10);
+	const job=d.job||{},lines=d.lines||[],p=d.price||{},sc=d.scenario||{},cs=d.cash||{},pilot=d.pilot||{};
+	const layerNames={1:'People',2:'Materials',3:'Vehicles and machines',4:"The job's own overheads",5:'Your share of the business'};
+	const sourceNames={invoice:'Invoice',bank:'Bank statement',wagebook:'Wage book',supplier:'Supplier quote',ownrate:'Own rate',other:'Other'};
+	const A={};
+
+	/* ---------- Cost Sheet ---------- */
+	const CS='Cost Sheet';
+	const ws=newSheet(CS,[26,34,10,12,14,16,18,10,14]);
+	title(ws,'EDMECA Job Cost Sheet',`${business}${participant?' · '+participant:''} · generated ${stamp} · All amounts in rand, excluding VAT`,9);
+	band(ws,4,'Job details',9);
+	const jobRows=[['Business',business],['Sector',job.sector||''],['The job in one line',job.line||''],['Client',job.client||'Client A']];
+	let r=5;
+	jobRows.forEach(([k,v])=>{label(ws.getCell(r,1),k);input(ws.getCell(r,2),v);ws.mergeCells(r,2,r,4);r++});
+	label(ws.getCell(r,1),'What you charged or will charge');input(ws.getCell(r,2),s4Num(job.quoted)||null,RAND);A.quoted=ref(CS,'B'+r);r++;
+	label(ws.getCell(r,1),'Duration');input(ws.getCell(r,2),s4Num(job.duration)||null,NUM);input(ws.getCell(r,3),job.durationUnit||'weeks');A.duration=ref(CS,'B'+r);A.durationUnit=ref(CS,'C'+r);r++;
+	label(ws.getCell(r,1),'Status');input(ws.getCell(r,2),({won:'Sent and won',lost:'Sent and lost',pending:'About to send'})[job.status]||'');r++;
+	r++;
+	header(ws,r,['Layer','Item','Qty','Unit','Rate','Amount','Source','Estimate','Found in round']);r++;
+	const layerTotalRef={};
+	[1,2,3,4].forEach(n=>{
+		band(ws,r,`${n} · ${layerNames[n]}`,9);r++;
+		const start=r;
+		const own=lines.filter(l=>Number(l.layer)===n);
+		const count=own.length+20;
+		for(let i=0;i<count;i++){
+			const l=own[i]||{};
+			ws.getCell(r,1).value=n;ws.getCell(r,1).font=font({color:{argb:GREY}});ws.getCell(r,1).alignment={horizontal:'center'};
+			input(ws.getCell(r,2),l.item||'');
+			input(ws.getCell(r,3),l.qty!==''&&l.qty!=null&&own[i]?s4Num(l.qty):null,NUM);
+			input(ws.getCell(r,4),l.unit||'');
+			input(ws.getCell(r,5),l.rate!==''&&l.rate!=null&&own[i]?s4Num(l.rate):null,RAND);
+			calc(ws.getCell(r,6),`IF(LOWER(D${r})="lump sum",E${r},C${r}*E${r})`,RAND);
+			input(ws.getCell(r,7),sourceNames[l.source]||l.source||'');
+			input(ws.getCell(r,8),own[i]&&l.estimate?'Yes':'');
+			input(ws.getCell(r,9),own[i]&&l.round?'Round '+l.round:'');
+			r++;
+		}
+		const end=r-1;
+		label(ws.getCell(r,1),`Layer ${n} total`,true);calc(ws.getCell(r,6),`SUM(F${start}:F${end})`,RAND,true);totalRow(ws,r,9);
+		layerTotalRef[n]=ref(CS,'F'+r);r++;
+		r++;
+	});
+	band(ws,r,`5 · ${layerNames[5]} — the overhead share this job must carry`,9);r++;
+	const ov=r;label(ws.getCell(r,1),'Monthly business overhead');input(ws.getCell(r,6),s4Num(p.overhead)||null,RAND);ws.getCell(r,2).value='The costs that stay if no job runs this month';ws.getCell(r,2).font=font({size:10,color:{argb:GREY},italic:true});A.overhead=ref(CS,'F'+r);r++;
+	label(ws.getCell(r,1),'Overhead method (A, B or C)');input(ws.getCell(r,6),p.method||'A');ws.getCell(r,2).value='A by time · B by direct cost · C by revenue';ws.getCell(r,2).font=font({size:10,color:{argb:GREY},italic:true});A.method=ref(CS,'F'+r);r++;
+	label(ws.getCell(r,1),'A: Months on this job');input(ws.getCell(r,6),c.months?Number(c.months.toFixed(2)):null,NUM);A.months=ref(CS,'F'+r);r++;
+	label(ws.getCell(r,1),'A: Share of your team this job uses');input(ws.getCell(r,6),c.share,PCT);A.share=ref(CS,'F'+r);r++;
+	label(ws.getCell(r,1),'B: Average monthly direct cost');input(ws.getCell(r,6),s4Num(p.avgDirect)||null,RAND);A.avgDirect=ref(CS,'F'+r);r++;
+	label(ws.getCell(r,1),'C: Average monthly sales');input(ws.getCell(r,6),s4Num(p.avgSales)||null,RAND);A.avgSales=ref(CS,'F'+r);r++;
+	const directFormula=`${layerTotalRef[1]}+${layerTotalRef[2]}+${layerTotalRef[3]}+${layerTotalRef[4]}`;
+	label(ws.getCell(r,1),'Layer 5 total · overhead share',true);
+	calc(ws.getCell(r,6),`IF(UPPER(${A.method})="B",IF(${A.avgDirect}>0,${A.overhead}/${A.avgDirect}*(${directFormula}),0),IF(UPPER(${A.method})="C",IF(${A.avgSales}>0,${A.overhead}/${A.avgSales}*${A.quoted},0),${A.overhead}*${A.months}*${A.share}))`,RAND,true);
+	totalRow(ws,r,9);layerTotalRef[5]=ref(CS,'F'+r);r++;
+	r++;
+	band(ws,r,'From cost to price',9);r++;
+	label(ws.getCell(r,1),'Direct cost (layers 1 to 4)',true);calc(ws.getCell(r,6),directFormula,RAND,true);A.direct=ref(CS,'F'+r);r++;
+	label(ws.getCell(r,1),'Full cost (layers 1 to 5)',true);calc(ws.getCell(r,6),`${A.direct}+${layerTotalRef[5]}`,RAND,true);totalRow(ws,r,9);A.full=ref(CS,'F'+r);r++;
+	label(ws.getCell(r,1),'Target margin');input(ws.getCell(r,6),c.targetMargin,PCT);A.tm=ref(CS,'F'+r);r++;
+	label(ws.getCell(r,1),'Minimum margin for walk-away');input(ws.getCell(r,6),c.minMargin,PCT);A.mm=ref(CS,'F'+r);r++;
+	label(ws.getCell(r,1),'Price at target margin',true);calc(ws.getCell(r,6),`IF(${A.tm}<1,${A.full}/(1-${A.tm}),0)`,RAND,true);totalRow(ws,r,9);A.price=ref(CS,'F'+r);r++;
+	label(ws.getCell(r,1),'Walk-away price',true);calc(ws.getCell(r,6),`IF(${A.mm}<1,${A.full}/(1-${A.mm}),0)`,RAND,true);A.walk=ref(CS,'F'+r);r++;
+	label(ws.getCell(r,1),'Margin on what you quoted');calc(ws.getCell(r,6),`IF(${A.quoted}>0,(${A.quoted}-${A.full})/${A.quoted},"")`,PCT);A.marginQuoted=ref(CS,'F'+r);r++;
+	label(ws.getCell(r,1),'Markup equivalent');calc(ws.getCell(r,6),`IF(${A.full}>0,(${A.price}-${A.full})/${A.full},"")`,PCT);r++;
+	label(ws.getCell(r,1),'Margin after direct costs');calc(ws.getCell(r,6),`IF(${A.price}>0,(${A.price}-${A.direct})/${A.price},"")`,PCT);A.marginDirect=ref(CS,'F'+r);r++;
+	label(ws.getCell(r,1),'Break-even revenue per month',true);calc(ws.getCell(r,6),`IF(AND(ISNUMBER(${A.marginDirect}),${A.marginDirect}>0),${A.overhead}/${A.marginDirect},"")`,RAND,true);A.breakEven=ref(CS,'F'+r);r++;
+	label(ws.getCell(r,1),'Your quote against the walk-away price',true);ws.mergeCells(r,6,r,9);
+	calc(ws.getCell(r,6),`IF(${A.quoted}>0,IF(${A.quoted}>=${A.walk},"Above your walk-away price","Below your walk-away price by R"&FIXED(${A.walk}-${A.quoted},0)),"Enter what you quoted")`,null,true);r++;
+	r++;
+	note(ws,r,'Yellow cells are yours to change. Everything else recalculates. Layer 5 uses method A (time) unless you type B or C in the method cell. Twenty blank lines per layer are ready for the next job.',9);
+	ws.getRow(r).height=32;
+
+	/* ---------- Interview ---------- */
+	const IV='Interview';
+	const wi=newSheet(IV,[10,52,52,16,10]);
+	title(wi,'Round 2 · The hidden cost interview',`${business} · ${job.line||''} · AI asks, you answer. Item names go in; amounts never do.`,5);
+	band(wi,4,'The interview prompt',5);
+	wi.mergeCells(5,1,5,5);wi.getCell(5,1).value=d.interviewPrompt||'';wi.getCell(5,1).alignment={wrapText:true,vertical:'top',indent:1};wi.getCell(5,1).font=font({size:10});wi.getRow(5).height=110;
+	header(wi,7,['Round','AI asked','My answer','Added as cost line','Layer']);
+	let ir=8;
+	(d.rounds||[]).forEach((rd,i)=>{
+		const found=lines.filter(l=>Number(l.round)===i+1);
+		wi.getCell(ir,1).value=i+1;wi.getCell(ir,1).alignment={horizontal:'center',vertical:'top'};
+		wi.getCell(ir,2).value=rd.asked||'';wi.getCell(ir,2).alignment={wrapText:true,vertical:'top'};
+		wi.getCell(ir,3).value=rd.answer||'';wi.getCell(ir,3).alignment={wrapText:true,vertical:'top'};
+		wi.getCell(ir,4).value=found.length?found.map(l=>l.item||'(unnamed)').join(', '):'No';wi.getCell(ir,4).alignment={wrapText:true,vertical:'top'};
+		wi.getCell(ir,5).value=found.length?[...new Set(found.map(l=>Number(l.layer)))].join(', '):'';wi.getCell(ir,5).alignment={horizontal:'center',vertical:'top'};
+		[1,2,3,4,5].forEach(col=>wi.getCell(ir,col).font=font());
+		ir++;
+	});
+	for(let i=0;i<6;i++){wi.getCell(ir,1).value=(d.rounds||[]).length+i+1;wi.getCell(ir,1).alignment={horizontal:'center'};wi.getCell(ir,1).font=font({color:{argb:GREY}});[2,3].forEach(col=>input(wi.getCell(ir,col),''));ir++}
+	ir++;note(wi,ir,'If Claude gives you a number, reply: do not suggest amounts, ask me the next question. Every rand on the cost sheet is one you typed.',5);
+
+	/* ---------- Scenarios ---------- */
+	const SN='Scenarios';
+	const wsn=newSheet(SN,[34,14,14,12,18]);
+	title(wsn,'Round 3 · Three what-ifs, your costs untouched',`${business} · Index figures: cost 100. The AI sees the index, never the rand.`,5);
+	label(wsn.getCell(4,1),'Full cost (from the Cost Sheet)');calc(wsn.getCell(4,2),A.full,RAND);
+	label(wsn.getCell(5,1),'Target margin (from the Cost Sheet)');calc(wsn.getCell(5,2),A.tm,PCT);
+	label(wsn.getCell(6,1),'Service to add');input(wsn.getCell(6,2),(sc.service||'').trim()||'a service');wsn.mergeCells(6,2,6,5);
+	label(wsn.getCell(7,1),'Service cost index');input(wsn.getCell(7,2),s4Num(sc.costIdx),NUM);
+	label(wsn.getCell(8,1),'Service charged index');input(wsn.getCell(8,2),s4Num(sc.chargedIdx),NUM);
+	header(wsn,10,['Scenario','Cost index','Price index','Margin','Rand price']);
+	const scRows=[['Your price at target margin','100','IF($B$5<1,100/(1-$B$5),0)'],['Charge 10 percent more','100','C11*1.1'],['Discount 10 percent','100','C11*0.9'],['Add the service','100+$B$7','C11+$B$8'],['The quote you sent','100',`IF(AND($B$4>0,${A.quoted}>0),${A.quoted}/$B$4*100,"")`]];
+	scRows.forEach((row,i)=>{const rr=11+i;label(wsn.getCell(rr,1),row[0]);calc(wsn.getCell(rr,2),row[1],NUM);calc(wsn.getCell(rr,3),row[2],'0.0');calc(wsn.getCell(rr,4),`IF(AND(ISNUMBER(C${rr}),C${rr}>0),(C${rr}-B${rr})/C${rr},"")`,PCT);calc(wsn.getCell(rr,5),`IF(ISNUMBER(C${rr}),$B$4*C${rr}/100,"")`,RAND)});
+	band(wsn,17,'The scenario prompt',5);wsn.mergeCells(18,1,18,5);wsn.getCell(18,1).value=sc.prompt||'';wsn.getCell(18,1).alignment={wrapText:true,vertical:'top',indent:1};wsn.getCell(18,1).font=font({size:10});wsn.getRow(18).height=70;
+	band(wsn,20,"Claude's answer, pasted back",5);wsn.mergeCells(21,1,21,5);wsn.getCell(21,1).value=sc.answer||'';wsn.getCell(21,1).alignment={wrapText:true,vertical:'top',indent:1};wsn.getCell(21,1).font=font({size:10});wsn.getRow(21).height=Math.min(400,Math.max(60,Math.ceil((sc.answer||'').length/110)*14));
+	label(wsn.getCell(23,1),'Scenario I would offer',true);const chosenLabel=({base:'Your price at target margin',plus:'Charge 10 percent more',minus:'Discount 10 percent',add:'Add the service',sent:'The quote you sent'})[sc.chosen]||'';input(wsn.getCell(23,2),chosenLabel);wsn.mergeCells(23,2,23,5);
+
+	/* ---------- Cash Line ---------- */
+	const CL='Cash Line';
+	const wc=newSheet(CL,[34,16,16,16,4,22,16]);
+	title(wc,'Job cash line · when the money moves',`${business} · The cost sheet tells you if. The cash line tells you when.`,7);
+	const cIn=[['Price (from the Cost Sheet)',A.price,RAND,true],['Deposit %, received in week 0',s4Num(cs.deposit),NUM],['Progress payment %',s4Num(cs.progress),NUM],['Week the progress claim goes in',cash.claimWeek,NUM],['Final payment %, at completion',s4Num(cs.final),NUM],['Payment terms on claims, days',s4Num(cs.terms),NUM],['When materials are paid (upfront, spread, completion)',cs.materials||'upfront'],['Job length in weeks',cash.weeks,NUM],['Layer 1 · People',layerTotalRef[1],RAND,true],['Layer 2 · Materials',layerTotalRef[2],RAND,true],['Layer 3 · Vehicles and machines',layerTotalRef[3],RAND,true],["Layer 4 · The job's own overheads",layerTotalRef[4],RAND,true],['Layer 5 · Your share of the business',layerTotalRef[5],RAND,true]];
+	let cr=4;
+	cIn.forEach(([k,v,fmt,isFormula])=>{label(wc.getCell(cr,1),k);if(isFormula)calc(wc.getCell(cr,2),v,fmt);else input(wc.getCell(cr,2),v,fmt);cr++});
+	// rows 4..16 → B4 price, B5 dep, B6 prog, B7 claim week, B8 final, B9 terms, B10 materials, B11 weeks, B12..B16 L1..L5
+	label(wc.getCell(cr,1),'Weeks until a claim is paid');calc(wc.getCell(cr,2),'ROUNDUP($B$9/7,0)',NUM);cr++; // B17
+	label(wc.getCell(cr,1),'Payment split check (must be 100)');calc(wc.getCell(cr,2),'$B$5+$B$6+$B$8',NUM);cr++; // B18
+	label(wc.getCell(4,6),'Cash gap (deepest point)',true);calc(wc.getCell(4,7),'MIN($D$21:$D$73)',RAND,true);wc.getCell(4,7).font=font({bold:true,size:14,color:{argb:RED}});
+	label(wc.getCell(5,6),'In week',true);calc(wc.getCell(5,7),'INDEX($A$21:$A$73,MATCH($G$4,$D$21:$D$73,0))',NUM,true);
+	label(wc.getCell(6,6),'Position at the end',true);calc(wc.getCell(6,7),'INDEX($D$21:$D$73,MATCH(MAX($A$21:$A$73),$A$21:$A$73,0))',RAND,true);
+	A.gap=ref(CL,'G4');A.gapWeek=ref(CL,'G5');
+	header(wc,20,['Week','Money in','Money out','Cumulative position']);
+	for(let w=0;w<=52;w++){
+		const rr=21+w;
+		wc.getCell(rr,1).value=w;wc.getCell(rr,1).alignment={horizontal:'center'};wc.getCell(rr,1).font=font();
+		calc(wc.getCell(rr,2),`IF(A${rr}=0,$B$5/100*$B$4,0)+IF(A${rr}=$B$7+$B$17,$B$6/100*$B$4,0)+IF(A${rr}=$B$11+$B$17,$B$8/100*$B$4,0)`,RAND);
+		calc(wc.getCell(rr,3),`IF($B$11>0,IF(LOWER($B$10)="spread",IF(AND(A${rr}>=1,A${rr}<=$B$11),$B$13/$B$11,0),IF(LOWER($B$10)="completion",IF(A${rr}=$B$11,$B$13,0),IF(A${rr}=1,$B$13,0)))+IF(AND(A${rr}>=1,A${rr}<=$B$11),($B$12+$B$14+$B$16)/$B$11,0)+IF(A${rr}=$B$11,$B$15,0),0)`,RAND);
+		calc(wc.getCell(rr,4),w===0?`B${rr}-C${rr}`:`D${rr-1}+B${rr}-C${rr}`,RAND);
+		if(w===cash.gapWeek){[1,2,3,4].forEach(col=>{fill(wc.getCell(rr,col),'FFFEE2E2');wc.getCell(rr,col).font=font({bold:true,color:{argb:RED}})})}
+	}
+	wc.addConditionalFormatting({ref:'D21:D73',rules:[{type:'dataBar',minLength:0,maxLength:100,cfvo:[{type:'min'},{type:'max'}],color:{argb:'FF4A3AAF'},showValue:true}]});
+	note(wc,75,'The table runs to week 52 so it keeps working on longer jobs. The bar in the Cumulative column is the cash line; the row shaded red is the deepest point at the time this file was generated. To see it as a chart, select columns A and D and insert a line chart.',7);wc.getRow(75).height=44;
+
+	/* ---------- Four Numbers ---------- */
+	const FN='Four Numbers';
+	const wf=newSheet(FN,[4,24,4,24,4,24,4,24]);
+	title(wf,'Your four numbers · check them before every quote',`${business} · Cost, price, margin, cash gap. Off one job, on one page.`,8);
+	const tiles=[['COST','Full cost, layers 1 to 5',A.full,RAND,INK],['PRICE','At the margin you chose',A.price,RAND,GREEN],['MARGIN','Kept from every rand billed',A.tm,PCT,PURPLE],['CASH GAP','Deepest point, and its week',A.gap,RAND,RED]];
+	tiles.forEach(([k,sub,f,fmt,color],i)=>{
+		const col=2+i*2;
+		const h=wf.getCell(4,col);h.value=k;h.font=font({size:10,bold:true,color:{argb:color}});
+		const v=wf.getCell(5,col);calc(v,f,fmt,true);v.font=font({size:22,bold:true,color:{argb:color}});
+		const s=wf.getCell(6,col);s.value=sub;s.font=font({size:9,color:{argb:GREY}});
+		[4,5,6].forEach(rr=>{fill(wf.getCell(rr,col),i===3?'FFFEF2F2':i===2?PURPLE_TINT:i===1?GREEN_TINT:'FFF8FAFC')});
+	});
+	const gw=wf.getCell(7,8);calc(gw,`"Week "&${A.gapWeek}`,null);gw.font=font({size:10,bold:true,color:{argb:RED}});fill(gw,'FFFEF2F2');
+	wf.getRow(5).height=34;
+	band(wf,9,'Your pilot · the next quote goes through the sheet',8);
+	const pr=[['The next quote I will cost on this sheet',pilot.quote||''],['Who prepares it',pilot.owner||''],['By when',pilot.date||''],['WhatsApp number for the day 7 check',pilot.whatsapp||''],['File generated',stamp]];
+	pr.forEach(([k,v],i)=>{label(wf.getCell(10+i,2),k,true);wf.mergeCells(10+i,4,10+i,8);input(wf.getCell(10+i,4),v)});
+	note(wf,16,'Full cost and walk-away checked before it is sent. Day 7 check: Wednesday 30 September 2026, one WhatsApp message, one question: did your next quote go through the cost sheet?',8);wf.getRow(16).height=32;
+
+	/* ---------- 90-Day Cash ---------- */
+	const ND='90-Day Cash';
+	const wn=newSheet(ND,[30,...Array(13).fill(12),14]);
+	title(wn,'90-day business cash view · blank template',`${business} · For the Session 5 opening. Money in against money out for the whole business, week by week.`,15);
+	header(wn,4,['Week',...Array.from({length:13},(_,i)=>'Week '+(i+1)),'Total']);
+	label(wn.getCell(5,1),'Week starting (date)');for(let k=0;k<13;k++)input(wn.getCell(5,2+k),'');
+	label(wn.getCell(6,1),'Opening balance',true);input(wn.getCell(6,2),null,RAND);
+	band(wn,7,'Receipts (money in, by customer)',15);
+	const custRows=[];for(let i=0;i<5;i++){const rr=8+i;custRows.push(rr);input(wn.getCell(rr,1),'Customer '+(i+1));for(let k=0;k<13;k++)input(wn.getCell(rr,2+k),null,RAND);calc(wn.getCell(rr,15),`SUM(B${rr}:N${rr})`,RAND)}
+	label(wn.getCell(13,1),'Total receipts',true);for(let k=0;k<14;k++){const colL=String.fromCharCode(66+k);calc(wn.getCell(13,2+k),`SUM(${colL}8:${colL}12)`,RAND,true)}totalRow(wn,13,15);
+	band(wn,14,'Payments (money out, by category)',15);
+	const cats=['Wages and salaries','Materials and suppliers','Vehicles and fuel','Rent','Insurance','Phones and software','Accountant and admin','Other'];
+	cats.forEach((cat,i)=>{const rr=15+i;input(wn.getCell(rr,1),cat);for(let k=0;k<13;k++)input(wn.getCell(rr,2+k),null,RAND);calc(wn.getCell(rr,15),`SUM(B${rr}:N${rr})`,RAND)});
+	label(wn.getCell(23,1),'Total payments',true);for(let k=0;k<14;k++){const colL=String.fromCharCode(66+k);calc(wn.getCell(23,2+k),`SUM(${colL}15:${colL}22)`,RAND,true)}totalRow(wn,23,15);
+	label(wn.getCell(24,1),'Closing balance',true);for(let k=0;k<13;k++){const colL=String.fromCharCode(66+k);calc(wn.getCell(24,2+k),`${colL}6+${colL}13-${colL}23`,RAND,true)}totalRow(wn,24,15);
+	for(let k=1;k<13;k++){const prev=String.fromCharCode(66+k-1);calc(wn.getCell(6,2+k),`${prev}24`,RAND)}
+	label(wn.getCell(26,1),'Lowest point in the 13 weeks',true);calc(wn.getCell(26,2),'MIN(B24:N24)',RAND,true);wn.getCell(26,2).font=font({bold:true,size:14,color:{argb:RED}});
+	label(wn.getCell(27,1),'In week',true);calc(wn.getCell(27,2),'INDEX(B4:N4,MATCH(B26,B24:N24,0))',null,true);
+	note(wn,29,'Type the opening balance once. Each week opens with the previous week\'s close. Fill receipts and payments from your bank statement and your quotes; the lowest point is the week to act on at least 30 days before it arrives.',15);wn.getRow(29).height=32;
+
+	/* ---------- How To Use ---------- */
+	const HT='How To Use';
+	const wh=newSheet(HT,[110]);
+	title(wh,'How to use this cost sheet on the next quote',`${business} · Built in the EDMECA Digital Leader workbook, Session 4 · ${stamp}`,1);
+	const steps=[
+		'1. Open the Cost Sheet tab. Type the new job\'s details in the yellow cells at the top, including what you intend to charge.',
+		'2. Round 1: list every cost you already know in layers 1 to 3, one line per cost, with a source. Include your own days on site at your own day rate.',
+		'3. Round 2: copy the interview prompt below into Claude, replacing the item list with your new cost lines (names only, no amounts). Answer one question at a time, at least three times round. Add anything real as a layer 4 line. You type the amount, never the AI.',
+		'4. Round 3: check monthly overhead, months on the job and the share of your team. The sheet gives you the full cost, the price at your target margin, the walk-away price and the monthly break-even.',
+		'5. Compare what you intend to charge with the walk-away price. Below it, you are paying to do the work.',
+		'6. Cash Line tab: enter deposit, progress, final and payment terms. Read the cash gap and its week. Ask for a bigger deposit if the gap is more than you can carry.',
+		'7. Four Numbers tab: cost, price, margin, cash gap. Read them before the quote goes out. Fifteen minutes, every quote.',
+		'8. Scenarios tab: copy the scenario prompt into Claude with your new index price, paste the answer back, and check its working against the table.',
+		'',
+		'THE INTERVIEW PROMPT',
+		d.interviewPrompt||'(Build it on card 3 of the workbook.)',
+		'',
+		'THE SCENARIO PROMPT',
+		sc.prompt||'(Build it on card 4 of the workbook.)',
+		'',
+		'Rules that keep your rand figures where they belong: item names go to the AI, amounts do not. Client names become Client A. Margin goes in as an index: cost 100, price 125. You sign the quote, so you check the number.',
+		'',
+		'raymond@edmeca.co.za | www.edmeca.co.za'
+	];
+	steps.forEach((s,i)=>{const cell=wh.getCell(4+i,1);cell.value=s;cell.alignment={wrapText:true,vertical:'top',indent:1};cell.font=font({bold:/^[A-Z ]+$/.test(s)&&s.length>3,size:11});if(s.length>120)wh.getRow(4+i).height=Math.ceil(s.length/105)*15+6});
+	return wb;
+}
+function s4FileName(business,date){const clean=String(business||'business').replace(/[^\w\- ]+/g,'').trim().replace(/\s+/g,'_').slice(0,40)||'business';const d=date||new Date();const ymd=d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');return `EDMECA_S4_CostSheet_${clean}_${ymd}.xlsx`}
+/* S4XLSX:END */
 </script>
 </body>
 </html>

@@ -55,6 +55,20 @@ Session 3 follows the facilitator deck's arc (Choose Where to Compete → Build 
 
 Note on the six-block prompt recipe: the deck's slide 35 names the blocks Role / Task / Context / Requirements / **Format** / **Example**, and carries a facilitator warning that the Session 1 callback is unverified. Session 1 in this workbook does teach six blocks, so the count is right, but its last two are named **Reasoning** and **Boundaries**. The app follows the deck. If the deck is corrected, change `quoteRecipe` in `index.html` and the `S3_Quotation` column headings together.
 
+Session 4 (Costing, Pricing and Financial Intelligence — "One Job, Costed Properly") follows the approved app spec (`EDMECA_Session4_App_Spec_v0.1`, 17 September 2026): six cards, the app as the calculation surface, Claude only ever asked to ask. Everything lives inside a single `session4` object:
+
+- Job (card 1): `job { sector, line, client, quoted, duration, durationUnit, status }`. `sector` is pre-filled from `session3.sector` when empty. `duration` plus `durationUnit` (`days` / `weeks` / `months`) converts to months for layer 5 (weeks ÷ 4.33, days ÷ 21.67) and to weeks for the cash line. `status` is `won` / `lost` / `pending`, reporting only
+- Cost lines (cards 2 and 3): `lines[]`, each `{ layer, item, qty, unit, rate, source, estimate, round }`. `layer` is 1 to 4 (People, Materials, Vehicles and machines, The job's own overheads); layer 5 is never a line, it is calculated on card 4. `unit` is one of `day, hour, m3, km, load, each, month, lump sum`; a lump sum takes `rate` as the amount, otherwise amount = qty × rate. `source` is `invoice` / `bank` / `wagebook` / `supplier` / `ownrate` / `other`. `round` is the interview round (1-based) the line was found in, or null for Round 1 lines. `hideAmounts` is the display-only toggle for the pair check
+- Interview (card 3): `interviewPrompt` (rebuilt every render from the sector, the job line and the item names — never quantities, rates or amounts), `rounds[]`, each `{ asked, answer }`. Three rounds with both fields filled is the minimum; an `asked` box that equals, or contains more than 80 percent of, the prompt is refused
+- Price (card 4): `price { overhead, method, months, share, avgDirect, avgSales, targetMargin, minMargin }`. `method` is `A` (by time: overhead × months × share, the default), `B` (by direct cost: overhead ÷ avgDirect × direct cost) or `C` (by revenue: overhead ÷ avgSales × quoted price). `months` starts from the card 1 duration and is editable. Margins are stored as percentages (20 means 20%). Everything else on the card is derived live: direct cost (layers 1 to 4), full cost, price = full ÷ (1 − target), walk-away = full ÷ (1 − minimum), margin on quoted, markup equivalent, margin after direct costs, break-even = overhead ÷ margin after direct costs
+- Scenarios (card 4): `scenario { service, costIdx, chargedIdx, prompt, answer, chosen }`. The prompt carries index figures only (cost 100, price 100 ÷ (1 − target)); no rand amount reaches the AI. `chosen` is `base` / `plus` / `minus` / `add` / `sent`
+- Cash line (card 5): `cash { deposit, progress, final, progressWeek, terms, materials, weeks, try50 }`. Percentages must total 100. `progressWeek` empty means the middle week. `materials` is `upfront` (week 1) / `spread` / `completion`. Weekly logic: deposit in week 0, progress and final paid ceil(terms ÷ 7) weeks after they are claimed; layer 2 by the chosen timing, layers 1, 3 and 5 spread evenly over the job weeks, layer 4 in the last job week. The cash gap is the lowest cumulative position. Acceptance values from the deck's worked example: price R317 250, full cost R253 800, 6 weeks, 30/40/30, 30 days gives −R158 625 in week 6; 50/20/30 gives −R95 175
+- Pilot and file (card 6): `pilot { quote, owner, date, whatsapp }` (date on or before 2026-09-30), `fileGenerated` (ISO timestamp of the last download), `submitted` (ISO timestamp when all six cards were complete on save)
+
+The calculation code is a DOM-free block in `index.html` between `/* S4CALC:BEGIN */` and `/* S4CALC:END */`, and the spreadsheet builder between `/* S4XLSX:BEGIN */` and `/* S4XLSX:END */`, so both can be lifted out and run in node against the worked example. The generated file (`EDMECA_S4_CostSheet_[Business]_[yyyymmdd].xlsx`, built with ExcelJS from cdnjs) has seven tabs — Cost Sheet, Interview, Scenarios, Cash Line, Four Numbers, 90-Day Cash, How To Use — with every calculated cell a live formula and input cells shaded yellow. The Cash Line tab has no native chart (ExcelJS cannot write one): the cumulative column carries a data bar, the deepest-point row is shaded red, and the note says how to insert a line chart in one step.
+
+Prompt-echo check: `looksLikePrompt(output, prompt)` normalises whitespace and case and flags an output that equals the prompt, contains it whole, or contains more than 80 percent of its six-word phrases. It is applied to every Session 4 output box, and back-ported to Session 2 (`sopText`) and Session 3 (`capText`, `quoteText`, `commsText`), where a save is refused with the red message.
+
 ## Adding future sessions
 
 Each new session should add its own state namespace, for example `session3`, and keep its fields inside the same `StateJSON` object. Add a readable reporting tab in Apps Script only when facilitators need spreadsheet columns for that session, and prefix its name with the session number (`S3_...`) so tabs never collide across sessions that reuse the same exercise numbering. This keeps resume data complete while allowing each session to have different exercises.
@@ -97,6 +111,16 @@ Session 3 (`S3_...`):
 - `S3_Pipeline`: one row per quote, with the pipeline stage it was placed in
 - `S3_Rhythm`: which daily/weekly/monthly business-development items the participant committed to
 - `S3_Pilot`: the closing six-field pilot — the quote, action, asset, owner, send date and follow-up date
+
+Session 4 (`S4_...`) — unlike the earlier tabs these hold one current record per participant, replaced on every save (`upsertRows` deletes the participant's rows, matched on Name and Business, then appends). Amounts are stored for EDMECA's programme reporting; nothing is reported to Property Point at rand level:
+
+- `S4_Job`: sector, job line, client label, quoted price, duration, months, weeks, status (event `s4c1`)
+- `S4_Costs`: one row per cost line — layer, item, qty, unit, rate, amount, source, estimate, found-in-round (events `s4c2` and `s4c3`)
+- `S4_Interview`: one row per round — AI asked, my answer, added as line (Y/N), layer (event `s4c3`)
+- `S4_Price`: the five layer totals, full cost, method, target margin, price, walk-away, margin on quoted, break-even, quoted below walk-away (Y/N), the scenario answer and the scenario chosen (event `s4c4`)
+- `S4_Cash`: deposit, progress, final, terms, materials timing, cash gap, gap week (event `s4c5`)
+- `S4_Pilot`: quote, owner, date, WhatsApp, file generated, and `Day7Reply`, which the facilitator fills in by hand and which survives later saves (events `s4c6` and `s4file`)
+- `s4submit` appends a `Participants` row with event `s4submit` when all six cards are complete. Autosave goes to the `State` tab only, through the ordinary state payload
 
 ## Note on renaming existing tabs
 
