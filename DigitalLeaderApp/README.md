@@ -1,6 +1,6 @@
 # EDMECA Digital Leader App
 
-Six-session exercise workbook for Property Point | Growthpoint Enterprise Development Cohort Seven. Session 1 (Digital Leader), Session 2 (Operations), Session 3 (Market Access) and Session 4 (Financial Intelligence, "One Job, Costed Properly") are built; Sessions 5 and 6 show a "coming soon" placeholder until their exercise content is added.
+Six-session exercise workbook for Property Point | Growthpoint Enterprise Development Cohort Seven. Session 1 (Digital Leader), Session 2 (Operations), Session 3 (Market Access), Session 4 (Financial Intelligence, "One Job, Costed Properly") and Session 5 (Service Innovation, Business Model Canvas) are built; Session 6 shows a "coming soon" placeholder until its exercise content is added.
 
 ## Run locally
 
@@ -43,3 +43,9 @@ Session 4 is the calculation surface for the costing session (spec: `EDMECA_Sess
 The output-equals-prompt check introduced for Session 4 (an answer box that holds the prompt is refused with a red message) is also applied to the Session 2 SOP box and the Session 3 capability statement, quotation template and follow-up pack boxes.
 
 Redeploy `EDMECA_Bridge_AppsScript.gs` after pulling this version: it adds the `S4_...` tabs and the `s4c1` to `s4c6`, `s4file` and `s4submit` events.
+
+## Session 5 notes
+
+Session 5 hosts the Business Model Canvas, ported from the EDMECA Academy portal tool as it runs on staging (`/portal/tools/bmc`) because the portal page cannot be framed. The guided view walks the nine blocks through the Desirability / Viability / Feasibility lens, three sentence starters per block. Guided, Canvas and Dashboard views sit on the step bar; Import, Example and Reset sit above the guided card; the Dashboard carries Export JSON, Export Word, Finalise & save, and Analyse with Claude (copy the prompt, paste the reply back).
+
+Redeploy `EDMECA_Bridge_AppsScript.gs` after pulling this version: it adds the `S5_Canvas` and `S5_Analysis` tabs and the `s5canvas`, `s5analysis` and `s5submit` events.

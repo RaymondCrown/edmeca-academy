@@ -69,6 +69,19 @@ The calculation code is a DOM-free block in `index.html` between `/* S4CALC:BEGI
 
 Prompt-echo check: `looksLikePrompt(output, prompt)` normalises whitespace and case and flags an output that equals the prompt, contains it whole, or contains more than 80 percent of its six-word phrases. It is applied to every Session 4 output box, and back-ported to Session 2 (`sopText`) and Session 3 (`capText`, `quoteText`, `commsText`), where a save is refused with the red message.
 
+Session 5 (Service Innovation) carries the Business Model Canvas, ported from the EDMECA Academy portal tool as deployed on the website's `staging` branch (`/portal/tools/bmc`, `client/src/pages/portal/BMCTool.tsx` on `origin/staging`) so it runs inside the workbook under the participant's sign-in. The portal page cannot be embedded (it sends `X-Frame-Options: DENY` and needs a portal login). Everything lives inside a single `session5` object:
+
+- `canvas { customerSegments, valuePropositions, channels, customerRelationships, revenueStreams, keyResources, keyActivities, keyPartnerships, costStructure }`, each an array of answers **by position**: index 0 to 2 is the answer to that block's first to third sentence starter, `''` where unanswered. Same keys and shape as the portal (so its JSON export and import match), capped at 20 answers of 2 000 characters on load
+- `section`: the block open in the Guided view (0 to 8, in canvas numbering). `session5Step` on the top-level state is the view (0 Guided, 1 Canvas, 2 Dashboard)
+- `locked`: the Guided view's Editing / Locked toggle (read-only answers)
+- `analysis { overallAssessment, strengths[], areasToImprove[], coherenceChecks[] }` parsed from Claude's reply, and `analysisText`, the reply as pasted. Null until the participant runs the analysis
+- `example`: true while the RateMyRate sample is loaded (the Example button). Nothing is written to the `S5_...` tabs and Finalise is refused while it is set; Reset clears it
+- `finalized`: ISO timestamp of the last Finalise & save, cleared by any later edit
+
+The Guided view groups the blocks by lens — **Desirability** (do customers want this? 1 Customer Segments, 2 Value Propositions, 3 Channels, 4 Customer Relationships), **Viability** (can this make money? 9 Cost Structure, 5 Revenue Streams), **Feasibility** (can we deliver this? 7 Key Activities, 6 Key Resources, 8 Key Partnerships) — and Previous / Next follow that order. Section titles, questions, guiding questions, sentence starters, worked examples, the 280-character limit on the Value Propositions answers and the RateMyRate sample are copied verbatim from the portal source into a data block between `/* S5DATA:BEGIN */` and `/* S5DATA:END */`. The company name is the participant's business; there is no separate name prompt.
+
+The portal's **Analyse Canvas** calls Claude from a Netlify function (`analyze-bmc`). The workbook never calls an AI, so the same analysis rules are offered as Copy prompt → run in the participant's own Claude → paste back. The workbook's prompt also asks Claude for a professional PDF report (A4, title block, executive summary, the canvas at a glance grouped by lens, strengths, areas to develop with an action each, coherence, next step; `BMC_Analysis_[Business].pdf`, with a print-to-PDF fallback), then the same analysis as a closing ```json block. The participant keeps the PDF and pastes the block (or the whole reply) back; `s5ParseAnalysis` takes the last json code block, else a bare JSON reply. It is parsed and shown as the same Strengths / Areas to develop / Cross-block coherence cards and included in the Word export. Two words of the prompt changed for this cohort: "student" became "owner", and "university-level business student" became "small business owner". Until an analysis is pasted, the dashboard shows the portal's rule-based insights. Export JSON and Export Word match the portal's files (`bmc-[business]-[yyyy-mm-dd]`); Word uses the `docx` library loaded from jsdelivr on first export.
+
 ## Adding future sessions
 
 Each new session should add its own state namespace, for example `session3`, and keep its fields inside the same `StateJSON` object. Add a readable reporting tab in Apps Script only when facilitators need spreadsheet columns for that session, and prefix its name with the session number (`S3_...`) so tabs never collide across sessions that reuse the same exercise numbering. This keeps resume data complete while allowing each session to have different exercises.
@@ -121,6 +134,11 @@ Session 4 (`S4_...`) — unlike the earlier tabs these hold one current record p
 - `S4_Cash`: deposit, progress, final, terms, materials timing, cash gap, gap week (event `s4c5`)
 - `S4_Pilot`: quote, owner, date, WhatsApp, file generated, and `Day7Reply`, which the facilitator fills in by hand and which survives later saves (events `s4c6` and `s4file`)
 - `s4submit` appends a `Participants` row with event `s4submit` when all six cards are complete. Autosave goes to the `State` tab only, through the ordinary state payload
+
+Session 5 (`S5_...`), also one current record per participant:
+
+- `S5_Canvas`: one row per answered prompt — lens, section, prompt number (1 to 3), answer, sections filled, total answers, finalised (YES on `s5submit`). An empty block gets one row with a blank answer. Written on `s5canvas` (moving block, leaving the Guided view, import, reset), `s5analysis` and `s5submit` (Finalise & save, which also appends a `Participants` row)
+- `S5_Analysis`: the pasted Claude analysis — overall assessment, strengths, areas to develop, coherence checks (one per line). Written whenever the save carries an analysis (`s5analysis`, `s5submit`)
 
 ## Note on renaming existing tabs
 

@@ -29,7 +29,9 @@ var TABS = {
   S4_Interview: ['Timestamp','Name','Business','Round','AIAsked','MyAnswer','AddedAsLine','Layer'],
   S4_Price: ['Timestamp','Name','Business','Layer1','Layer2','Layer3','Layer4','Layer5','FullCost','Method','TargetMargin','Price','WalkAway','MarginOnQuoted','BreakEven','QuotedBelowWalkAway','ScenarioAnswer','ScenarioChosen'],
   S4_Cash: ['Timestamp','Name','Business','Deposit','Progress','Final','Terms','MaterialsTiming','CashGap','GapWeek'],
-  S4_Pilot: ['Timestamp','Name','Business','Quote','Owner','Date','WhatsApp','FileGenerated','Day7Reply']
+  S4_Pilot: ['Timestamp','Name','Business','Quote','Owner','Date','WhatsApp','FileGenerated','Day7Reply'],
+  S5_Canvas: ['Timestamp','Name','Business','Lens','Section','PromptNumber','Answer','SectionsFilled','TotalAnswers','Finalised'],
+  S5_Analysis: ['Timestamp','Name','Business','OverallAssessment','Strengths','AreasToDevelop','CoherenceChecks']
 };
 
 var S3_SORT_ANSWERS = {
@@ -225,6 +227,35 @@ function doPost(event) {
       upsertRows('S4_Pilot', name, business, [[timestamp, name, business, data.quote || '', data.owner || '', data.date || '', data.whatsapp || '', data.fileGenerated || '', '']]);
     } else if (exercise === 's4submit') {
       sheet('Participants').appendRow([timestamp, name, business, 's4submit']);
+
+    // Session 5 · Business Model Canvas: one row per answered prompt, replaced on every save (an empty block gets one blank row so it still shows).
+    // Answers are positional — PromptNumber is the sentence starter (1 to 3) the answer sits under in the workbook.
+    } else if (exercise === 's5canvas' || exercise === 's5submit' || exercise === 's5analysis') {
+      var canvas = data.canvas || {};
+      var sections = [
+        ['Desirability', 'customerSegments', '1. Customer Segments'], ['Desirability', 'valuePropositions', '2. Value Propositions'],
+        ['Desirability', 'channels', '3. Channels'], ['Desirability', 'customerRelationships', '4. Customer Relationships'],
+        ['Viability', 'costStructure', '9. Cost Structure'], ['Viability', 'revenueStreams', '5. Revenue Streams'],
+        ['Feasibility', 'keyActivities', '7. Key Activities'], ['Feasibility', 'keyResources', '6. Key Resources'], ['Feasibility', 'keyPartnerships', '8. Key Partnerships']
+      ];
+      var finalised = exercise === 's5submit' ? 'YES' : '';
+      var canvasRows = [];
+      sections.forEach(function (section) {
+        var items = canvas[section[1]] || [];
+        var answered = 0;
+        items.forEach(function (item, index) {
+          if (!String(item || '').trim()) return;
+          answered++;
+          canvasRows.push([timestamp, name, business, section[0], section[2], index + 1, item, data.filled || 0, data.items || 0, finalised]);
+        });
+        if (!answered) canvasRows.push([timestamp, name, business, section[0], section[2], '', '', data.filled || 0, data.items || 0, finalised]);
+      });
+      upsertRows('S5_Canvas', name, business, canvasRows);
+      var analysis = data.analysis;
+      if (analysis && typeof analysis.overallAssessment === 'string') {
+        upsertRows('S5_Analysis', name, business, [[timestamp, name, business, analysis.overallAssessment, (analysis.strengths || []).join('\n'), (analysis.areasToImprove || []).join('\n'), (analysis.coherenceChecks || []).join('\n')]]);
+      }
+      if (exercise === 's5submit') sheet('Participants').appendRow([timestamp, name, business, 's5submit']);
     }
 
     return json({ ok: true });
