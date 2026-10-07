@@ -57,3 +57,5 @@ Session 5 follow-ups (7 October 2026): the Example button on the Design Thinking
 Redeploy `EDMECA_Bridge_AppsScript.gs` after pulling this version: it adds the `S5_Artefacts` and `S5_Progress` tabs. Without the redeploy the new data is ignored and nothing breaks.
 
 Tests: `tests/session5_open_changes.test.js` (headless Playwright; run it against `DigitalLeaderApp/` before pushing).
+
+Empathize feeds Define (7 October 2026): when the Define view opens, each empty problem field (customer, job, barrier) is drafted once from the Empathize cards (chosen segment; the functional job's "so I can"; the first challenge). One-click suggestions sit under each field (segment, segment with the persona name, the jobs, the challenges and pains), and an empty HMW box offers a starter built from the problem statement. An unfinished starter does not count as a How Might We question. No sheet or Apps Script change. Tests: `tests/session5_define_prefill.test.js`.
