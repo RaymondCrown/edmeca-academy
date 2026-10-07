@@ -84,8 +84,8 @@
 </main><footer>EDMECA · AI Enablement Programme · From Framework to Execution to Evidence · <a target="_blank" rel="noreferrer" href="https://www.edmeca.co.za">www.edmeca.co.za</a></footer><div class="toast" id="toast"></div>
 <script>
 function blankSession4(){return{job:{sector:'',line:'',client:'Client A',quoted:'',duration:'',durationUnit:'weeks',status:''},lines:[],hideAmounts:false,interviewPrompt:'',rounds:[],price:{overhead:'',method:'A',months:'',share:100,avgDirect:'',avgSales:'',targetMargin:20,minMargin:0},scenario:{service:'',costIdx:8,chargedIdx:12,prompt:'',answer:'',chosen:''},cash:{deposit:30,progress:40,final:30,progressWeek:'',terms:30,materials:'upfront',weeks:'',try50:false},pilot:{quote:'',owner:'',date:'',whatsapp:''},fileGenerated:'',submitted:''}}
-function blankDt(){const call=()=>({who:'',happened:'',why:'',nearly:''}),job=()=>({when:'',want:'',so:''});return{segments:['','','',''],chosen:-1,persona:{name:'',age:'',role:'',situation:''},challenges:['',''],pains:['',''],needs:['','',''],jobs:{functional:job(),emotional:job(),social:job()},competition:['','','',''],alphaReply:'',alphaChange:'',calls:[call(),call(),call()],problem:{customer:'',job:'',barrier:''},checks:{focus:false,evidence:false,nosolution:false},hmw:['','',''],hmwChosen:-1,scamper:{s:'',c:'',a:'',m:'',p:'',e:'',r:''},circled:[],ideaLine:'',proto:{headline:'',reaction:'',change:''},sentToCanvas:'',seeded:[]}}
-function mergeDt(s){const b=blankDt();s=s&&typeof s==='object'?s:{};const str=v=>typeof v==='string'?v.slice(0,2000):'';const arr=(src,n)=>Array.from({length:n},(_,i)=>str(Array.isArray(src)?src[i]:''));const obj=(src,keys)=>Object.fromEntries(keys.map(k=>[k,str(src&&src[k])]));const int=(v,n)=>Number.isInteger(v)&&v>=-1&&v<n?v:-1;const sc=s.scamper||{};return{segments:arr(s.segments,4),chosen:int(s.chosen,4),persona:obj(s.persona,['name','age','role','situation']),challenges:arr(s.challenges,2),pains:arr(s.pains,2),needs:arr(s.needs,3),jobs:{functional:obj((s.jobs||{}).functional,['when','want','so']),emotional:obj((s.jobs||{}).emotional,['when','want','so']),social:obj((s.jobs||{}).social,['when','want','so'])},competition:arr(s.competition,4),alphaReply:str(s.alphaReply),alphaChange:str(s.alphaChange),calls:Array.from({length:3},(_,i)=>obj((s.calls||[])[i],['who','happened','why','nearly'])),problem:obj(s.problem,['customer','job','barrier']),checks:{focus:!!(s.checks&&s.checks.focus),evidence:!!(s.checks&&s.checks.evidence),nosolution:!!(s.checks&&s.checks.nosolution)},hmw:arr(s.hmw,3),hmwChosen:int(s.hmwChosen,3),scamper:obj(sc,['s','c','a','m','p','e','r']),circled:(Array.isArray(s.circled)?s.circled:[]).filter(k=>typeof k==='string'&&k.length===1&&'scamper'.includes(k)).slice(0,3),ideaLine:str(s.ideaLine),proto:obj(s.proto,['headline','reaction','change']),sentToCanvas:str(s.sentToCanvas),seeded:(Array.isArray(s.seeded)?s.seeded:[]).filter(k=>['customer','job','barrier'].includes(k))}}
+function blankDt(){const call=()=>({who:'',happened:'',why:'',nearly:''}),job=()=>({when:'',want:'',so:''});return{segments:['','','',''],chosen:-1,persona:{name:'',age:'',role:'',situation:''},challenges:['',''],pains:['',''],needs:['','',''],jobs:{functional:job(),emotional:job(),social:job()},competition:['','','',''],alphaReply:'',alphaChange:'',calls:[call(),call(),call()],problem:{customer:'',job:'',barrier:''},checks:{focus:false,evidence:false,nosolution:false},hmw:['','',''],hmwChosen:-1,scamper:{s:'',c:'',a:'',m:'',p:'',e:'',r:''},circled:[],ideaLine:'',proto:{headline:'',reaction:'',change:'',offer:'',action:'',whatsapp:'',proof:['','',''],link:''},sentToCanvas:'',seeded:[]}}
+function mergeDt(s){const b=blankDt();s=s&&typeof s==='object'?s:{};const str=v=>typeof v==='string'?v.slice(0,2000):'';const arr=(src,n)=>Array.from({length:n},(_,i)=>str(Array.isArray(src)?src[i]:''));const obj=(src,keys)=>Object.fromEntries(keys.map(k=>[k,str(src&&src[k])]));const int=(v,n)=>Number.isInteger(v)&&v>=-1&&v<n?v:-1;const sc=s.scamper||{};return{segments:arr(s.segments,4),chosen:int(s.chosen,4),persona:obj(s.persona,['name','age','role','situation']),challenges:arr(s.challenges,2),pains:arr(s.pains,2),needs:arr(s.needs,3),jobs:{functional:obj((s.jobs||{}).functional,['when','want','so']),emotional:obj((s.jobs||{}).emotional,['when','want','so']),social:obj((s.jobs||{}).social,['when','want','so'])},competition:arr(s.competition,4),alphaReply:str(s.alphaReply),alphaChange:str(s.alphaChange),calls:Array.from({length:3},(_,i)=>obj((s.calls||[])[i],['who','happened','why','nearly'])),problem:obj(s.problem,['customer','job','barrier']),checks:{focus:!!(s.checks&&s.checks.focus),evidence:!!(s.checks&&s.checks.evidence),nosolution:!!(s.checks&&s.checks.nosolution)},hmw:arr(s.hmw,3),hmwChosen:int(s.hmwChosen,3),scamper:obj(sc,['s','c','a','m','p','e','r']),circled:(Array.isArray(s.circled)?s.circled:[]).filter(k=>typeof k==='string'&&k.length===1&&'scamper'.includes(k)).slice(0,3),ideaLine:str(s.ideaLine),proto:{...obj(s.proto,['headline','reaction','change','offer','whatsapp','link']),action:['enquire','order','book','info'].includes((s.proto||{}).action)?s.proto.action:'',proof:arr((s.proto||{}).proof,3)},sentToCanvas:str(s.sentToCanvas),seeded:(Array.isArray(s.seeded)?s.seeded:[]).filter(k=>['customer','job','barrier','offer'].includes(k))}}
 function blankSession5(){return{canvas:{customerSegments:[],valuePropositions:[],channels:[],customerRelationships:[],revenueStreams:[],keyResources:[],keyActivities:[],keyPartnerships:[],costStructure:[]},section:0,locked:false,analysis:null,analysisText:'',example:false,finalized:null,dt:blankDt()}}
 function mergeSession5(s){const b=blankSession5();s=s||{};const src=s.canvas&&typeof s.canvas==='object'?s.canvas:{};const c={...b.canvas};Object.keys(c).forEach(k=>{if(Array.isArray(src[k]))c[k]=src[k].slice(0,20).map(v=>typeof v==='string'?v.slice(0,2000):'')});return{...b,...s,canvas:c,section:Number.isInteger(s.section)&&s.section>=0&&s.section<9?s.section:0,dt:mergeDt(s.dt)}}
 function mergeSession4(s){const b=blankSession4();s=s||{};return{...b,...s,job:{...b.job,...(s.job||{})},price:{...b.price,...(s.price||{})},scenario:{...b.scenario,...(s.scenario||{})},cash:{...b.cash,...(s.cash||{})},pilot:{...b.pilot,...(s.pilot||{})},lines:Array.isArray(s.lines)?s.lines:[],rounds:Array.isArray(s.rounds)?s.rounds:[]}}
@@ -1693,12 +1693,13 @@ const dtEx={ /* Kgotso Facilities, made up for the workbook */
 	hmw:['How might we help facilities managers find a fault before their tenants do, so leases keep renewing?','How might we help Thabo budget for maintenance as one fixed cost a year?','How might we give the landlord proof every month that the plant is cared for?'],
 	scamper:{s:'Replace call-out billing with a fixed monthly fee per site',c:'Combine HVAC and electrical under one contractor and one report',a:'Borrow the car service plan: visits on a fixed schedule',m:'Make urgent faults a 4-hour response',p:'Use a WhatsApp group per site to log faults',e:'Remove the quote step for repairs under an agreed limit',r:'Flip it: we visit before it breaks, instead of them calling after'},
 	ideaLine:'offering a monthly maintenance contract: scheduled visits before things break, one contractor for HVAC and electrical, and a fixed fee per site',
-	proto:{headline:'Find the fault before your tenants do.',reaction:'He would press the WhatsApp button for the free site check, but he wants to know what the monthly fee depends on before he calls.',change:'Add one line on how the fee is set: per site, based on the plant we find on the free check.'}
+	proto:{offer:'We help facilities managers keep tenants comfortable and leases renewing, without waiting for the plant to break first.',action:'book',whatsapp:'',proof:['A free site check of the plant before you sign','One contractor for HVAC and electrical, one monthly report','A 4-hour response on urgent faults'],link:'',headline:'Find the fault before your tenants do.',reaction:'He would press the WhatsApp button for the free site check, but he wants to know what the monthly fee depends on before he calls.',change:'Add one line on how the fee is set: per site, based on the plant we find on the free check.'}
 };
 /* The Kgotso example as Design Thinking state (loaded by the Example button, same confirm as the canvas example) */
 function dtExampleState(){const e=dtEx,blank=blankDt();return mergeDt({segments:e.segments,chosen:0,persona:e.persona,challenges:e.challenges,pains:e.pains,needs:e.needs,jobs:e.jobs,competition:e.competition,alphaReply:e.alphaReply,alphaChange:e.alphaChange,calls:[e.call,blank.calls[1],blank.calls[2]],problem:e.problem,checks:{focus:true,evidence:true,nosolution:true},hmw:e.hmw,hmwChosen:0,scamper:e.scamper,circled:['s','a','r'],ideaLine:e.ideaLine,proto:e.proto,sentToCanvas:''})}
 function dtHasWork(){return JSON.stringify(dt())!==JSON.stringify(blankDt())}
 const dtScamper=[['s','S','Replace it','What could we replace?'],['c','C','Join it','What could we combine?'],['a','A','Borrow it','What works somewhere else that we could copy?'],['m','M','Change it','Can we make it faster, easier or simpler?'],['p','P','Use it differently','What else could we use?'],['e','E','Remove it','What could we take away?'],['r','R','Flip it','What if we did the opposite?']];
+const dtActions=[['enquire','Enquire','to enquire'],['order','Order','to order'],['book','Book','to book'],['info','Find out more','to find out more']];
 const dtJobs=[['functional','Functional','What do they need to get done?'],['emotional','Emotional','How do they want to feel?'],['social','Social','How do they want others to see them?']];
 function dt(){const d=s5();if(!d.dt)d.dt=blankDt();return d.dt}
 function dtGet(path){return path.split('.').reduce((o,k)=>o==null?o:o[k],dt())}
@@ -1731,29 +1732,88 @@ Jobs to Be Done:
 ${jobs.join('\n')||'(none yet)'}
 What they use instead of us: ${list(d.competition).join('; ')||'(none yet)'}`;
 }
+/* Card 9 prompt, aligned with the EDMECA PRP Metaprompt (Live Landing Page Edition): the sprint work answers questions 1 to 4,
+   card 9 answers 5 to 7, and Claude writes the Lovable PRP, the Facebook advert and what to watch. Claude asks only for what is blank. */
+function dtOfferDraft(){const p=dt().problem,c=dtNoDot(p.customer),j=dtNoDot(p.job);return c&&j?`We help ${lc1(c)} to ${j} without `:''}
+function dtOfferDone(){const o=dtT(dt().proto.offer);return !!o&&o!==dtT(dtOfferDraft())}
+function dtSeedOffer(){const d=dt();if(d.seeded.includes('offer')||dtT(d.proto.offer))return 0;const v=dtOfferDraft();if(!v)return 0;d.proto.offer=v;d.seeded.push('offer');s5Touch();return 1}
+function dtActionText(){const a=dtActions.find(x=>x[0]===dt().proto.action);return a?a[2]:''}
 function dtProtoPrompt(){
-	const d=dt(),hmw=d.hmwChosen>=0?dtT(d.hmw[d.hmwChosen]):'',idea=dtNoDot(dtT(d.ideaLine));
-	return `You are a web designer. Build a one-page landing page for my business that a customer can react to. It is a prototype, not a finished website: build it here in the chat as a single page I can view.
+	const d=dt(),p=d.persona,pr=d.proto,list=a=>(a||[]).map(dtT).filter(Boolean);
+	const hmw=d.hmwChosen>=0?dtT(d.hmw[d.hmwChosen]):'',idea=dtNoDot(d.ideaLine),NF='(not filled in)';
+	const jobs=dtJobs.map(([k,l])=>`- ${l}: ${dtJobSentence(k)||NF}`).join('\n');
+	const circled=d.circled.map(k=>{const s=dtScamper.find(x=>x[0]===k);return s&&dtT(d.scamper[k])?`${s[2]}: ${dtNoDot(d.scamper[k])}`:''}).filter(Boolean);
+	const proof=list(pr.proof),act=dtActionText(),wa=dtT(pr.whatsapp);
+	const gaps=[!dtOfferDone()&&'the offer',!act&&'the customer action',!proof.length&&'the proof'].filter(Boolean);
+	return `You are a friendly AI product strategist helping my team in a live design sprint. We have finished Empathise, Define and Ideate, and our work is below. Do not redo it. Your job is to turn our chosen idea into a clear customer-facing offer, then into a Lovable-ready brief for a live mobile-first landing page and a short Facebook advert. Make the idea real enough for a customer to use.
 
-My business: ${state.business}
-Who it is for: ${dtPersonaSentence()||'(fill in cards 1 and 2 first)'}
-Their problem: ${dtProblemSentence()||'(fill in card 5 first)'}
-The design challenge: ${hmw||'(choose your HMW on card 6 first)'}
-The offer: we address it by ${idea?lc1(idea):'(write your chosen idea on card 8 first)'}
+How to work: ${gaps.length?`first ask me only about ${gaps.join(', ').replace(/, ([^,]*)$/,' and $1')}, one question at a time, and wait for each answer. Then `:''}flag at most one clear inconsistency in one or two lines, if there is one: the Jobs to Be Done must describe customer progress, the problem must be written from the customer's point of view, and the How Might We must not already prescribe the solution. Then write the three outputs below. Use our own words wherever possible. Keep the language simple, with no technical jargon. Do not write code.
 
-The page needs: a headline in the customer's own words, three benefits that answer their problem, how it works in three steps, one clear call to action (WhatsApp or a call back) and a short "who we are".
-Vibe: professional, trustworthy, plain South African English.
-Rules: do not invent prices, client names, testimonials, statistics, certifications or years in business. Wherever you need a fact from me, write [TO CONFIRM]. Do not put the persona's name on the page.`;
+OUR SPRINT WORK
+Business: ${state.business}
+
+1. Customer
+Segment: ${dtSegment()||NF}
+Persona (a made-up typical customer, not a real person; never put this name on the page or in the advert): ${[dtT(p.name),dtT(p.age)?dtT(p.age)+' years old':'',dtT(p.role),dtT(p.situation)].filter(Boolean).join(', ')||NF}
+Challenges: ${list(d.challenges).join('; ')||NF}
+Pain points, in their words: ${list(d.pains).join('; ')||NF}
+Needs: ${list(d.needs).join('; ')||NF}
+What they use instead of us today: ${list(d.competition).join('; ')||NF}
+
+2. Jobs to Be Done
+${jobs}
+
+3. Problem
+Problem statement: ${dtProblemSentence()||NF}
+Chosen How Might We: ${hmw||NF}
+
+4. Winning idea
+We address it by ${idea?lc1(idea):NF}.${circled.length?`\nIdeas we circled in SCAMPER: ${circled.join('; ')}.`:''}
+
+5. The offer, in 10 seconds: ${dtOfferDone()?dtT(pr.offer):NF}
+
+6. Customer action: click WhatsApp ${act||NF}. WhatsApp number for the button: ${wa||'[TO CONFIRM]'}
+
+7. Proof we can show: ${proof.length?proof.join('; '):NF}
+
+OUTPUT 1: LOVABLE PRP (maximum 350 words)
+1. Working title: the business or offer name.
+2. Purpose: build a polished mobile-first landing page that clearly presents the business offer, gives customers confidence, and enables them to take the next step through WhatsApp. The page must be ready to publish and use immediately.
+3. Target customer: our segment and persona.
+4. Customer problem: our problem statement.
+5. Customer Jobs to Be Done: the functional, emotional and social jobs.
+6. Offer: the idea and value proposition in simple customer language.
+7. Landing page structure: hero section; customer problem; the offer; how it works in no more than three steps; why choose this offer, with no more than three benefits or proof points; one clear WhatsApp call to action.
+8. WhatsApp CTA: the button opens WhatsApp with a pre-written message such as "Hi, I'm interested in [offer]. Please send me more information."
+9. Design: mobile-first, clean, simple and easy to read; professional and trustworthy, in plain South African English.
+10. Fixed first-live-version rules: single-page landing page, no login, no accounts, no database, no payment integration, no complicated automation, one primary WhatsApp CTA, publishable as a shareable link, designed to work from a Facebook post or QR code.
+End the PRP with this closing instruction to Lovable, word for word:
+"Build a polished, mobile-first single-page landing page that clearly presents this business offer, gives customers confidence, and enables them to take the next step through WhatsApp. The page must be ready to publish and use immediately. Make the value proposition immediately clear, use one primary WhatsApp call-to-action, and make the page ready to share from Facebook or via QR code. Build immediately and make reasonable design assumptions. Do not ask clarifying questions."
+
+OUTPUT 2: FACEBOOK ADVERT
+Headline: maximum 8 words.
+Primary text: maximum 50 words, in the order customer problem -> benefit -> invitation.
+Call to action: one of Learn More, WhatsApp Us, Book Now, Order Now, Get a Quote.
+Visual suggestion: one simple image or graphic we could use.
+
+OUTPUT 3: WHAT TO WATCH AFTER YOU PUBLISH
+1. Do customers understand the offer?
+2. Does the offer feel useful enough for them to act?
+3. Do customers click WhatsApp and start a conversation?
+Suggest only simple evidence to collect: landing page views, WhatsApp clicks, WhatsApp enquiries, and customer comments or questions.
+
+Rules: do not invent customer information, prices, discounts, client names, testimonials, reviews, statistics, guarantees, certifications or years in business. Where a fact is missing, write [TO CONFIRM]. Never show the persona's name. If we ask for complicated functionality, say: "Great future feature. For this first live version, let's keep the page focused, useful and launchable."`;
 }
 /* ---------- completeness ---------- */
 function dtMissing(v){
 	const d=dt(),miss=[];
 	if(v===0){if(d.segments.map(dtT).filter(Boolean).length<2)miss.push('at least two customer groups');if(d.chosen<0||!dtSegment())miss.push('the group you design for first');if(!dtT(d.persona.name))miss.push('a persona name');if(!dtT(d.persona.role))miss.push('the persona\'s role');if(!dtFirst(d.pains))miss.push('a pain point');if(!dtFirst(d.needs))miss.push('a need');const f=d.jobs.functional;if(!dtT(f.when)||!dtT(f.want)||!dtT(f.so))miss.push('the functional job (all three parts)');if(!dtT(d.alphaReply))miss.push('Claude\'s three questions, pasted back');else if(looksLikePrompt(d.alphaReply,dtAlphaPrompt()))miss.push('Claude\'s questions, not the prompt you copied');if(!dtT(d.alphaChange))miss.push('one thing you changed because of the questions')}
 	if(v===1){const p=d.problem;if(!dtT(p.customer)||!dtT(p.job)||!dtT(p.barrier))miss.push('the customer, the job and the barrier');if(!(d.checks.focus&&d.checks.evidence&&d.checks.nosolution))miss.push('all three problem checks ticked');const hmwOk=x=>dtT(x)&&dtT(x)!==dtT(dtHmwStarter());if(d.hmw.filter(hmwOk).length<3)miss.push('three How Might We questions, each one finished');if(d.hmwChosen<0||!hmwOk(d.hmw[d.hmwChosen]))miss.push('the HMW you take into ideas')}
-	if(v===2){const n=dtScamper.filter(([k])=>dtT(d.scamper[k])).length;if(n<4)miss.push((4-n)+' more SCAMPER idea'+(4-n===1?'':'s')+' (at least four of seven)');if(!d.circled.length)miss.push('your strongest ideas circled (up to three)');if(!dtT(d.ideaLine))miss.push('your chosen idea in one line');if(!dtT(d.proto.headline))miss.push('the headline Claude wrote for your prototype');else if(looksLikePrompt(d.proto.headline,dtProtoPrompt()))miss.push('the headline from Claude\'s page, not the prompt you copied');if(!dtT(d.proto.reaction))miss.push('your partner\'s reaction to the prototype');if(!dtT(d.proto.change))miss.push('one change you will make to the prototype')}
+	if(v===2){const n=dtScamper.filter(([k])=>dtT(d.scamper[k])).length;if(n<4)miss.push((4-n)+' more SCAMPER idea'+(4-n===1?'':'s')+' (at least four of seven)');if(!d.circled.length)miss.push('your strongest ideas circled (up to three)');if(!dtT(d.ideaLine))miss.push('your chosen idea in one line');if(!dtT(d.proto.offer))miss.push('your offer in one sentence');else if(!dtOfferDone())miss.push('your offer sentence, finished after "without"');if(!dtActionText())miss.push('the one action the customer takes on WhatsApp');if(!dtT(d.proto.headline))miss.push('the hero headline from your Lovable page');else if(looksLikePrompt(d.proto.headline,dtProtoPrompt()))miss.push('the headline from your page, not the prompt you copied');if(dtT(d.proto.link)&&!dtLinkOk(d.proto.link))miss.push('a page link that starts with https://');if(!dtT(d.proto.reaction))miss.push('your partner\'s reaction to the prototype');if(!dtT(d.proto.change))miss.push('one change you will make to the prototype')}
 	return miss;
 }
 function dtComplete(v){return dtMissing(v).length===0}
+function dtLinkOk(s){return /^https?:\/\/[^\s.]+\.[^\s]+$/i.test(dtT(s))}
 function dtPill(v,label){const miss=dtMissing(v);return miss.length?`<div style="margin:10px 0 4px"><span class="pill todo">${label} · not yet complete</span><div class="hint" style="margin-top:6px">Still needed: ${esc(miss.join('; '))}.</div></div>`:`<div style="margin:10px 0 4px"><span class="pill ok">✓ ${label} complete</span></div>`}
 /* live refresh while typing: sentences, the prompt, pills and the step bar, without re-rendering the inputs */
 function dtLive(){
@@ -1823,7 +1883,7 @@ function dtRows(){
 	d.hmw.forEach((s,i)=>add('Define','HMW '+(i+1)+(i===d.hmwChosen?' (chosen)':''),s));
 	dtScamper.forEach(([k,L,name])=>add('Ideate','SCAMPER '+L+' · '+name+(d.circled.includes(k)?' (circled)':''),d.scamper[k]));
 	add('Ideate','Chosen idea',d.ideaLine);
-	add('Prototype','Headline Claude wrote',looksLikePrompt(d.proto.headline,dtProtoPrompt())?'':d.proto.headline);add('Prototype','Partner reaction',d.proto.reaction);add('Prototype','One change',d.proto.change);
+	add('Prototype','Offer',d.proto.offer);add('Prototype','Customer action',dtActionText()?'WhatsApp '+dtActionText():'');d.proto.proof.forEach((s,i)=>add('Prototype','Proof '+(i+1),s));add('Prototype','Headline Claude wrote',looksLikePrompt(d.proto.headline,dtProtoPrompt())?'':d.proto.headline);add('Prototype','Live page link',d.proto.link);add('Prototype','Partner reaction',d.proto.reaction);add('Prototype','One change',d.proto.change);
 	add('Ideate','Sent to canvas',d.sentToCanvas);
 	return rows;
 }
@@ -1907,20 +1967,27 @@ ${dtExample('Finding the right balance (Kgotso Facilities)','Too broad: "HMW imp
 ${dtNav()}`;
 }
 function renderDtIdeate(){
+	const seededOffer=dtSeedOffer();
 	const d=dt(),e=dtEx,hmw=d.hmwChosen>=0?dtT(d.hmw[d.hmwChosen]):'';
 	const rows=dtScamper.map(([k,L,name,q])=>{const on=d.circled.includes(k);return `<div class="opp" style="${on?'border-color:var(--green);background:var(--green-tint)':''}"><div class="opp-head"><span class="num">${L} · ${name}</span><span class="hint" style="flex:1">${q}</span><button class="btn ${on?'primary':'ghost'}" type="button" style="padding:6px 12px;font-size:12px" onclick="dtCircle('${k}')">${on?'✓ Circled':'Circle'}</button></div>${dtInput('scamper.'+k,e.scamper[k])}</div>`}).join('');
 	return `<div class="lead"><span class="time">SESSION 5 · IN CLASS · PHASES 3 AND 4 · IDEATE 25 MINUTES · PROTOTYPE 20 MINUTES</span><h1><b>Ideate and Prototype:</b> create ideas, then make one real</h1><p>Use the SCAMPER questions as prompts; you do not need all seven. Quantity over quality, no criticism yet, wild ideas welcome, and build with "yes, and". The aim is not the perfect idea yet. The aim is different ideas.</p></div>
 <div class="card" style="background:var(--purple-tint);border-color:var(--purple-line)"><h3>Your HMW challenge</h3><div class="hint" style="font-size:15px;color:var(--deep)">${hmw?esc(hmw):'Tick the HMW you take into ideas on the Define view first.'}</div></div>
 <div class="card"><h3>7 · SCAMPER idea sheet</h3><div class="hint">One idea per question. Circle your three strongest.</div>${rows}</div>
 <div class="card"><h3>8 · Your chosen idea, in one line</h3><div class="hint">Write it so it finishes the sentence "...and we address it by ...". It goes onto your canvas as the start of your value proposition.</div>${dtInput('ideaLine',e.ideaLine,{area:true,h:50})}</div>
-<div class="card" style="border-color:var(--purple-line)"><h3>9 · Prototype: make it real enough to react to</h3><div class="hint">A one-page landing page is the prototype of your offer. The prompt below is built from your own sentences on cards 2, 5, 6 and 8. Claude drafts the page in the chat: no website, no account, no code. It must not invent prices, client names or reviews; anything it needs from you comes back as [TO CONFIRM].</div>
+<div class="card" style="border-color:var(--purple-line)"><h3>9 · Prototype: a live landing page for your offer</h3><div class="hint">Make the idea real enough for a customer to use. Claude turns your sprint work into a build brief for Lovable (a website builder that publishes a page for you), a Facebook advert and what to watch. Cards 1 to 8 are already in the prompt. Answer the three questions below; they are the only new thinking.</div>
+${seededOffer?`<div class="hint" style="margin-top:8px">We started your offer from your problem statement. Finish it after "without": the main pain or problem your customer gets rid of.</div>`:''}
+<label>5 · The offer: what should a customer understand in 10 seconds?</label>${dtInput('proto.offer',e.proto.offer,{area:true,h:50})}<div class="hint">We help [customer] to [achieve outcome] without [main pain or problem].</div>
+<label>6 · The one action: after reading the page, the customer clicks WhatsApp ...</label><div class="dtsug" style="margin-top:4px">${dtActions.map(([k,l])=>`<label style="display:flex;gap:6px;align-items:center;font-weight:400;margin:0 12px 0 0"><input type="radio" name="dtAction" style="width:auto" ${d.proto.action===k?'checked':''} onchange="dtSet('proto.action','${k}')">${l}</label>`).join('')}</div>
+<label>Business WhatsApp number for the button (optional; Claude writes [TO CONFIRM] if blank)</label>${dtInput('proto.whatsapp','')}
+<label>7 · Proof: up to three things that make the offer believable</label><div class="hint">For example price, convenience, turnaround time, a photograph, previous work, a testimonial, a guarantee, location or experience. Only what you really have; leave a box empty rather than invent.</div>${[0,1,2].map(i=>dtInput('proto.proof.'+i,e.proto.proof[i])).join('')}
 <div class="prompt" style="margin-top:12px;white-space:pre-wrap" id="dtProtoPrompt">${esc(dtProtoPrompt())}</div>
 <div class="actions" style="justify-content:flex-start;gap:10px;margin-top:12px"><button class="btn purple" type="button" onclick="s4Copy(dtProtoPrompt())">Copy prompt</button></div>
-<ol class="howto"><li><b>Press Copy prompt</b>, open Claude in a new tab, start a new chat, paste and send. Claude builds the page.</li><li><b>Check it.</b> Delete anything Claude invented, or ask it to mark the fact [TO CONFIRM].</li><li><b>Show your partner for 30 seconds.</b> They play ${esc(dtT(d.persona.name)||'your customer')}: what is this, is it for me, what would I do next?</li></ol>
-<label>The headline Claude wrote for your page</label><input id="dtProtoHeadline" value="${esc(d.proto.headline)}" placeholder="${esc('e.g. '+e.proto.headline)}" oninput="dtSet('proto.headline',this.value)">
+<ol class="howto"><li><b>Press Copy prompt</b>, open Claude in a new tab, start a new chat, paste and send. Claude asks only about anything left blank, then writes the Lovable PRP, the Facebook advert and what to watch.</li><li><b>Check it.</b> Delete anything Claude invented, or ask it to mark the fact [TO CONFIRM].</li><li><b>Copy Output 1, the Lovable PRP</b>, open lovable.dev, paste it and let Lovable build the page. Replace every [TO CONFIRM], then press Publish and copy the link.</li><li><b>Show your partner for 30 seconds.</b> They play ${esc(dtT(d.persona.name)||'your customer')}: what is this, is it for me, what would I do next?</li></ol>
+<label>The hero headline on your page</label><input id="dtProtoHeadline" value="${esc(d.proto.headline)}" placeholder="${esc('e.g. '+e.proto.headline)}" oninput="dtSet('proto.headline',this.value)">
+<label>Your live page link (optional in class; publish it by ${s5CallsDue})</label>${dtInput('proto.link','https://your-business.lovable.app')}
 <label>Your partner's reaction: would ${esc(dtT(d.persona.name)||'your customer')} click? Why, or why not?</label>${dtInput('proto.reaction',e.proto.reaction,{area:true,h:50})}
 <label>One change you will make</label>${dtInput('proto.change',e.proto.change,{area:true,h:50})}
-<div class="hint" style="margin-top:10px"><b>Homework, by ${s5CallsDue}:</b> show the page to one of your three customers on your calls. Ask what they would click, and what is missing.</div></div>
+<div class="hint" style="margin-top:10px"><b>Homework, by ${s5CallsDue}:</b> publish the page if you have not, post the Facebook advert or share the link, and show the page to one of your three customers on your calls. Ask what they would click, and what is missing. Then watch three things: page views, WhatsApp clicks and WhatsApp enquiries.</div></div>
 <div class="card" style="background:var(--green-tint);border-color:#cbe9be"><h3>Homework · take it to the canvas, by ${s5CanvasDue}</h3><div class="hint">The Business Model Canvas is your homework. Press the button and four sentence starters on the canvas are drafted from today's work, only where the box is still empty. Then finish all nine blocks, run Analyse with Claude, Finalise &amp; save, and Export Word.</div>
 <div id="dtPreview">${dtPreviewHtml()}</div>
 <div class="actions" style="justify-content:flex-start;margin-top:12px"><button class="btn primary" type="button" onclick="dtToCanvas()">Take it to the canvas -&gt;</button>${d.sentToCanvas?`<span class="hint" style="align-self:center">Last sent ${esc(new Date(d.sentToCanvas).toLocaleDateString('en-ZA',{day:'numeric',month:'long'}))}</span>`:''}</div></div>
