@@ -31,7 +31,8 @@ var TABS = {
   S4_Cash: ['Timestamp','Name','Business','Deposit','Progress','Final','Terms','MaterialsTiming','CashGap','GapWeek'],
   S4_Pilot: ['Timestamp','Name','Business','Quote','Owner','Date','WhatsApp','FileGenerated','Day7Reply'],
   S5_Canvas: ['Timestamp','Name','Business','Lens','Section','PromptNumber','Answer','SectionsFilled','TotalAnswers','Finalised'],
-  S5_Analysis: ['Timestamp','Name','Business','OverallAssessment','Strengths','AreasToDevelop','CoherenceChecks']
+  S5_Analysis: ['Timestamp','Name','Business','OverallAssessment','Strengths','AreasToDevelop','CoherenceChecks'],
+  S5_DesignThinking: ['Timestamp','Name','Business','Phase','Field','Value','EmpathizeDone','DefineDone','IdeateDone']
 };
 
 var S3_SORT_ANSWERS = {
@@ -69,6 +70,14 @@ function upsertRows(name, participant, business, rows) {
     if (name === 'S4_Pilot' && kept.day7) row[8] = kept.day7;
     tab.appendRow(row);
   });
+}
+
+function writeDesignThinking(data, name, business, timestamp) {
+  var rows = (data.dtRows || []).map(function (r) {
+    return [timestamp, name, business, r.phase || '', r.field || '', r.value || '', data.empathize ? 'YES' : '', data.define ? 'YES' : '', data.ideate ? 'YES' : ''];
+  });
+  if (!rows.length) rows.push([timestamp, name, business, '', '', '', '', '', '']);
+  upsertRows('S5_DesignThinking', name, business, rows);
 }
 
 function json(value) {
@@ -230,6 +239,10 @@ function doPost(event) {
 
     // Session 5 · Business Model Canvas: one row per answered prompt, replaced on every save (an empty block gets one blank row so it still shows).
     // Answers are positional — PromptNumber is the sentence starter (1 to 3) the answer sits under in the workbook.
+    // Session 5 · Design Thinking (in class, before the canvas): one row per answered field, replaced on every save.
+    // The workbook flattens the fields into dtRows ({phase, field, value}); s5submit carries them too when the canvas is finalised.
+    } else if (exercise === 's5dt') {
+      writeDesignThinking(data, name, business, timestamp);
     } else if (exercise === 's5canvas' || exercise === 's5submit' || exercise === 's5analysis') {
       var canvas = data.canvas || {};
       var sections = [
@@ -255,6 +268,7 @@ function doPost(event) {
       if (analysis && typeof analysis.overallAssessment === 'string') {
         upsertRows('S5_Analysis', name, business, [[timestamp, name, business, analysis.overallAssessment, (analysis.strengths || []).join('\n'), (analysis.areasToImprove || []).join('\n'), (analysis.coherenceChecks || []).join('\n')]]);
       }
+      if (exercise === 's5submit' && data.dtRows && data.dtRows.length) writeDesignThinking(data, name, business, timestamp);
       if (exercise === 's5submit') sheet('Participants').appendRow([timestamp, name, business, 's5submit']);
     }
 

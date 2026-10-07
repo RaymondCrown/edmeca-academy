@@ -1,6 +1,6 @@
 # EDMECA Digital Leader App
 
-Six-session exercise workbook for Property Point | Growthpoint Enterprise Development Cohort Seven. Session 1 (Digital Leader), Session 2 (Operations), Session 3 (Market Access), Session 4 (Financial Intelligence, "One Job, Costed Properly") and Session 5 (Service Innovation, Business Model Canvas) are built; Session 6 shows a "coming soon" placeholder until its exercise content is added.
+Six-session exercise workbook for Property Point | Growthpoint Enterprise Development Cohort Seven. Session 1 (Digital Leader), Session 2 (Operations), Session 3 (Market Access), Session 4 (Financial Intelligence, "One Job, Costed Properly") and Session 5 (Service Innovation: Design Thinking in class, Business Model Canvas as homework) are built; Session 6 shows a "coming soon" placeholder until its exercise content is added.
 
 ## Run locally
 
@@ -49,3 +49,5 @@ Redeploy `EDMECA_Bridge_AppsScript.gs` after pulling this version: it adds the `
 Session 5 hosts the Business Model Canvas, ported from the EDMECA Academy portal tool as it runs on staging (`/portal/tools/bmc`) because the portal page cannot be framed. The guided view walks the nine blocks through the Desirability / Viability / Feasibility lens, three sentence starters per block. Guided, Canvas and Dashboard views sit on the step bar; Import, Example and Reset sit above the guided card; the Dashboard carries Export JSON, Export Word, Finalise & save, and Analyse with Claude (copy the prompt, paste the reply back).
 
 Redeploy `EDMECA_Bridge_AppsScript.gs` after pulling this version: it adds the `S5_Canvas` and `S5_Analysis` tabs and the `s5canvas`, `s5analysis` and `s5submit` events.
+
+Design Thinking (added 7 October 2026): the Session 5 step bar now opens on three in-class views, Empathize, Define and Ideate, taken from the Business Planning Integration deck (segment and persona, Jobs to Be Done, the Alpha Prompt, three customer calls as homework, problem statement, How Might We, SCAMPER). The worked example is Kgotso Facilities, the same made-up contractor as the canvas example. The only AI step is the Alpha Prompt (copy, paste back, echo-checked). Take it to the canvas drafts four canvas starters, only into empty boxes, and the canvas views are labelled as homework (due Thursday 22 October; customer calls by Thursday 15 October). Redeploy `EDMECA_Bridge_AppsScript.gs` after pulling: it adds the `S5_DesignThinking` tab and the `s5dt` event.
