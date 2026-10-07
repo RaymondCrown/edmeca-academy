@@ -1458,7 +1458,7 @@ function s5Answered(id){return (s5().canvas[id]||[]).filter(t=>String(t).trim())
 function s5Stats(){const filled=s5Sections.filter(x=>s5Answered(x.id).length).length;const items=s5Sections.reduce((n,x)=>n+s5Answered(x.id).length,0);return{filled,items,pct:Math.round(filled/9*100)}}
 function postSession5(exercise,extra){
 	if(s5().example)return syncState(); /* the example canvas stays out of the S5_ tabs */
-	const payload={name:state.name,business:state.business,exercise,data:{canvas:s5().canvas,...s5Stats(),...(extra||{})},state:{...state,data:data()},timestamp:new Date().toISOString()};
+	const payload={name:state.name,business:state.business,exercise,data:{canvas:s5().canvas,...s5Stats(),progress:s5Progress(),...(exercise==='s5submit'?{artefacts:s5Artefacts()}:{}),...(extra||{})},state:{...state,data:data()},timestamp:new Date().toISOString()};
 	localStorage.setItem('edmeca:'+state.name.toLowerCase()+'|'+state.business.toLowerCase(),JSON.stringify(payload));
 	fetch('/api/bridge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
 }
@@ -1487,13 +1487,14 @@ function s5ToggleLock(){s5().locked=!s5().locked;renderSession5Step()}
 function s5Meta(){const m=document.getElementById('s5meta');if(m)m.innerHTML=s5MetaHtml()}
 function s5Confirm(msg){return !s5Stats().items||confirm(msg)}
 function s5Reset(){
-	if(!confirm('Clear the whole canvas? This also clears your saved copy and cannot be undone.'))return;
-	state.session5=blankSession5();postSession5('s5canvas');session5Step=0;state.session5Step=0;renderSession5();toast('Canvas reset. All data has been cleared.');
+	if(!confirm('Clear your Design Thinking cards and the whole canvas? This also clears your saved copy and cannot be undone.'))return;
+	state.session5=blankSession5();postSession5('s5canvas');postS5dt('s5dt');state.session5View=0;s5View=0;session5Step=0;state.session5Step=0;renderSession5();toast('Session 5 reset. All data has been cleared.');
 }
 function s5LoadSample(){
-	if(!s5Confirm('Load the example canvas? It replaces everything on your canvas.'))return;
-	const d=s5();d.canvas=JSON.parse(JSON.stringify(s5Sample));d.analysis=null;d.analysisText='';d.finalized=null;d.example=true;
-	s5Touch();goSession5(2);toast('Example loaded: a complete canvas for '+s5ExampleName+', a made-up maintenance contractor.');
+	if((s5Stats().items||dtHasWork())&&!confirm('Load the example? It replaces your Design Thinking cards and your canvas.'))return;
+	const d=s5();d.canvas=JSON.parse(JSON.stringify(s5Sample));d.analysis=null;d.analysisText='';d.finalized=null;d.example=true;d.dt=dtExampleState();
+	s5Touch();toast('Example loaded: Design Thinking cards and a complete canvas for '+s5ExampleName+', a made-up maintenance contractor. Nothing is saved to the sheet.');
+	if(s5View!=null&&s5View<3)renderSession5();else goSession5(2);
 }
 function s5Import(){
 	const inp=document.createElement('input');inp.type='file';inp.accept='.json,application/json';
@@ -1694,6 +1695,9 @@ const dtEx={ /* Kgotso Facilities, made up for the workbook */
 	ideaLine:'offering a monthly maintenance contract: scheduled visits before things break, one contractor for HVAC and electrical, and a fixed fee per site',
 	proto:{headline:'Find the fault before your tenants do.',reaction:'He would press the WhatsApp button for the free site check, but he wants to know what the monthly fee depends on before he calls.',change:'Add one line on how the fee is set: per site, based on the plant we find on the free check.'}
 };
+/* The Kgotso example as Design Thinking state (loaded by the Example button, same confirm as the canvas example) */
+function dtExampleState(){const e=dtEx,blank=blankDt();return mergeDt({segments:e.segments,chosen:0,persona:e.persona,challenges:e.challenges,pains:e.pains,needs:e.needs,jobs:e.jobs,competition:e.competition,alphaReply:e.alphaReply,alphaChange:e.alphaChange,calls:[e.call,blank.calls[1],blank.calls[2]],problem:e.problem,checks:{focus:true,evidence:true,nosolution:true},hmw:e.hmw,hmwChosen:0,scamper:e.scamper,circled:['s','a','r'],ideaLine:e.ideaLine,proto:e.proto,sentToCanvas:''})}
+function dtHasWork(){return JSON.stringify(dt())!==JSON.stringify(blankDt())}
 const dtScamper=[['s','S','Replace it','What could we replace?'],['c','C','Join it','What could we combine?'],['a','A','Borrow it','What works somewhere else that we could copy?'],['m','M','Change it','Can we make it faster, easier or simpler?'],['p','P','Use it differently','What else could we use?'],['e','E','Remove it','What could we take away?'],['r','R','Flip it','What if we did the opposite?']];
 const dtJobs=[['functional','Functional','What do they need to get done?'],['emotional','Emotional','How do they want to feel?'],['social','Social','How do they want others to see them?']];
 function dt(){const d=s5();if(!d.dt)d.dt=blankDt();return d.dt}
@@ -1786,6 +1790,24 @@ function goS5View(v){
 	renderSession5();syncState();
 }
 function goSession5(i){goS5View(3+i)}
+/* Facilitator view (S5_Progress, one row per participant): in-class steps complete, customer calls recorded, canvas finalised. */
+function s5Progress(){
+	const d=dt(),done=[0,1,2].map(dtComplete),calls=d.calls.filter(c=>dtT(c.who)&&dtT(c.happened)).length;
+	return{empathize:done[0],define:done[1],ideate:done[2],inClass:done.filter(Boolean).length,calls,sections:s5Stats().filled,finalised:!!s5().finalized};
+}
+/* Artefact credit, same shape as Session 4's s4submit (1 = complete, 0.5 = started). 20 on s5dt once Ideate & Prototype is complete;
+   18, 19 and 21 on s5submit. A starter the participant has not edited beyond the Design Thinking draft earns no credit. */
+function s5Edited1(id,i){const v=dtT(s5().canvas[id][i]);if(!v)return false;return !dtDrafts().some(([k,j,,t])=>k===id&&j===i&&dtT(t)===v)}
+function s5Artefacts(dtOnly){
+	const out={};
+	if(dtComplete(2))out[20]=1;
+	if(dtOnly)return out;
+	const vp=[0,1,2].map(i=>s5Edited1('valuePropositions',i)),n=vp.filter(Boolean).length;
+	if(n)out[18]=n===3?1:0.5;
+	const st=s5Stats();if(s5().finalized)out[19]=st.filled===9?1:0.5;
+	if(vp[2])out[21]=1;
+	return out;
+}
 function dtRows(){
 	const d=dt(),rows=[],add=(phase,field,value)=>{if(dtT(value))rows.push({phase,field,value:dtT(value)})};
 	d.segments.forEach((s,i)=>add('Empathize','Customer group '+(i+1)+(i===d.chosen?' (chosen)':''),s));
@@ -1806,14 +1828,17 @@ function dtRows(){
 	return rows;
 }
 function postS5dt(exercise){
-	const payload={name:state.name,business:state.business,exercise,data:{dtRows:dtRows(),empathize:dtComplete(0),define:dtComplete(1),ideate:dtComplete(2)},state:{...state,data:data()},timestamp:new Date().toISOString()};
+	if(s5().example)return syncState(); /* the example cards stay out of the S5_ tabs */
+	const payload={name:state.name,business:state.business,exercise,data:{dtRows:dtRows(),empathize:dtComplete(0),define:dtComplete(1),ideate:dtComplete(2),progress:s5Progress(),artefacts:s5Artefacts(true)},state:{...state,data:data()},timestamp:new Date().toISOString()};
 	localStorage.setItem('edmeca:'+state.name.toLowerCase()+'|'+state.business.toLowerCase(),JSON.stringify(payload));
 	fetch('/api/bridge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
 }
 /* ---------- views ---------- */
 function renderS5dt(){
 	const el=document.getElementById('session5Content');
-	el.innerHTML=[renderDtEmpathize,renderDtDefine,renderDtIdeate][s5View]();
+	const ex=s5().example;
+	const bar=`<div class="s5bar" style="margin:0 0 10px"><button class="btn ghost" onclick="s5LoadSample()">Example</button><button class="btn ghost" onclick="s5Reset()">Reset</button></div>${ex?`<div class="card" style="background:var(--green-tint);border-color:#cbe9be"><div class="hint"><b>The Kgotso Facilities example is loaded.</b> It is made up, and nothing you see here is saved to the facilitator sheet. Press Reset to clear it and start your own.</div></div>`:''}`;
+	el.innerHTML=bar+[renderDtEmpathize,renderDtDefine,renderDtIdeate][s5View]();
 	const a=document.getElementById('dtAlphaReply');if(a)s4FlagEcho(a,looksLikePrompt(dt().alphaReply,dtAlphaPrompt()));
 	const ph=document.getElementById('dtProtoHeadline');if(ph)s4FlagEcho(ph,looksLikePrompt(dt().proto.headline,dtProtoPrompt()));
 }

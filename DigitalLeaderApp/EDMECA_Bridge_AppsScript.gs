@@ -32,8 +32,12 @@ var TABS = {
   S4_Pilot: ['Timestamp','Name','Business','Quote','Owner','Date','WhatsApp','FileGenerated','Day7Reply'],
   S5_Canvas: ['Timestamp','Name','Business','Lens','Section','PromptNumber','Answer','SectionsFilled','TotalAnswers','Finalised'],
   S5_Analysis: ['Timestamp','Name','Business','OverallAssessment','Strengths','AreasToDevelop','CoherenceChecks'],
-  S5_DesignThinking: ['Timestamp','Name','Business','Phase','Field','Value','EmpathizeDone','DefineDone','IdeateDone']
+  S5_DesignThinking: ['Timestamp','Name','Business','Phase','Field','Value','EmpathizeDone','DefineDone','IdeateDone'],
+  S5_Artefacts: ['Timestamp','Name','Business','ArtefactNumber','Artefact','Credit','Event'],
+  S5_Progress: ['Timestamp','Name','Business','EmpathizeDone','DefineDone','IdeatePrototypeDone','InClassStepsOutOf3','CustomerCallsRecordedOutOf3','CanvasSectionsOutOf9','CanvasFinalised']
 };
+
+var S5_ARTEFACTS = { 18: 'Refined Value Proposition', 19: 'Business Model Canvas', 20: 'New Service Idea', 21: 'Differentiation Statement' };
 
 var S3_SORT_ANSWERS = {
   price: 'yours', claims: 'yours', dates: 'yours', conversation: 'yours',
@@ -78,6 +82,27 @@ function writeDesignThinking(data, name, business, timestamp) {
   });
   if (!rows.length) rows.push([timestamp, name, business, '', '', '', '', '', '']);
   upsertRows('S5_DesignThinking', name, business, rows);
+}
+
+// S5_Artefacts: one row per participant and artefact number, replaced when that artefact is saved again (credit 1 = complete, 0.5 = started).
+// 20 arrives on s5dt once Ideate & Prototype is complete; 18, 19, 20 and 21 arrive on s5submit.
+function writeArtefacts(data, name, business, timestamp, event) {
+  var tab = sheet('S5_Artefacts');
+  var key = keyFor(name, business);
+  var credits = data.artefacts || {};
+  Object.keys(credits).forEach(function (number) {
+    var values = tab.getDataRange().getValues();
+    for (var i = values.length - 1; i >= 1; i--) {
+      if (keyFor(values[i][1], values[i][2]) === key && String(values[i][3]) === String(number)) tab.deleteRow(i + 1);
+    }
+    tab.appendRow([timestamp, name, business, Number(number), S5_ARTEFACTS[number] || '', credits[number], event]);
+  });
+}
+
+// S5_Progress: the facilitator's one-row-per-participant check on in-class steps, customer calls (due 15 October) and the canvas (due 22 October).
+function writeProgress(data, name, business, timestamp) {
+  var p = data.progress || {};
+  upsertRows('S5_Progress', name, business, [[timestamp, name, business, p.empathize ? 'YES' : '', p.define ? 'YES' : '', p.ideate ? 'YES' : '', p.inClass || 0, p.calls || 0, p.sections || 0, p.finalised ? 'YES' : '']]);
 }
 
 function json(value) {
@@ -270,6 +295,12 @@ function doPost(event) {
       }
       if (exercise === 's5submit' && data.dtRows && data.dtRows.length) writeDesignThinking(data, name, business, timestamp);
       if (exercise === 's5submit') sheet('Participants').appendRow([timestamp, name, business, 's5submit']);
+    }
+
+    // Session 5 facilitator evidence, written alongside whichever s5 event arrived
+    if (String(exercise || '').indexOf('s5') === 0) {
+      if (data.progress) writeProgress(data, name, business, timestamp);
+      if (data.artefacts && (exercise === 's5dt' || exercise === 's5submit')) writeArtefacts(data, name, business, timestamp, exercise);
     }
 
     return json({ ok: true });
