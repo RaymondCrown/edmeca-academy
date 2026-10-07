@@ -84,8 +84,8 @@
 </main><footer>EDMECA · AI Enablement Programme · From Framework to Execution to Evidence · <a target="_blank" rel="noreferrer" href="https://www.edmeca.co.za">www.edmeca.co.za</a></footer><div class="toast" id="toast"></div>
 <script>
 function blankSession4(){return{job:{sector:'',line:'',client:'Client A',quoted:'',duration:'',durationUnit:'weeks',status:''},lines:[],hideAmounts:false,interviewPrompt:'',rounds:[],price:{overhead:'',method:'A',months:'',share:100,avgDirect:'',avgSales:'',targetMargin:20,minMargin:0},scenario:{service:'',costIdx:8,chargedIdx:12,prompt:'',answer:'',chosen:''},cash:{deposit:30,progress:40,final:30,progressWeek:'',terms:30,materials:'upfront',weeks:'',try50:false},pilot:{quote:'',owner:'',date:'',whatsapp:''},fileGenerated:'',submitted:''}}
-function blankDt(){const call=()=>({who:'',happened:'',why:'',nearly:''}),job=()=>({when:'',want:'',so:''});return{segments:['','','',''],chosen:-1,persona:{name:'',age:'',role:'',situation:''},challenges:['',''],pains:['',''],needs:['','',''],jobs:{functional:job(),emotional:job(),social:job()},competition:['','','',''],alphaReply:'',alphaChange:'',calls:[call(),call(),call()],problem:{customer:'',job:'',barrier:''},checks:{focus:false,evidence:false,nosolution:false},hmw:['','',''],hmwChosen:-1,scamper:{s:'',c:'',a:'',m:'',p:'',e:'',r:''},circled:[],ideaLine:'',sentToCanvas:''}}
-function mergeDt(s){const b=blankDt();s=s&&typeof s==='object'?s:{};const str=v=>typeof v==='string'?v.slice(0,2000):'';const arr=(src,n)=>Array.from({length:n},(_,i)=>str(Array.isArray(src)?src[i]:''));const obj=(src,keys)=>Object.fromEntries(keys.map(k=>[k,str(src&&src[k])]));const int=(v,n)=>Number.isInteger(v)&&v>=-1&&v<n?v:-1;const sc=s.scamper||{};return{segments:arr(s.segments,4),chosen:int(s.chosen,4),persona:obj(s.persona,['name','age','role','situation']),challenges:arr(s.challenges,2),pains:arr(s.pains,2),needs:arr(s.needs,3),jobs:{functional:obj((s.jobs||{}).functional,['when','want','so']),emotional:obj((s.jobs||{}).emotional,['when','want','so']),social:obj((s.jobs||{}).social,['when','want','so'])},competition:arr(s.competition,4),alphaReply:str(s.alphaReply),alphaChange:str(s.alphaChange),calls:Array.from({length:3},(_,i)=>obj((s.calls||[])[i],['who','happened','why','nearly'])),problem:obj(s.problem,['customer','job','barrier']),checks:{focus:!!(s.checks&&s.checks.focus),evidence:!!(s.checks&&s.checks.evidence),nosolution:!!(s.checks&&s.checks.nosolution)},hmw:arr(s.hmw,3),hmwChosen:int(s.hmwChosen,3),scamper:obj(sc,['s','c','a','m','p','e','r']),circled:(Array.isArray(s.circled)?s.circled:[]).filter(k=>typeof k==='string'&&k.length===1&&'scamper'.includes(k)).slice(0,3),ideaLine:str(s.ideaLine),sentToCanvas:str(s.sentToCanvas)}}
+function blankDt(){const call=()=>({who:'',happened:'',why:'',nearly:''}),job=()=>({when:'',want:'',so:''});return{segments:['','','',''],chosen:-1,persona:{name:'',age:'',role:'',situation:''},challenges:['',''],pains:['',''],needs:['','',''],jobs:{functional:job(),emotional:job(),social:job()},competition:['','','',''],alphaReply:'',alphaChange:'',calls:[call(),call(),call()],problem:{customer:'',job:'',barrier:''},checks:{focus:false,evidence:false,nosolution:false},hmw:['','',''],hmwChosen:-1,scamper:{s:'',c:'',a:'',m:'',p:'',e:'',r:''},circled:[],ideaLine:'',proto:{headline:'',reaction:'',change:''},sentToCanvas:''}}
+function mergeDt(s){const b=blankDt();s=s&&typeof s==='object'?s:{};const str=v=>typeof v==='string'?v.slice(0,2000):'';const arr=(src,n)=>Array.from({length:n},(_,i)=>str(Array.isArray(src)?src[i]:''));const obj=(src,keys)=>Object.fromEntries(keys.map(k=>[k,str(src&&src[k])]));const int=(v,n)=>Number.isInteger(v)&&v>=-1&&v<n?v:-1;const sc=s.scamper||{};return{segments:arr(s.segments,4),chosen:int(s.chosen,4),persona:obj(s.persona,['name','age','role','situation']),challenges:arr(s.challenges,2),pains:arr(s.pains,2),needs:arr(s.needs,3),jobs:{functional:obj((s.jobs||{}).functional,['when','want','so']),emotional:obj((s.jobs||{}).emotional,['when','want','so']),social:obj((s.jobs||{}).social,['when','want','so'])},competition:arr(s.competition,4),alphaReply:str(s.alphaReply),alphaChange:str(s.alphaChange),calls:Array.from({length:3},(_,i)=>obj((s.calls||[])[i],['who','happened','why','nearly'])),problem:obj(s.problem,['customer','job','barrier']),checks:{focus:!!(s.checks&&s.checks.focus),evidence:!!(s.checks&&s.checks.evidence),nosolution:!!(s.checks&&s.checks.nosolution)},hmw:arr(s.hmw,3),hmwChosen:int(s.hmwChosen,3),scamper:obj(sc,['s','c','a','m','p','e','r']),circled:(Array.isArray(s.circled)?s.circled:[]).filter(k=>typeof k==='string'&&k.length===1&&'scamper'.includes(k)).slice(0,3),ideaLine:str(s.ideaLine),proto:obj(s.proto,['headline','reaction','change']),sentToCanvas:str(s.sentToCanvas)}}
 function blankSession5(){return{canvas:{customerSegments:[],valuePropositions:[],channels:[],customerRelationships:[],revenueStreams:[],keyResources:[],keyActivities:[],keyPartnerships:[],costStructure:[]},section:0,locked:false,analysis:null,analysisText:'',example:false,finalized:null,dt:blankDt()}}
 function mergeSession5(s){const b=blankSession5();s=s||{};const src=s.canvas&&typeof s.canvas==='object'?s.canvas:{};const c={...b.canvas};Object.keys(c).forEach(k=>{if(Array.isArray(src[k]))c[k]=src[k].slice(0,20).map(v=>typeof v==='string'?v.slice(0,2000):'')});return{...b,...s,canvas:c,section:Number.isInteger(s.section)&&s.section>=0&&s.section<9?s.section:0,dt:mergeDt(s.dt)}}
 function mergeSession4(s){const b=blankSession4();s=s||{};return{...b,...s,job:{...b.job,...(s.job||{})},price:{...b.price,...(s.price||{})},scenario:{...b.scenario,...(s.scenario||{})},cash:{...b.cash,...(s.cash||{})},pilot:{...b.pilot,...(s.pilot||{})},lines:Array.isArray(s.lines)?s.lines:[],rounds:Array.isArray(s.rounds)?s.rounds:[]}}
@@ -1671,9 +1671,10 @@ function s5ExportWord(){
    Content follows the Business Planning Integration deck (7 October 2026): segment and persona, Jobs to Be Done, the Alpha Prompt,
    three customer calls (homework), problem statement, How Might We, SCAMPER. The worked example is Kgotso Facilities, the same made-up
    maintenance contractor as the canvas example, so the grey text in the class and on the canvas tells one story.
-   State lives in session5.dt (blankDt / mergeDt sit beside blankSession5). The only AI step is the Alpha Prompt: copy, paste back, echo-checked.
+   State lives in session5.dt (blankDt / mergeDt sit beside blankSession5). AI is used twice: the Alpha Prompt (three questions, no rewriting) and card 9, Prototype
+   (Claude drafts a one-page landing page from the participant's own sentences, with [TO CONFIRM] for anything it would otherwise invent). Both are copy-prompt / paste-back and echo-checked.
    "Take it to the canvas" drafts four canvas starters (Customer Segments 1 and 3, Value Propositions 1 and 3), only where the box is empty. */
-const s5Views=['Empathize','Define','Ideate','Guided','Canvas','Dashboard'];
+const s5Views=['Empathize','Define','Ideate & Prototype','Guided','Canvas','Dashboard'];
 const s5CallsDue='Thursday 15 October',s5CanvasDue='Thursday 22 October';
 let s5View=null;
 const dtEx={ /* Kgotso Facilities, made up for the workbook */
@@ -1690,7 +1691,8 @@ const dtEx={ /* Kgotso Facilities, made up for the workbook */
 	problem:{customer:'Facilities managers like Thabo',job:'keep tenants comfortable and leases renewing',barrier:'maintenance only happens after something fails and no one contractor owns the plant'},
 	hmw:['How might we help facilities managers find a fault before their tenants do, so leases keep renewing?','How might we help Thabo budget for maintenance as one fixed cost a year?','How might we give the landlord proof every month that the plant is cared for?'],
 	scamper:{s:'Replace call-out billing with a fixed monthly fee per site',c:'Combine HVAC and electrical under one contractor and one report',a:'Borrow the car service plan: visits on a fixed schedule',m:'Make urgent faults a 4-hour response',p:'Use a WhatsApp group per site to log faults',e:'Remove the quote step for repairs under an agreed limit',r:'Flip it: we visit before it breaks, instead of them calling after'},
-	ideaLine:'offering a monthly maintenance contract: scheduled visits before things break, one contractor for HVAC and electrical, and a fixed fee per site'
+	ideaLine:'offering a monthly maintenance contract: scheduled visits before things break, one contractor for HVAC and electrical, and a fixed fee per site',
+	proto:{headline:'Find the fault before your tenants do.',reaction:'He would press the WhatsApp button for the free site check, but he wants to know what the monthly fee depends on before he calls.',change:'Add one line on how the fee is set: per site, based on the plant we find on the free check.'}
 };
 const dtScamper=[['s','S','Replace it','What could we replace?'],['c','C','Join it','What could we combine?'],['a','A','Borrow it','What works somewhere else that we could copy?'],['m','M','Change it','Can we make it faster, easier or simpler?'],['p','P','Use it differently','What else could we use?'],['e','E','Remove it','What could we take away?'],['r','R','Flip it','What if we did the opposite?']];
 const dtJobs=[['functional','Functional','What do they need to get done?'],['emotional','Emotional','How do they want to feel?'],['social','Social','How do they want others to see them?']];
@@ -1725,12 +1727,26 @@ Jobs to Be Done:
 ${jobs.join('\n')||'(none yet)'}
 What they use instead of us: ${list(d.competition).join('; ')||'(none yet)'}`;
 }
+function dtProtoPrompt(){
+	const d=dt(),hmw=d.hmwChosen>=0?dtT(d.hmw[d.hmwChosen]):'',idea=dtNoDot(dtT(d.ideaLine));
+	return `You are a web designer. Build a one-page landing page for my business that a customer can react to. It is a prototype, not a finished website: build it here in the chat as a single page I can view.
+
+My business: ${state.business}
+Who it is for: ${dtPersonaSentence()||'(fill in cards 1 and 2 first)'}
+Their problem: ${dtProblemSentence()||'(fill in card 5 first)'}
+The design challenge: ${hmw||'(choose your HMW on card 6 first)'}
+The offer: we address it by ${idea?lc1(idea):'(write your chosen idea on card 8 first)'}
+
+The page needs: a headline in the customer's own words, three benefits that answer their problem, how it works in three steps, one clear call to action (WhatsApp or a call back) and a short "who we are".
+Vibe: professional, trustworthy, plain South African English.
+Rules: do not invent prices, client names, testimonials, statistics, certifications or years in business. Wherever you need a fact from me, write [TO CONFIRM]. Do not put the persona's name on the page.`;
+}
 /* ---------- completeness ---------- */
 function dtMissing(v){
 	const d=dt(),miss=[];
 	if(v===0){if(d.segments.map(dtT).filter(Boolean).length<2)miss.push('at least two customer groups');if(d.chosen<0||!dtSegment())miss.push('the group you design for first');if(!dtT(d.persona.name))miss.push('a persona name');if(!dtT(d.persona.role))miss.push('the persona\'s role');if(!dtFirst(d.pains))miss.push('a pain point');if(!dtFirst(d.needs))miss.push('a need');const f=d.jobs.functional;if(!dtT(f.when)||!dtT(f.want)||!dtT(f.so))miss.push('the functional job (all three parts)');if(!dtT(d.alphaReply))miss.push('Claude\'s three questions, pasted back');else if(looksLikePrompt(d.alphaReply,dtAlphaPrompt()))miss.push('Claude\'s questions, not the prompt you copied');if(!dtT(d.alphaChange))miss.push('one thing you changed because of the questions')}
 	if(v===1){const p=d.problem;if(!dtT(p.customer)||!dtT(p.job)||!dtT(p.barrier))miss.push('the customer, the job and the barrier');if(!(d.checks.focus&&d.checks.evidence&&d.checks.nosolution))miss.push('all three problem checks ticked');if(d.hmw.map(dtT).filter(Boolean).length<3)miss.push('three How Might We questions');if(d.hmwChosen<0||!dtT(d.hmw[d.hmwChosen]))miss.push('the HMW you take into ideas')}
-	if(v===2){const n=dtScamper.filter(([k])=>dtT(d.scamper[k])).length;if(n<4)miss.push((4-n)+' more SCAMPER idea'+(4-n===1?'':'s')+' (at least four of seven)');if(!d.circled.length)miss.push('your strongest ideas circled (up to three)');if(!dtT(d.ideaLine))miss.push('your chosen idea in one line')}
+	if(v===2){const n=dtScamper.filter(([k])=>dtT(d.scamper[k])).length;if(n<4)miss.push((4-n)+' more SCAMPER idea'+(4-n===1?'':'s')+' (at least four of seven)');if(!d.circled.length)miss.push('your strongest ideas circled (up to three)');if(!dtT(d.ideaLine))miss.push('your chosen idea in one line');if(!dtT(d.proto.headline))miss.push('the headline Claude wrote for your prototype');else if(looksLikePrompt(d.proto.headline,dtProtoPrompt()))miss.push('the headline from Claude\'s page, not the prompt you copied');if(!dtT(d.proto.reaction))miss.push('your partner\'s reaction to the prototype');if(!dtT(d.proto.change))miss.push('one change you will make to the prototype')}
 	return miss;
 }
 function dtComplete(v){return dtMissing(v).length===0}
@@ -1742,9 +1758,11 @@ function dtLive(){
 	dtJobs.forEach(([k])=>set('dtJob_'+k,esc(dtJobSentence(k))||'<span class="placeholder">When I ..., I want ..., so I can ...</span>'));
 	set('dtProblemSentence',esc(dtProblemSentence())||'<span class="placeholder">[Customer] struggles to [do the job] because [what gets in the way].</span>');
 	set('dtAlphaPrompt',esc(dtAlphaPrompt()));
+	set('dtProtoPrompt',esc(dtProtoPrompt()));
 	if(document.getElementById('dtPreview'))set('dtPreview',dtPreviewHtml());
 	if(s5View!=null&&s5View<3)set('dtPill',dtPill(s5View,s5Views[s5View]));
 	const a=document.getElementById('dtAlphaReply');if(a)s4FlagEcho(a,looksLikePrompt(dt().alphaReply,dtAlphaPrompt()));
+	const ph=document.getElementById('dtProtoHeadline');if(ph)s4FlagEcho(ph,looksLikePrompt(dt().proto.headline,dtProtoPrompt()));
 	s5StepBar();
 }
 /* ---------- navigation (wraps the canvas views 0 to 2 as views 3 to 5) ---------- */
@@ -1783,6 +1801,7 @@ function dtRows(){
 	d.hmw.forEach((s,i)=>add('Define','HMW '+(i+1)+(i===d.hmwChosen?' (chosen)':''),s));
 	dtScamper.forEach(([k,L,name])=>add('Ideate','SCAMPER '+L+' · '+name+(d.circled.includes(k)?' (circled)':''),d.scamper[k]));
 	add('Ideate','Chosen idea',d.ideaLine);
+	add('Prototype','Headline Claude wrote',looksLikePrompt(d.proto.headline,dtProtoPrompt())?'':d.proto.headline);add('Prototype','Partner reaction',d.proto.reaction);add('Prototype','One change',d.proto.change);
 	add('Ideate','Sent to canvas',d.sentToCanvas);
 	return rows;
 }
@@ -1796,6 +1815,7 @@ function renderS5dt(){
 	const el=document.getElementById('session5Content');
 	el.innerHTML=[renderDtEmpathize,renderDtDefine,renderDtIdeate][s5View]();
 	const a=document.getElementById('dtAlphaReply');if(a)s4FlagEcho(a,looksLikePrompt(dt().alphaReply,dtAlphaPrompt()));
+	const ph=document.getElementById('dtProtoHeadline');if(ph)s4FlagEcho(ph,looksLikePrompt(dt().proto.headline,dtProtoPrompt()));
 }
 function dtNav(){const back=s5View>0?`<button class="btn ghost" onclick="goS5View(${s5View-1})">&lt;- Back</button>`:'<span></span>';const next=s5View<2?`<button class="btn primary" onclick="goS5View(${s5View+1})">Save &amp; continue to ${s5Views[s5View+1]} -&gt;</button>`:'';return `<div id="dtPill">${dtPill(s5View,s5Views[s5View])}</div><div class="actions">${back}${next}</div>`}
 function renderDtEmpathize(){
@@ -1840,10 +1860,18 @@ ${dtNav()}`;
 function renderDtIdeate(){
 	const d=dt(),e=dtEx,hmw=d.hmwChosen>=0?dtT(d.hmw[d.hmwChosen]):'';
 	const rows=dtScamper.map(([k,L,name,q])=>{const on=d.circled.includes(k);return `<div class="opp" style="${on?'border-color:var(--green);background:var(--green-tint)':''}"><div class="opp-head"><span class="num">${L} · ${name}</span><span class="hint" style="flex:1">${q}</span><button class="btn ${on?'primary':'ghost'}" type="button" style="padding:6px 12px;font-size:12px" onclick="dtCircle('${k}')">${on?'✓ Circled':'Circle'}</button></div>${dtInput('scamper.'+k,e.scamper[k])}</div>`}).join('');
-	return `<div class="lead"><span class="time">SESSION 5 · IN CLASS · PHASE 3 OF 3 · 30 MINUTES</span><h1><b>Ideate:</b> seven easy questions to create ideas</h1><p>Use the SCAMPER questions as prompts; you do not need all seven. Quantity over quality, no criticism yet, wild ideas welcome, and build with "yes, and". The aim is not the perfect idea yet. The aim is different ideas.</p></div>
+	return `<div class="lead"><span class="time">SESSION 5 · IN CLASS · PHASES 3 AND 4 · IDEATE 25 MINUTES · PROTOTYPE 20 MINUTES</span><h1><b>Ideate and Prototype:</b> create ideas, then make one real</h1><p>Use the SCAMPER questions as prompts; you do not need all seven. Quantity over quality, no criticism yet, wild ideas welcome, and build with "yes, and". The aim is not the perfect idea yet. The aim is different ideas.</p></div>
 <div class="card" style="background:var(--purple-tint);border-color:var(--purple-line)"><h3>Your HMW challenge</h3><div class="hint" style="font-size:15px;color:var(--deep)">${hmw?esc(hmw):'Tick the HMW you take into ideas on the Define view first.'}</div></div>
 <div class="card"><h3>7 · SCAMPER idea sheet</h3><div class="hint">One idea per question. Circle your three strongest.</div>${rows}</div>
 <div class="card"><h3>8 · Your chosen idea, in one line</h3><div class="hint">Write it so it finishes the sentence "...and we address it by ...". It goes onto your canvas as the start of your value proposition.</div>${dtInput('ideaLine',e.ideaLine,{area:true,h:50})}</div>
+<div class="card" style="border-color:var(--purple-line)"><h3>9 · Prototype: make it real enough to react to</h3><div class="hint">A one-page landing page is the prototype of your offer. The prompt below is built from your own sentences on cards 2, 5, 6 and 8. Claude drafts the page in the chat: no website, no account, no code. It must not invent prices, client names or reviews; anything it needs from you comes back as [TO CONFIRM].</div>
+<div class="prompt" style="margin-top:12px;white-space:pre-wrap" id="dtProtoPrompt">${esc(dtProtoPrompt())}</div>
+<div class="actions" style="justify-content:flex-start;gap:10px;margin-top:12px"><button class="btn purple" type="button" onclick="s4Copy(dtProtoPrompt())">Copy prompt</button></div>
+<ol class="howto"><li><b>Press Copy prompt</b>, open Claude in a new tab, start a new chat, paste and send. Claude builds the page.</li><li><b>Check it.</b> Delete anything Claude invented, or ask it to mark the fact [TO CONFIRM].</li><li><b>Show your partner for 30 seconds.</b> They play ${esc(dtT(d.persona.name)||'your customer')}: what is this, is it for me, what would I do next?</li></ol>
+<label>The headline Claude wrote for your page</label><input id="dtProtoHeadline" value="${esc(d.proto.headline)}" placeholder="${esc('e.g. '+e.proto.headline)}" oninput="dtSet('proto.headline',this.value)">
+<label>Your partner's reaction: would ${esc(dtT(d.persona.name)||'your customer')} click? Why, or why not?</label>${dtInput('proto.reaction',e.proto.reaction,{area:true,h:50})}
+<label>One change you will make</label>${dtInput('proto.change',e.proto.change,{area:true,h:50})}
+<div class="hint" style="margin-top:10px"><b>Homework, by ${s5CallsDue}:</b> show the page to one of your three customers on your calls. Ask what they would click, and what is missing.</div></div>
 <div class="card" style="background:var(--green-tint);border-color:#cbe9be"><h3>Homework · take it to the canvas, by ${s5CanvasDue}</h3><div class="hint">The Business Model Canvas is your homework. Press the button and four sentence starters on the canvas are drafted from today's work, only where the box is still empty. Then finish all nine blocks, run Analyse with Claude, Finalise &amp; save, and Export Word.</div>
 <div id="dtPreview">${dtPreviewHtml()}</div>
 <div class="actions" style="justify-content:flex-start;margin-top:12px"><button class="btn primary" type="button" onclick="dtToCanvas()">Take it to the canvas -&gt;</button>${d.sentToCanvas?`<span class="hint" style="align-self:center">Last sent ${esc(new Date(d.sentToCanvas).toLocaleDateString('en-ZA',{day:'numeric',month:'long'}))}</span>`:''}</div></div>
