@@ -1733,7 +1733,7 @@ ${jobs.join('\n')||'(none yet)'}
 What they use instead of us: ${list(d.competition).join('; ')||'(none yet)'}`;
 }
 /* Card 9 prompt, aligned with the EDMECA PRP Metaprompt (Live Landing Page Edition): the sprint work answers questions 1 to 4,
-   card 9 answers 5 to 7, and Claude writes the Lovable PRP, the Facebook advert and what to watch. Claude asks only for what is blank. */
+   card 9 answers 5 to 7, and Claude writes the Lovable PRP only (the metaprompt's advert and what-to-watch outputs are left out). Claude asks only for what is blank. */
 function dtOfferDraft(){const p=dt().problem,c=dtNoDot(p.customer),j=dtNoDot(p.job);return c&&j?`We help ${lc1(c)} to ${j} without `:''}
 function dtOfferDone(){const o=dtT(dt().proto.offer);return !!o&&o!==dtT(dtOfferDraft())}
 function dtSeedOffer(){const d=dt();if(d.seeded.includes('offer')||dtT(d.proto.offer))return 0;const v=dtOfferDraft();if(!v)return 0;d.proto.offer=v;d.seeded.push('offer');s5Touch();return 1}
@@ -1745,16 +1745,16 @@ function dtProtoPrompt(){
 	const circled=d.circled.map(k=>{const s=dtScamper.find(x=>x[0]===k);return s&&dtT(d.scamper[k])?`${s[2]}: ${dtNoDot(d.scamper[k])}`:''}).filter(Boolean);
 	const proof=list(pr.proof),act=dtActionText(),wa=dtT(pr.whatsapp);
 	const gaps=[!dtOfferDone()&&'the offer',!act&&'the customer action',!proof.length&&'the proof'].filter(Boolean);
-	return `You are a friendly AI product strategist helping my team in a live design sprint. We have finished Empathise, Define and Ideate, and our work is below. Do not redo it. Your job is to turn our chosen idea into a clear customer-facing offer, then into a Lovable-ready brief for a live mobile-first landing page and a short Facebook advert. Make the idea real enough for a customer to use.
+	return `You are a friendly AI product strategist helping my team in a live design sprint. We have finished Empathise, Define and Ideate, and our work is below. Do not redo it. Your job is to turn our chosen idea into a clear customer-facing offer, then into a Lovable-ready brief for a live mobile-first landing page. Make the idea real enough for a customer to use.
 
-How to work: ${gaps.length?`first ask me only about ${gaps.join(', ').replace(/, ([^,]*)$/,' and $1')}, one question at a time, and wait for each answer. Then `:''}flag at most one clear inconsistency in one or two lines, if there is one: the Jobs to Be Done must describe customer progress, the problem must be written from the customer's point of view, and the How Might We must not already prescribe the solution. Then write the three outputs below. Use our own words wherever possible. Keep the language simple, with no technical jargon. Do not write code.
+How to work: ${gaps.length?`first ask me only about ${gaps.join(', ').replace(/, ([^,]*)$/,' and $1')}, one question at a time, and wait for each answer. Then `:''}flag at most one clear inconsistency in one or two lines, if there is one: the Jobs to Be Done must describe customer progress, the problem must be written from the customer's point of view, and the How Might We must not already prescribe the solution. Then write the Lovable PRP below. Use our own words wherever possible. Keep the language simple, with no technical jargon. Do not write code.
 
 OUR SPRINT WORK
 Business: ${state.business}
 
 1. Customer
 Segment: ${dtSegment()||NF}
-Persona (a made-up typical customer, not a real person; never put this name on the page or in the advert): ${[dtT(p.name),dtT(p.age)?dtT(p.age)+' years old':'',dtT(p.role),dtT(p.situation)].filter(Boolean).join(', ')||NF}
+Persona (a made-up typical customer, not a real person; never put this name on the page): ${[dtT(p.name),dtT(p.age)?dtT(p.age)+' years old':'',dtT(p.role),dtT(p.situation)].filter(Boolean).join(', ')||NF}
 Challenges: ${list(d.challenges).join('; ')||NF}
 Pain points, in their words: ${list(d.pains).join('; ')||NF}
 Needs: ${list(d.needs).join('; ')||NF}
@@ -1776,7 +1776,7 @@ We address it by ${idea?lc1(idea):NF}.${circled.length?`\nIdeas we circled in SC
 
 7. Proof we can show: ${proof.length?proof.join('; '):NF}
 
-OUTPUT 1: LOVABLE PRP (maximum 350 words)
+LOVABLE PRP (maximum 350 words)
 1. Working title: the business or offer name.
 2. Purpose: build a polished mobile-first landing page that clearly presents the business offer, gives customers confidence, and enables them to take the next step through WhatsApp. The page must be ready to publish and use immediately.
 3. Target customer: our segment and persona.
@@ -1789,18 +1789,6 @@ OUTPUT 1: LOVABLE PRP (maximum 350 words)
 10. Fixed first-live-version rules: single-page landing page, no login, no accounts, no database, no payment integration, no complicated automation, one primary WhatsApp CTA, publishable as a shareable link, designed to work from a Facebook post or QR code.
 End the PRP with this closing instruction to Lovable, word for word:
 "Build a polished, mobile-first single-page landing page that clearly presents this business offer, gives customers confidence, and enables them to take the next step through WhatsApp. The page must be ready to publish and use immediately. Make the value proposition immediately clear, use one primary WhatsApp call-to-action, and make the page ready to share from Facebook or via QR code. Build immediately and make reasonable design assumptions. Do not ask clarifying questions."
-
-OUTPUT 2: FACEBOOK ADVERT
-Headline: maximum 8 words.
-Primary text: maximum 50 words, in the order customer problem -> benefit -> invitation.
-Call to action: one of Learn More, WhatsApp Us, Book Now, Order Now, Get a Quote.
-Visual suggestion: one simple image or graphic we could use.
-
-OUTPUT 3: WHAT TO WATCH AFTER YOU PUBLISH
-1. Do customers understand the offer?
-2. Does the offer feel useful enough for them to act?
-3. Do customers click WhatsApp and start a conversation?
-Suggest only simple evidence to collect: landing page views, WhatsApp clicks, WhatsApp enquiries, and customer comments or questions.
 
 Rules: do not invent customer information, prices, discounts, client names, testimonials, reviews, statistics, guarantees, certifications or years in business. Where a fact is missing, write [TO CONFIRM]. Never show the persona's name. If we ask for complicated functionality, say: "Great future feature. For this first live version, let's keep the page focused, useful and launchable."`;
 }
@@ -1974,7 +1962,7 @@ function renderDtIdeate(){
 <div class="card" style="background:var(--purple-tint);border-color:var(--purple-line)"><h3>Your HMW challenge</h3><div class="hint" style="font-size:15px;color:var(--deep)">${hmw?esc(hmw):'Tick the HMW you take into ideas on the Define view first.'}</div></div>
 <div class="card"><h3>7 · SCAMPER idea sheet</h3><div class="hint">One idea per question. Circle your three strongest.</div>${rows}</div>
 <div class="card"><h3>8 · Your chosen idea, in one line</h3><div class="hint">Write it so it finishes the sentence "...and we address it by ...". It goes onto your canvas as the start of your value proposition.</div>${dtInput('ideaLine',e.ideaLine,{area:true,h:50})}</div>
-<div class="card" style="border-color:var(--purple-line)"><h3>9 · Prototype: a live landing page for your offer</h3><div class="hint">Make the idea real enough for a customer to use. Claude turns your sprint work into a build brief for Lovable (a website builder that publishes a page for you), a Facebook advert and what to watch. Cards 1 to 8 are already in the prompt. Answer the three questions below; they are the only new thinking.</div>
+<div class="card" style="border-color:var(--purple-line)"><h3>9 · Prototype: a live landing page for your offer</h3><div class="hint">Make the idea real enough for a customer to use. Claude turns your sprint work into a build brief for Lovable (a website builder that publishes a page for you). Cards 1 to 8 are already in the prompt. Answer the three questions below; they are the only new thinking.</div>
 ${seededOffer?`<div class="hint" style="margin-top:8px">We started your offer from your problem statement. Finish it after "without": the main pain or problem your customer gets rid of.</div>`:''}
 <label>5 · The offer: what should a customer understand in 10 seconds?</label>${dtInput('proto.offer',e.proto.offer,{area:true,h:50})}<div class="hint">We help [customer] to [achieve outcome] without [main pain or problem].</div>
 <label>6 · The one action: after reading the page, the customer clicks WhatsApp ...</label><div class="dtsug" style="margin-top:4px">${dtActions.map(([k,l])=>`<label style="display:flex;gap:6px;align-items:center;font-weight:400;margin:0 12px 0 0"><input type="radio" name="dtAction" style="width:auto" ${d.proto.action===k?'checked':''} onchange="dtSet('proto.action','${k}')">${l}</label>`).join('')}</div>
@@ -1982,12 +1970,12 @@ ${seededOffer?`<div class="hint" style="margin-top:8px">We started your offer fr
 <label>7 · Proof: up to three things that make the offer believable</label><div class="hint">For example price, convenience, turnaround time, a photograph, previous work, a testimonial, a guarantee, location or experience. Only what you really have; leave a box empty rather than invent.</div>${[0,1,2].map(i=>dtInput('proto.proof.'+i,e.proto.proof[i])).join('')}
 <div class="prompt" style="margin-top:12px;white-space:pre-wrap" id="dtProtoPrompt">${esc(dtProtoPrompt())}</div>
 <div class="actions" style="justify-content:flex-start;gap:10px;margin-top:12px"><button class="btn purple" type="button" onclick="s4Copy(dtProtoPrompt())">Copy prompt</button></div>
-<ol class="howto"><li><b>Press Copy prompt</b>, open Claude in a new tab, start a new chat, paste and send. Claude asks only about anything left blank, then writes the Lovable PRP, the Facebook advert and what to watch.</li><li><b>Check it.</b> Delete anything Claude invented, or ask it to mark the fact [TO CONFIRM].</li><li><b>Copy Output 1, the Lovable PRP</b>, open lovable.dev, paste it and let Lovable build the page. Replace every [TO CONFIRM], then press Publish and copy the link.</li><li><b>Show your partner for 30 seconds.</b> They play ${esc(dtT(d.persona.name)||'your customer')}: what is this, is it for me, what would I do next?</li></ol>
+<ol class="howto"><li><b>Press Copy prompt</b>, open Claude in a new tab, start a new chat, paste and send. Claude asks only about anything left blank, then writes the Lovable PRP.</li><li><b>Check it.</b> Delete anything Claude invented, or ask it to mark the fact [TO CONFIRM].</li><li><b>Copy the Lovable PRP</b>, open lovable.dev, paste it and let Lovable build the page. Replace every [TO CONFIRM], then press Publish and copy the link.</li><li><b>Show your partner for 30 seconds.</b> They play ${esc(dtT(d.persona.name)||'your customer')}: what is this, is it for me, what would I do next?</li></ol>
 <label>The hero headline on your page</label><input id="dtProtoHeadline" value="${esc(d.proto.headline)}" placeholder="${esc('e.g. '+e.proto.headline)}" oninput="dtSet('proto.headline',this.value)">
 <label>Your live page link (optional in class; publish it by ${s5CallsDue})</label>${dtInput('proto.link','https://your-business.lovable.app')}
 <label>Your partner's reaction: would ${esc(dtT(d.persona.name)||'your customer')} click? Why, or why not?</label>${dtInput('proto.reaction',e.proto.reaction,{area:true,h:50})}
 <label>One change you will make</label>${dtInput('proto.change',e.proto.change,{area:true,h:50})}
-<div class="hint" style="margin-top:10px"><b>Homework, by ${s5CallsDue}:</b> publish the page if you have not, post the Facebook advert or share the link, and show the page to one of your three customers on your calls. Ask what they would click, and what is missing. Then watch three things: page views, WhatsApp clicks and WhatsApp enquiries.</div></div>
+<div class="hint" style="margin-top:10px"><b>Homework, by ${s5CallsDue}:</b> publish the page if you have not, share the link, and show the page to one of your three customers on your calls. Ask what they would click, and what is missing. Then watch three things: page views, WhatsApp clicks and WhatsApp enquiries.</div></div>
 <div class="card" style="background:var(--green-tint);border-color:#cbe9be"><h3>Homework · take it to the canvas, by ${s5CanvasDue}</h3><div class="hint">The Business Model Canvas is your homework. Press the button and four sentence starters on the canvas are drafted from today's work, only where the box is still empty. Then finish all nine blocks, run Analyse with Claude, Finalise &amp; save, and Export Word.</div>
 <div id="dtPreview">${dtPreviewHtml()}</div>
 <div class="actions" style="justify-content:flex-start;margin-top:12px"><button class="btn primary" type="button" onclick="dtToCanvas()">Take it to the canvas -&gt;</button>${d.sentToCanvas?`<span class="hint" style="align-self:center">Last sent ${esc(new Date(d.sentToCanvas).toLocaleDateString('en-ZA',{day:'numeric',month:'long'}))}</span>`:''}</div></div>

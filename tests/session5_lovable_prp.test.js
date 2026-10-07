@@ -25,7 +25,7 @@ const srv=http.createServer((q,r)=>{const u=q.url.split('?')[0];const f=path.joi
 	has('Business: Kgotso Test','business');
 	has('Segment: Facilities managers of managed office parks','segment');
 	has('Thabo, 41 years old, Facilities manager','persona with age and role');
-	has('never put this name on the page or in the advert','persona name kept off the page and advert');
+	has('never put this name on the page)','persona name kept off the page');
 	has('Challenges: Twelve sites','challenges');has('Pain points, in their words: "I hear about','pains');has('Needs: Know about a fault','needs');
 	has('What they use instead of us today: Whoever is free','what they hire instead');
 	has('- Functional: When a tenant reports a fault','functional job');has('- Emotional: When summer starts','emotional job');has('- Social: When I report to the landlord','social job');
@@ -58,7 +58,7 @@ const srv=http.createServer((q,r)=>{const u=q.url.split('?')[0];const f=path.joi
 
 	console.log('Metaprompt outputs and rules');
 	pr=await ev(()=>dtProtoPrompt());
-	['OUTPUT 1: LOVABLE PRP (maximum 350 words)','10. Fixed first-live-version rules: single-page landing page, no login','"Build a polished, mobile-first single-page landing page','Do not ask clarifying questions."','OUTPUT 2: FACEBOOK ADVERT','Headline: maximum 8 words.','maximum 50 words, in the order customer problem -> benefit -> invitation','Learn More, WhatsApp Us, Book Now, Order Now, Get a Quote','OUTPUT 3: WHAT TO WATCH AFTER YOU PUBLISH','landing page views, WhatsApp clicks, WhatsApp enquiries','flag at most one clear inconsistency','write [TO CONFIRM]','"Great future feature. For this first live version, let\'s keep the page focused, useful and launchable."'].forEach(s=>has(s,'carries: '+s.slice(0,60)));
+	['LOVABLE PRP (maximum 350 words)','Then write the Lovable PRP below.','10. Fixed first-live-version rules: single-page landing page, no login','"Build a polished, mobile-first single-page landing page','Do not ask clarifying questions."','flag at most one clear inconsistency','write [TO CONFIRM]','"Great future feature. For this first live version, let\'s keep the page focused, useful and launchable."'].forEach(s=>has(s,'carries: '+s.slice(0,60)));
 	ok(!/[–—§]/.test(pr),'no em dash, en dash or section symbol');
 
 	console.log('Paste-back and completion');
