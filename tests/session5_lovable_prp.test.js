@@ -58,7 +58,7 @@ const srv=http.createServer((q,r)=>{const u=q.url.split('?')[0];const f=path.joi
 
 	console.log('Metaprompt outputs and rules');
 	pr=await ev(()=>dtProtoPrompt());
-	['LOVABLE PRP (maximum 350 words)','Then write the Lovable PRP below.','10. Fixed first-live-version rules: single-page landing page, no login','"Build a polished, mobile-first single-page landing page','Do not ask clarifying questions."','flag at most one clear inconsistency','write [TO CONFIRM]','"Great future feature. For this first live version, let\'s keep the page focused, useful and launchable."'].forEach(s=>has(s,'carries: '+s.slice(0,60)));
+	['LOVABLE PRP (maximum 450 words)','9. Visual design: the page must look striking and modern','a full-width hero image with the headline and the WhatsApp button over it','high-quality, realistic photographs','in a South African context','never present them as our own team, our clients or our past work','never show a real company\'s logo','one strong accent for the WhatsApp buttons','Make it visually striking: use high-quality, relevant images in the hero','Then write the Lovable PRP below.','10. Fixed first-live-version rules: single-page landing page, no login','"Build a polished, mobile-first single-page landing page','Do not ask clarifying questions."','flag at most one clear inconsistency','write [TO CONFIRM]','"Great future feature. For this first live version, let\'s keep the page focused, useful and launchable."'].forEach(s=>has(s,'carries: '+s.slice(0,60)));
 	ok(!/[–—§]/.test(pr),'no em dash, en dash or section symbol');
 
 	console.log('Paste-back and completion');
