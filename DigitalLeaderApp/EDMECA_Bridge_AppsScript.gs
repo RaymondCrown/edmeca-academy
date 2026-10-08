@@ -1,5 +1,5 @@
 var TABS = {
-  State: ['Key','Name','Business','UpdatedAt','StateJSON'],
+  State: ['Key','Name','Business','UpdatedAt','StateJSON','StateJSON2','StateJSON3','StateJSON4','StateJSON5','StateJSON6','StateJSON7','StateJSON8'],
   Participants: ['Timestamp','Name','Business','Event'],
   Submissions: ['Timestamp','Name','Business'],
   S1_Ex1_Snapshot: ['Timestamp','Name','Business','WhereTimeGoes','TenExtraHours','CompetitorEdge'],
@@ -105,6 +105,33 @@ function writeProgress(data, name, business, timestamp) {
   upsertRows('S5_Progress', name, business, [[timestamp, name, business, p.empathize ? 'YES' : '', p.define ? 'YES' : '', p.ideate ? 'YES' : '', p.inClass || 0, p.calls || 0, p.sections || 0, p.finalised ? 'YES' : '']]);
 }
 
+// State: a Google Sheets cell holds at most 50,000 characters, so the state JSON is split across StateJSON to StateJSON8
+// (45,000 characters each, 360,000 in all) and joined again on load. Before this, a participant whose state passed
+// 50,000 characters had every save rejected, exercise rows included.
+var STATE_CHUNK = 45000;
+var STATE_CHUNKS = 8;
+
+function writeState(name, business, timestamp, state) {
+  var stateSheet = sheet('State');
+  var header = stateSheet.getRange(1, 1, 1, TABS.State.length);
+  if (header.getValues()[0].join('|') !== TABS.State.join('|')) header.setValues([TABS.State]).setFontWeight('bold');
+  var text = JSON.stringify(state);
+  if (text.length > STATE_CHUNK * STATE_CHUNKS) throw new Error('state is ' + text.length + ' characters, over the ' + (STATE_CHUNK * STATE_CHUNKS) + ' limit');
+  var chunks = [];
+  for (var c = 0; c < STATE_CHUNKS; c++) chunks.push(text.slice(c * STATE_CHUNK, (c + 1) * STATE_CHUNK));
+  var key = keyFor(name, business);
+  var keys = stateSheet.getRange(1, 1, stateSheet.getLastRow(), 1).getValues();
+  var row = -1;
+  for (var i = 1; i < keys.length; i++) if (keys[i][0] === key) row = i + 1;
+  var stateValues = [[key, name, business, timestamp].concat(chunks)];
+  if (row === -1) row = stateSheet.getLastRow() + 1;
+  stateSheet.getRange(row, 1, 1, TABS.State.length).setValues(stateValues);
+}
+
+function readState(row) {
+  return JSON.parse(row.slice(4, 4 + STATE_CHUNKS).join('') || '{}');
+}
+
 function json(value) {
   return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);
 }
@@ -119,7 +146,7 @@ function doGet(event) {
   var values = sheet('State').getDataRange().getValues();
   var key = keyFor(params.name || '', params.business || '');
   for (var i = values.length - 1; i >= 1; i--) {
-    if (values[i][0] === key) return json({ ok: true, found: true, state: JSON.parse(values[i][4] || '{}') });
+    if (values[i][0] === key) return json({ ok: true, found: true, state: readState(values[i]) });
   }
   return json({ ok: true, found: false });
 }
@@ -133,18 +160,6 @@ function doPost(event) {
     var business = String(body.business || '').trim();
     if (!name || !business) return json({ ok: false, error: 'missing name or business' });
     var timestamp = new Date();
-
-    if (body.state) {
-      var stateSheet = sheet('State');
-      var key = keyFor(name, business);
-      var values = stateSheet.getDataRange().getValues();
-      var row = -1;
-      for (var i = 1; i < values.length; i++) if (values[i][0] === key) row = i + 1;
-      var stateValues = [key, name, business, timestamp, JSON.stringify(body.state)];
-      if (row === -1) stateSheet.appendRow(stateValues);
-      else stateSheet.getRange(row, 1, 1, 5).setValues([stateValues]);
-    }
-
     var exercise = body.exercise;
     var data = body.data || {};
 
@@ -301,6 +316,15 @@ function doPost(event) {
     if (String(exercise || '').indexOf('s5') === 0) {
       if (data.progress) writeProgress(data, name, business, timestamp);
       if (data.artefacts && (exercise === 's5dt' || exercise === 's5submit')) writeArtefacts(data, name, business, timestamp, exercise);
+    }
+
+    // State last and on its own, so a state failure never costs the exercise rows above.
+    if (body.state) {
+      try {
+        writeState(name, business, timestamp, body.state);
+      } catch (stateError) {
+        return json({ ok: false, error: 'state not saved: ' + String(stateError) });
+      }
     }
 
     return json({ ok: true });
