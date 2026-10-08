@@ -57,23 +57,59 @@ function sheet(name) {
   return tab;
 }
 
+// Rows are written in blocks: one read, one deleteRows per run of matching rows and one setValues for all new rows,
+// instead of a deleteRow and an appendRow per row. The script lock is held for every save, so this keeps the class's saves moving.
+function appendRows(tab, rows) {
+  if (!rows.length) return;
+  var width = rows.reduce(function (w, r) { return Math.max(w, r.length); }, 0);
+  var block = rows.map(function (r) { r = r.slice(); while (r.length < width) r.push(''); return r; });
+  var start = tab.getLastRow() + 1;
+  var short = start + block.length - 1 - tab.getMaxRows();
+  if (short > 0) tab.insertRowsAfter(tab.getMaxRows(), short);
+  tab.getRange(start, 1, block.length, width).setValues(block);
+}
+
+// rowNumbers ascending; contiguous runs go in one deleteRows call each, bottom run first so the numbers above stay valid.
+function deleteRowRuns(tab, rowNumbers) {
+  if (!rowNumbers.length) return;
+  if (tab.getMaxRows() - rowNumbers.length <= tab.getFrozenRows()) tab.insertRowsAfter(tab.getMaxRows(), 1); // a sheet must keep one unfrozen row
+  var i = rowNumbers.length - 1;
+  while (i >= 0) {
+    var end = rowNumbers[i], start = end;
+    while (i > 0 && rowNumbers[i - 1] === start - 1) { start--; i--; }
+    tab.deleteRows(start, end - start + 1);
+    i--;
+  }
+}
+
+// Data rows (from row 2) whose Name and Business (columns 2 and 3) match, plus any extra test on the row.
+function matchingRows(tab, participant, business, test) {
+  var last = tab.getLastRow();
+  if (last < 2) return { numbers: [], values: [] };
+  var values = tab.getRange(2, 1, last - 1, tab.getLastColumn()).getValues();
+  var key = keyFor(participant, business);
+  var numbers = [], matched = [];
+  values.forEach(function (v, i) {
+    if (keyFor(v[1], v[2]) === key && (!test || test(v))) { numbers.push(i + 2); matched.push(v); }
+  });
+  return { numbers: numbers, values: matched };
+}
+
 // Session 4 tabs hold one current record per participant (one row, or one row per line/round), replaced on every save.
 // The participant is matched on Name and Business (columns 2 and 3). S4_Pilot keeps the facilitator's Day7Reply across saves.
 function upsertRows(name, participant, business, rows) {
   var tab = sheet(name);
-  var values = tab.getDataRange().getValues();
-  var key = keyFor(participant, business);
-  var kept = {};
-  for (var i = values.length - 1; i >= 1; i--) {
-    if (keyFor(values[i][1], values[i][2]) === key) {
-      if (name === 'S4_Pilot' && values[i][8]) kept.day7 = values[i][8];
-      tab.deleteRow(i + 1);
-    }
-  }
-  rows.forEach(function (row) {
-    if (name === 'S4_Pilot' && kept.day7) row[8] = kept.day7;
-    tab.appendRow(row);
-  });
+  var found = matchingRows(tab, participant, business);
+  var day7 = '';
+  if (name === 'S4_Pilot') found.values.forEach(function (v) { if (v[8]) day7 = v[8]; });
+  deleteRowRuns(tab, found.numbers);
+  if (day7) rows.forEach(function (row) { row[8] = day7; });
+  appendRows(tab, rows);
+}
+
+// Tabs that keep every save (Sessions 1 to 3) collect a list's rows here and add them in one block.
+function appendAll(name, rows) {
+  appendRows(sheet(name), rows);
 }
 
 function writeDesignThinking(data, name, business, timestamp) {
@@ -88,15 +124,13 @@ function writeDesignThinking(data, name, business, timestamp) {
 // 20 arrives on s5dt once Ideate & Prototype is complete; 18, 19, 20 and 21 arrive on s5submit.
 function writeArtefacts(data, name, business, timestamp, event) {
   var tab = sheet('S5_Artefacts');
-  var key = keyFor(name, business);
   var credits = data.artefacts || {};
-  Object.keys(credits).forEach(function (number) {
-    var values = tab.getDataRange().getValues();
-    for (var i = values.length - 1; i >= 1; i--) {
-      if (keyFor(values[i][1], values[i][2]) === key && String(values[i][3]) === String(number)) tab.deleteRow(i + 1);
-    }
-    tab.appendRow([timestamp, name, business, Number(number), S5_ARTEFACTS[number] || '', credits[number], event]);
-  });
+  var numbers = Object.keys(credits);
+  if (!numbers.length) return;
+  deleteRowRuns(tab, matchingRows(tab, name, business, function (v) { return numbers.indexOf(String(v[3])) !== -1; }).numbers);
+  appendRows(tab, numbers.map(function (number) {
+    return [timestamp, name, business, Number(number), S5_ARTEFACTS[number] || '', credits[number], event];
+  }));
 }
 
 // S5_Progress: the facilitator's one-row-per-participant check on in-class steps, customer calls (due 15 October) and the canvas (due 22 October).
@@ -175,10 +209,11 @@ function doPost(event) {
     } else if (exercise === 'e3') {
       var saveId = Utilities.getUuid().slice(0, 8);
       var ideas = data.ideas || [];
-      var ideasSheet = sheet('S1_Ex3_Ideas');
+      var ideasSheet = [];
       ideas.forEach(function (idea) {
-        ideasSheet.appendRow([timestamp, saveId, name, business, idea.text || idea.txt || '', idea.area || '', idea.impact || idea.imp || '', idea.effort || idea.eff || '', idea.quadrant || '', idea.priority || idea.top ? 'YES' : '']);
+        ideasSheet.push([timestamp, saveId, name, business, idea.text || idea.txt || '', idea.area || '', idea.impact || idea.imp || '', idea.effort || idea.eff || '', idea.quadrant || '', idea.priority || idea.top ? 'YES' : '']);
       });
+      appendAll('S1_Ex3_Ideas', ideasSheet);
       var topIdeas = ideas.filter(function (idea) { return idea.priority || idea.top; }).map(function (idea) { return idea.text || idea.txt || ''; }).join(' | ');
       sheet('S1_Ex3_Map').appendRow([timestamp, saveId, name, business, ideas.length, ideas.filter(function (idea) { return idea.priority || idea.top; }).length, topIdeas, data.partnerNotes || data.notes || '']);
 
@@ -187,17 +222,19 @@ function doPost(event) {
       sheet('S2_Priorities').appendRow([timestamp, name, business, JSON.stringify(data.priorities || []), data.notes || '']);
     } else if (exercise === 's2_processmap') {
       var pmSaveId = Utilities.getUuid().slice(0, 8);
-      var pmSheet = sheet('S2_ProcessMaps');
+      var pmSheet = [];
       (data.processes || []).forEach(function (proc, pIndex) {
         (proc.steps || []).forEach(function (step, sIndex) {
-          pmSheet.appendRow([timestamp, pmSaveId, name, business, pIndex + 1, proc.name || '', proc.trigger || '', sIndex + 1, step.text || '', step.friction || '']);
+          pmSheet.push([timestamp, pmSaveId, name, business, pIndex + 1, proc.name || '', proc.trigger || '', sIndex + 1, step.text || '', step.friction || '']);
         });
       });
+      appendAll('S2_ProcessMaps', pmSheet);
     } else if (exercise === 's2_redesign') {
-      var rSheet = sheet('S2_Redesign');
+      var rSheet = [];
       (data.steps || []).forEach(function (step, sIndex) {
-        rSheet.appendRow([timestamp, name, business, data.chosenProcess || '', sIndex + 1, step.text || '', step.action || '', step.split || '']);
+        rSheet.push([timestamp, name, business, data.chosenProcess || '', sIndex + 1, step.text || '', step.action || '', step.split || '']);
       });
+      appendAll('S2_Redesign', rSheet);
     } else if (exercise === 's2_sop') {
       sheet('S2_SOP').appendRow([timestamp, name, business, data.chosenProcess || '', data.sopPrompt || '', data.sopText || '']);
     } else if (exercise === 's2_baseline') {
@@ -214,17 +251,19 @@ function doPost(event) {
       sheet('S3_GTM').appendRow([timestamp, name, business, data.who || '', data.knownFor || '', data.where || '']);
     } else if (exercise === 's3_opportunities') {
       var oppSaveId = Utilities.getUuid().slice(0, 8);
-      var oppSheet = sheet('S3_Opportunities');
+      var oppSheet = [];
       (data.opportunities || []).forEach(function (opp, index) {
         var total = (Number(opp.win) || 0) + (Number(opp.value) || 0) + (Number(opp.deliver) || 0);
-        oppSheet.appendRow([timestamp, oppSaveId, name, business, index + 1, opp.name || '', opp.buyerType || '', opp.date || '', opp.win || '', opp.value || '', opp.deliver || '', total, opp.name && opp.name === data.chosen ? 'YES' : '']);
+        oppSheet.push([timestamp, oppSaveId, name, business, index + 1, opp.name || '', opp.buyerType || '', opp.date || '', opp.win || '', opp.value || '', opp.deliver || '', total, opp.name && opp.name === data.chosen ? 'YES' : '']);
       });
+      appendAll('S3_Opportunities', oppSheet);
     } else if (exercise === 's3_evidence') {
       var evSaveId = Utilities.getUuid().slice(0, 8);
-      var evSheet = sheet('S3_Evidence');
+      var evSheet = [];
       (data.evidence || []).forEach(function (row, index) {
-        evSheet.appendRow([timestamp, evSaveId, name, business, index + 1, row.client || '', row.scope || '', row.value || '', row.date || '', row.outcome || '']);
+        evSheet.push([timestamp, evSaveId, name, business, index + 1, row.client || '', row.scope || '', row.value || '', row.date || '', row.outcome || '']);
       });
+      appendAll('S3_Evidence', evSheet);
     } else if (exercise === 's3_sort') {
       var sort = data.sort || {};
       var correct = 0;
@@ -239,18 +278,20 @@ function doPost(event) {
       sheet('S3_Quotation').appendRow([timestamp, name, business, data.opportunity || '', blocks.role || '', blocks.task || '', blocks.context || '', blocks.requirements || '', blocks.format || '', blocks.example || '', data.prompt || '', data.text || '', data.exampleText || '', data.exampleSource || '']);
     } else if (exercise === 's3_gaps') {
       var gapSaveId = Utilities.getUuid().slice(0, 8);
-      var gapSheet = sheet('S3_Gaps');
+      var gapSheet = [];
       (data.gaps || []).forEach(function (gap, index) {
-        gapSheet.appendRow([timestamp, gapSaveId, name, business, data.opportunity || '', index + 1, gap.missing || '', gap.who || '']);
+        gapSheet.push([timestamp, gapSaveId, name, business, data.opportunity || '', index + 1, gap.missing || '', gap.who || '']);
       });
+      appendAll('S3_Gaps', gapSheet);
     } else if (exercise === 's3_followup') {
       sheet('S3_FollowUp').appendRow([timestamp, name, business, data.opportunity || '', data.prompt || '', data.text || '']);
     } else if (exercise === 's3_pipeline') {
       var pipeSaveId = Utilities.getUuid().slice(0, 8);
-      var pipeSheet = sheet('S3_Pipeline');
+      var pipeSheet = [];
       (data.opportunities || []).forEach(function (opp, index) {
-        pipeSheet.appendRow([timestamp, pipeSaveId, name, business, index + 1, opp.name || '', opp.stage || '']);
+        pipeSheet.push([timestamp, pipeSaveId, name, business, index + 1, opp.name || '', opp.stage || '']);
       });
+      appendAll('S3_Pipeline', pipeSheet);
     } else if (exercise === 's3_rhythm') {
       sheet('S3_Rhythm').appendRow([timestamp, name, business, JSON.stringify(data.rhythm || {})]);
     } else if (exercise === 's3_pilot') {

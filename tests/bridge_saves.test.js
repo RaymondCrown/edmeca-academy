@@ -16,9 +16,16 @@ ok(await ev(()=>$('toast').textContent.includes('not yet to the programme sheet'
 ok(await ev(()=>Object.keys(bridgeQueue()).some(k=>k.endsWith('|s5dt'))),'s5dt kept in the retry queue');
 ok(posts[0]&&posts[0].state&&posts[0].state.savedAt,'state carries savedAt');
 console.log('Retry after the next good save');
-mode='ok';posts.length=0;await ev(()=>syncState());await wait(600);
+mode='ok';posts.length=0;await ev(()=>{state.area='Retry';syncState()});await wait(2600);
 ok(posts.some(p=>p.exercise==='s5dt'),'queued s5dt re-sent');
 ok(await ev(()=>Object.keys(bridgeQueue()).length===0),'queue empty');
+console.log('The workbook copy is sent only when it changed, and a burst of moves is one write');
+posts.length=0;await ev(()=>{state.area='Burst';syncState();goS5View(1);goS5View(2);goS5View(0)});await wait(2600);
+ok(posts.filter(p=>!p.exercise&&p.state).length===1,'three quick moves, one State write');
+posts.length=0;await ev(()=>syncState());await wait(2600);
+ok(!posts.length,'nothing sent when the workbook has not changed');
+posts.length=0;await ev(()=>postS5dt('s5dt'));await wait(300);
+ok(posts.length===1&&!posts[0].state,'an exercise save leaves the unchanged workbook out');
 console.log('Unsent Design Thinking work goes on page hide');
 posts.length=0;await ev(()=>{dtSet('persona.name','Zanele')});await ev(()=>{Object.defineProperty(document,'visibilityState',{value:'hidden',configurable:true});document.dispatchEvent(new Event('visibilitychange'))});await wait(400);
 ok(posts.some(p=>p.exercise==='s5dt'),'s5dt sent when the page is hidden');

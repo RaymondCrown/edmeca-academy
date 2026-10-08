@@ -28,7 +28,7 @@ const srv=http.createServer((q,r)=>{const f=path.join(root,q.url.split('?')[0]==
 	ok(await ev(()=>[0,1,2].every(dtComplete)),'all three in-class steps complete with the example loaded');
 	ok(await ev(()=>dt().circled.length===3&&dt().calls[0].who!==''&&dt().calls[1].who===''),'three circled, one example call');
 	ok(await page.locator('text=The Kgotso Facilities example is loaded').count()===1,'banner shown on the Design Thinking view');
-	ok(await page.locator('.s5bar button:has-text("Example")').count()===1&&await page.locator('.s5bar button:has-text("Reset")').count()===1,'Example and Reset buttons on the Design Thinking view');
+	ok(await page.locator('.s5bar button:has-text("Example")').count()===1&&await page.locator('.s5bar button:has-text("Start my own canvas")').count()===1,'Example and Start my own canvas buttons on the Design Thinking view (Reset while the example is loaded)');
 	ok(await ev(()=>s5View===0),'stays on the current view after loading');
 
 	console.log('Example stays out of the sheet');
