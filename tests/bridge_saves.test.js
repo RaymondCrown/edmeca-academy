@@ -31,6 +31,16 @@ posts.length=0;await ev(()=>{dtSet('persona.name','Zanele')});await ev(()=>{Obje
 ok(posts.some(p=>p.exercise==='s5dt'),'s5dt sent when the page is hidden');
 posts.length=0;await ev(()=>document.dispatchEvent(new Event('visibilitychange')));await wait(300);
 ok(!posts.some(p=>p.exercise==='s5dt'),'nothing re-sent when nothing changed');
+console.log('A queued older canvas save never overwrites a newer finalise');
+await ev(()=>{state.session5=blankSession5();goSession5(0);s5Set('customerSegments',0,'one')});
+mode='fail';posts.length=0;await ev(()=>postSession5('s5canvas'));await wait(300);
+await ev(()=>{s5Set('customerSegments',1,'two');s5Set('valuePropositions',0,'three')});
+ok(await ev(()=>{const e=bridgeQueue()['jodi t|nc test|s5canvas'];return e&&e.data.items===1&&e.data.canvas.customerSegments.length===1&&!e.state}),'queued copy frozen at the moment it failed, without the workbook');
+mode='ok';posts.length=0;await ev(()=>s5Finalise());await wait(800);
+ok(posts.filter(p=>/^s5(canvas|submit)/.test(p.exercise||'')).map(p=>p.exercise).join()==='s5submit','only the finalise is sent; the older queued canvas save is dropped');
+ok(await ev(()=>!bridgeQueue()['jodi t|nc test|s5canvas']),'retry slot empty');
+posts.length=0;await ev(()=>postSession5('s5canvas'));await wait(300);
+ok(posts[0]&&posts[0].data.finalised===true&&posts[0].data.artefacts&&posts[0].data.artefacts[19]!=null,'a later canvas save still says finalised and carries artefact credit');
 console.log('Stale sheet copy does not overwrite newer local work');
 await ev(()=>{const k='edmeca:jodi t|nc test';const l=JSON.parse(localStorage.getItem(k));l.state.persona='LOCAL';localStorage.setItem(k,JSON.stringify(l))});
 remote={ok:true,found:true,state:{name:'Jodi T',business:'NC Test',persona:'OLD SHEET'}};

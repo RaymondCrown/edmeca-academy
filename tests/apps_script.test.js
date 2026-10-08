@@ -28,6 +28,15 @@ post({name:'Jo',business:'Co',exercise:'s4c6',data:{quote:'Q1'}});tabs.S4_Pilot.
 ok(JSON.stringify(tabs.S4_Pilot.rows.slice(1).map(r=>[r[3],r[8]]))==='[["Q2","replied"]]','S4_Pilot keeps the Day7Reply');
 const t=new Tab();tabs.S5_Progress=t;t.appendRow(['h']);t.setFrozenRows(1);t.max=2;t.appendRow(['x','Solo','Co']);
 ok(post({name:'Solo',business:'Co',exercise:'s5dt',data:{dtRows:[],progress:{}}}).ok&&t.rows.length-1===1,'replacing the only data row on a full sheet works');
+console.log('Finalised canvas');
+const cv={customerSegments:['a','b'],valuePropositions:['c']};
+post({name:'Fin',business:'Co',exercise:'s5submit',data:{canvas:cv,filled:2,items:3,finalised:true,artefacts:{18:0.5,19:0.5}}});
+post({name:'Fin',business:'Co',exercise:'s5canvas',data:{canvas:cv,filled:2,items:3,finalised:true,artefacts:{18:0.5,19:0.5}}});
+const fin=tabs.S5_Canvas.rows.filter(r=>r[1]==='Fin');
+ok(fin.length===10&&fin.every(r=>r[9]==='YES'),'a canvas save after finalising keeps Finalised YES');
+ok(tabs.S5_Artefacts.rows.filter(r=>r[1]==='Fin').length===2,'artefact credit kept once per artefact');
+post({name:'Fin',business:'Co',exercise:'s5canvas',data:{canvas:cv,filled:2,items:3}});
+ok(tabs.S5_Canvas.rows.filter(r=>r[1]==='Fin').every(r=>r[9]===''),'edited after finalising: Finalised cleared');
 console.log('State split across cells');
 tabs.State=new Tab();tabs.State.appendRow(['Key','Name','Business','UpdatedAt','StateJSON']);
 ok(post({name:'Jodi',business:'NC',exercise:'s3_gtm',data:{who:'x'},state:{n:'x'.repeat(120000)}}).ok,'120,000-character state saved');

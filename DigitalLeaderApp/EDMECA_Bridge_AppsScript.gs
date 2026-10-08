@@ -121,7 +121,7 @@ function writeDesignThinking(data, name, business, timestamp) {
 }
 
 // S5_Artefacts: one row per participant and artefact number, replaced when that artefact is saved again (credit 1 = complete, 0.5 = started).
-// 20 arrives on s5dt once Ideate & Prototype is complete; 18, 19, 20 and 21 arrive on s5submit.
+// 20 arrives on s5dt once Ideate & Prototype is complete; 18, 19, 20 and 21 arrive on s5submit and on every later canvas save while the canvas stays finalised.
 function writeArtefacts(data, name, business, timestamp, event) {
   var tab = sheet('S5_Artefacts');
   var credits = data.artefacts || {};
@@ -332,7 +332,7 @@ function doPost(event) {
         ['Viability', 'costStructure', '9. Cost Structure'], ['Viability', 'revenueStreams', '5. Revenue Streams'],
         ['Feasibility', 'keyActivities', '7. Key Activities'], ['Feasibility', 'keyResources', '6. Key Resources'], ['Feasibility', 'keyPartnerships', '8. Key Partnerships']
       ];
-      var finalised = exercise === 's5submit' ? 'YES' : '';
+      var finalised = exercise === 's5submit' || data.finalised ? 'YES' : ''; // a later canvas save keeps YES while the canvas is still finalised
       var canvasRows = [];
       sections.forEach(function (section) {
         var items = canvas[section[1]] || [];
@@ -356,7 +356,7 @@ function doPost(event) {
     // Session 5 facilitator evidence, written alongside whichever s5 event arrived
     if (String(exercise || '').indexOf('s5') === 0) {
       if (data.progress) writeProgress(data, name, business, timestamp);
-      if (data.artefacts && (exercise === 's5dt' || exercise === 's5submit')) writeArtefacts(data, name, business, timestamp, exercise);
+      if (data.artefacts) writeArtefacts(data, name, business, timestamp, exercise);
     }
 
     // State last and on its own, so a state failure never costs the exercise rows above.
