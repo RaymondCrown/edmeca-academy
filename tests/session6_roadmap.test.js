@@ -137,6 +137,13 @@ ok(pr.postDone&&pr.postTotal===11&&pr.postBand==='Builder'&&pr.toolkitDone&&pr.s
 posts.length=0;await ev(()=>{const t=document.getElementById('s6TopWin');t.value='Quotes in an hour';t.dispatchEvent(new Event('input'));goS6View(3)});await wait(100);
 ok(posts.some(p=>p.exercise==='s6story'&&p.data.topWin==='Quotes in an hour')&&!posts.some(p=>p.exercise==='s6commit'),'leaving a view sends what changed (story), not what was already sent (commitment)');
 
+await ev(()=>localStorage.removeItem(sentKey()));posts.length=0;await ev(()=>{goS6View(4)});await wait(50);
+await ev(()=>{const t=document.getElementById('s6Replaced');t.value='Replaced the paper job card';t.dispatchEvent(new Event('input'));goS6View(3)});await wait(150);
+ok(posts.some(p=>p.exercise==='s6story')&&!posts.some(p=>p.exercise==='s6commit'),'editing only the story never sends the commitment card');
+posts.length=0;await ev(()=>{goS6View(4)});await wait(50);await ev(()=>{const c=document.getElementById('s6D30With');c.value='Bookkeeper';c.dispatchEvent(new Event('input'));goS6View(3)});await wait(150);
+ok(posts.some(p=>p.exercise==='s6commit')&&!posts.some(p=>p.exercise==='s6story'),'editing only the commitment sends only the commitment card');
+posts.length=0;await ev(()=>{window.__keep=JSON.stringify(s6());s6().roadmap.rows.forEach(r=>{r.priority='';r.owner=''});s6().toolkit.forEach(r=>r.choice='');s6().story.consent='';s6Post('s6roadmap');s6Post('s6toolkit');s6Post('s6story');state.session6=mergeS6(JSON.parse(window.__keep))});await wait(150);
+ok(JSON.stringify(posts.map(p=>p.data.artefacts))==='[{"22":0},{"23":0},{"25":0}]','a cleared artefact is sent as 0, so an older credit is replaced');
 console.log('10 · Freeze');
 readOnly=true;posts.length=0;await ev(()=>{goS6View(4)});await wait(50);
 await ev(()=>s6SaveCommit());await wait(200);

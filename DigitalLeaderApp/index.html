@@ -2123,7 +2123,7 @@ function s6(){if(!state.session6)state.session6=blankS6();return state.session6}
 function s6T(v){return String(v==null?'':v).trim()}
 function s6Key(){return (state.name+'|'+state.business).toLowerCase()}
 function s6Touch(view){s6Unsent[view==null?s6View:view]=true;clearTimeout(s6SyncTimer);s6SyncTimer=setTimeout(()=>syncState(),2500)}
-function s6Set(path,v,view){const ks=path.split('.'),last=ks.pop();const o=ks.reduce((o,k)=>o[k],s6());o[last]=v;s6Touch(view)}
+function s6Set(path,v,view){const ks=path.split('.'),last=ks.pop();const o=ks.reduce((o,k)=>o[k],s6());o[last]=v;s6Touch(view);if(view===4)s6Unsent[ks[0]]=true /* the story and commitment cards are sent separately, each only once it has been touched */}
 const s6Days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],s6Months=['January','February','March','April','May','June','July','August','September','October','November','December'];
 function s6DateLabel(iso){const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s6T(iso));if(!m)return '';const d=new Date(Number(m[1]),Number(m[2])-1,Number(m[3]));return `${s6Days[d.getDay()]} ${d.getDate()} ${s6Months[d.getMonth()]} ${d.getFullYear()}`}
 function s6InWeek(iso){return /^\d{4}-\d{2}-\d{2}$/.test(s6T(iso))&&iso>=s6WeekMin&&iso<=s6WeekMax}
@@ -2168,9 +2168,9 @@ function s6Nav(){const back=s6View>0?`<button class="btn ghost" onclick="goS6Vie
    The POST is the exception: it reaches S6_Post only through Submit my assessment. */
 function s6Flush(keepalive){
 	if(state.session!==6||s6View==null||!s6Unsent[s6View])return;
-	const ev={1:['s6story'],2:['s6roadmap'],3:['s6toolkit'],4:['s6story','s6commit']}[s6View]||[];
+	const ev={1:['s6story'],2:['s6roadmap'],3:['s6toolkit'],4:[s6Unsent.story&&'s6story',s6Unsent.commit&&'s6commit'].filter(Boolean)}[s6View]||[];
 	const was=quietSave;quietSave=true;try{ev.forEach(e=>s6Post(e,keepalive))}finally{quietSave=was}
-	s6Unsent[s6View]=false;
+	s6Unsent[s6View]=false;if(s6View===4){s6Unsent.story=false;s6Unsent.commit=false}
 }
 /* ---------- View 1 · POST ---------- */
 function s6Radios(group,path,val,disabled){return POST_QUESTIONS.map((q,qi)=>`<div class="card s6q"><h3>${qi+1} · ${esc(q.title)}</h3>${q.options.map((o,i)=>`<label class="s6opt"><input type="radio" name="${group}${q.key}" value="${i+1}" ${val[q.key]===i+1?'checked':''} ${disabled?'disabled':''} onchange="s6Set('${path}.${q.key}',${i+1},0)"><span>${esc(o)}</span></label>`).join('')}</div>`).join('')}
@@ -2335,8 +2335,8 @@ function renderS6Story(){
 <div class="actions"><span></span><button class="btn primary" onclick="s6SaveCommit()">Save my commitment</button></div></div>
 <div class="card"><div class="s5tools"><button class="btn ghost" onclick="s6ExportPlan('pdf')">Export my plan as PDF</button><button class="btn ghost" onclick="s6ExportPlan('word')">Export my plan as Word</button></div></div>${s6Nav()}`;
 }
-function s6SaveStory(){if(!s6().story.consent)return toast('Choose how we may use your story before you save.');s6Post('s6story');toast('Story saved.');return true}
-function s6SaveCommit(){s6Post('s6commit');toast('Commitment saved.')}
+function s6SaveStory(){if(!s6().story.consent)return toast('Choose how we may use your story before you save.');s6Post('s6story');s6Unsent.story=false;toast('Story saved.');return true}
+function s6SaveCommit(){s6Post('s6commit');s6Unsent.commit=false;toast('Commitment saved.')}
 /* ---------- saves: one event per view, artefact credit and the facilitator's S6_Progress row ---------- */
 function s6Progress(){
 	const d=s6(),r=d.roadmap,st=r.stranger,c=d.commit,sub=d.post.submitted;
@@ -2348,9 +2348,9 @@ function s6Progress(){
 function s6Credit(exercise){
 	const d=s6(),p=s6Progress();
 	if(exercise==='s6post')return{24:1};
-	if(exercise==='s6roadmap'){const n=p.roadmapPriorities;return n?{22:n===3?1:0.5}:{}}
-	if(exercise==='s6toolkit'){const n=d.toolkit.slice(0,8).filter(x=>x.choice).length;return n?{23:n===8?1:0.5}:{}}
-	if(exercise==='s6story')return p.storyDone?{25:1}:{};
+	if(exercise==='s6roadmap'){const n=p.roadmapPriorities;return{22:n===3?1:n?0.5:0}} /* 0, not nothing: S6_Artefacts replaces the older credit */
+	if(exercise==='s6toolkit'){const n=d.toolkit.slice(0,8).filter(x=>x.choice).length;return{23:n===8?1:n?0.5:0}}
+	if(exercise==='s6story')return{25:p.storyDone?1:0};
 	if(exercise==='s6commit')return{26:p.firstStepDone&&p.reviewDatesSet?1:0.5};
 	return{};
 }

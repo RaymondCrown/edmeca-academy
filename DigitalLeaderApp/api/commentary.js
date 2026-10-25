@@ -6,6 +6,13 @@
 const MODEL = 'claude-sonnet-5-5';
 const MAX_CHARS = 24000;
 
+// The workbook's test identities (the S6_TEST_IDENTITIES list in the Apps Script) never get commentary: their saved
+// workbooks are on the sheet and their names are in the repo, so they would otherwise open the endpoint to anyone.
+const TEST_IDENTITIES = ['a', 'b', 'c', 'd', 'dvev', 'test person', 'test co', 'test user', 'sipho', 'testa a', 'abz', 'aq', 'as', 'dfsad', 'hgdyh', 'utfug', 'test kevin', 'zz bridge test', 'test live', 'test dbg', 'raymond crown', 'justin siljeur', 'jerome adonis'];
+export function isTestIdentity(name, business) {
+  return TEST_IDENTITIES.includes(String(name).trim().toLowerCase()) || TEST_IDENTITIES.includes(String(business).trim().toLowerCase());
+}
+
 const COMMON = `You write the commentary section at the end of a document a participant exports from the EDMECA AI Enablement Programme workbook (Property Point, Growthpoint Enterprise Development, Cohort Seven). The participants own small South African businesses, mostly construction, maintenance, facilities, security and related services.
 
 Write to the owner in the second person, in plain South African English, as a practical business coach. Interpret what is in the document and give concrete guidance they can act on.
@@ -36,7 +43,7 @@ export function prepare(body) {
   return {
     request: {
       model: MODEL,
-      max_tokens: 4000,
+      max_tokens: 16000, // thinking counts toward this, so leave room for it and the text
       thinking: { type: 'adaptive' },
       output_config: { effort: 'medium' },
       betas: ['server-side-fallback-2026-07-01'],
@@ -74,6 +81,7 @@ export default async function handler(req, res) {
   const body = req.body || {};
   const name = String(body.name || '').trim(), business = String(body.business || '').trim();
   if (!name || !business) return res.status(400).json({ ok: false, error: 'missing name or business' });
+  if (isTestIdentity(name, business)) return res.status(403).json({ ok: false, error: 'not available for test identities' });
   const prepared = prepare(body);
   if (prepared.error) return res.status(prepared.status).json({ ok: false, error: prepared.error });
 
@@ -88,6 +96,7 @@ export default async function handler(req, res) {
   try {
     const response = await client.beta.messages.create(prepared.request);
     if (response.stop_reason === 'refusal') return res.status(422).json({ ok: false, error: 'declined' });
+    if (response.stop_reason === 'max_tokens') return res.status(502).json({ ok: false, error: 'commentary was cut off' }); // never put half a paragraph in an export
     const text = tidy(response.content.filter(b => b.type === 'text').map(b => b.text).join('\n\n'));
     if (!text) return res.status(502).json({ ok: false, error: 'empty commentary' });
     return res.status(200).json({ ok: true, commentary: text });

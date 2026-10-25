@@ -12,6 +12,7 @@ const pr=mod.prepare({kind:'plan',text:'Priority 1: Quote from the cost sheet'})
 ok(pr.model==='claude-sonnet-5-5'&&pr.thinking.type==='adaptive'&&pr.output_config.effort==='medium'&&pr.fallbacks==='default'&&pr.betas.includes('server-side-fallback-2026-07-01'),'Sonnet 5.5, adaptive thinking, medium effort, default fallbacks');
 ok(pr.system.includes('90-day AI implementation roadmap')&&pr.system.includes('no em dashes')&&pr.messages[0].content.includes('<document>\nPriority 1: Quote from the cost sheet\n</document>'),'instructions live on the server; the document is wrapped as data');
 ok(['journey','canvas'].every(k=>mod.prepare({kind:k,text:'x'}).request.system!==pr.system),'each export has its own instructions');
+ok(pr.max_tokens===16000,'max_tokens leaves room for thinking');
 ok(mod.tidy('Keep it — small\n\n\n\nnext')==='Keep it, small\n\nnext','em dashes replaced, spacing tidied');
 const call=async(req,env)=>{const out={};const res={setHeader(){},status(c){out.status=c;return this},json(j){out.body=j;return this}};const old={...process.env};Object.assign(process.env,env||{});try{await mod.default(req,res)}finally{process.env=old}return out};
 const body={name:'Zanele M',business:'ZM Electrical',kind:'plan',text:'Priority 1: x'};
@@ -25,6 +26,8 @@ class APIError extends Error{constructor(s){super('x');this.status=s}}class Rate
 mod.deps.Anthropic=class{constructor(){this.beta={messages:{create:async r=>{sent=r;if(reply instanceof Error)throw reply;return reply}}}}};Object.assign(mod.deps.Anthropic,{APIError,RateLimitError});
 let o=await call({method:'POST',body},env);
 ok(o.status===200&&o.body.commentary==='Your plan holds, mostly.\n\nWatch Day 30.'&&sent.messages[0].content.includes('Priority 1: x'),'commentary returned, text blocks only, tidied');
+ok((await call({method:'POST',body:{...body,name:'Test Person',business:'Test Co'}},env)).status===403&&(await call({method:'POST',body:{...body,name:'Someone',business:'test co'}},env)).status===403,'test identities refused (name or business)');
+reply={stop_reason:'max_tokens',content:[{type:'text',text:'Half a para'}]};ok((await call({method:'POST',body},env)).status===502,'cut off at max_tokens: no half commentary');
 reply={stop_reason:'refusal',content:[]};ok((await call({method:'POST',body},env)).status===422,'refusal: 422');
 reply=new RateLimitError(429);ok((await call({method:'POST',body},env)).status===429,'rate limited: 429');
 reply=new APIError(500);ok((await call({method:'POST',body},env)).status===502,'API error: 502');
