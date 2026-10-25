@@ -3,7 +3,7 @@
 // used as a general Claude proxy. Only participants with a saved workbook (a row in the State tab) get commentary.
 // Needs ANTHROPIC_API_KEY in Vercel; without it the app exports without commentary.
 
-const MODEL = 'claude-opus-5-5';
+const MODEL = 'claude-sonnet-5-5';
 const MAX_CHARS = 24000;
 
 const COMMON = `You write the commentary section at the end of a document a participant exports from the EDMECA AI Enablement Programme workbook (Property Point, Growthpoint Enterprise Development, Cohort Seven). The participants own small South African businesses, mostly construction, maintenance, facilities, security and related services.

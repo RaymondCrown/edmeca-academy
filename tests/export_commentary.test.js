@@ -9,7 +9,7 @@ console.log('api/commentary.js');
 const mod=await import(pathToFileURL(path.join(root,'api','commentary.js')).href);
 ok(mod.prepare({kind:'other',text:'x'}).status===400&&mod.prepare({kind:'plan',text:'  '}).status===400&&mod.prepare({kind:'plan',text:'x'.repeat(24001)}).status===413,'unknown kind, empty and over-long documents refused');
 const pr=mod.prepare({kind:'plan',text:'Priority 1: Quote from the cost sheet'}).request;
-ok(pr.model==='claude-opus-5-5'&&pr.thinking.type==='adaptive'&&pr.output_config.effort==='medium'&&pr.fallbacks==='default'&&pr.betas.includes('server-side-fallback-2026-07-01'),'Opus 5.5, adaptive thinking, medium effort, default fallbacks');
+ok(pr.model==='claude-sonnet-5-5'&&pr.thinking.type==='adaptive'&&pr.output_config.effort==='medium'&&pr.fallbacks==='default'&&pr.betas.includes('server-side-fallback-2026-07-01'),'Sonnet 5.5, adaptive thinking, medium effort, default fallbacks');
 ok(pr.system.includes('90-day AI implementation roadmap')&&pr.system.includes('no em dashes')&&pr.messages[0].content.includes('<document>\nPriority 1: Quote from the cost sheet\n</document>'),'instructions live on the server; the document is wrapped as data');
 ok(['journey','canvas'].every(k=>mod.prepare({kind:k,text:'x'}).request.system!==pr.system),'each export has its own instructions');
 ok(mod.tidy('Keep it — small\n\n\n\nnext')==='Keep it, small\n\nnext','em dashes replaced, spacing tidied');
