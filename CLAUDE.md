@@ -10,7 +10,7 @@ Session specs, decks and briefs live outside the repo (iCloud `Claude/Edmeca/Cla
 - The whole workbook is `state`, saved to localStorage at once and to the `State` tab after a 2-second pause (`syncState`). Each session has its own namespace (`state.session5`, `state.session6`) with `blank...` / `merge...` helpers beside `blankSession5` near the top of the first script, and `restore` merges it.
 - Exercise saves go through `bridgePost(payload)` with a new event name; the Apps Script upserts the participant's rows (`upsertRows`, matched on Name and Business). Failed saves are queued and retried; a read-only reply (the freeze) is not.
 - Leaving a step by any route autosaves it quietly (`autosaveStep`, `quietSave` on: no toasts, no required-field checks, only what changed since the last send).
-- AI steps are copy prompt, paste back, and `looksLikePrompt` / `s4FlagEcho` refuse a pasted prompt. The browser never calls an AI.
+- AI steps are copy prompt, paste back, and `looksLikePrompt` / `s4FlagEcho` refuse a pasted prompt. The browser never calls an AI. The one exception is export commentary: `exportCommentary(kind,text)` posts to `api/commentary.js`, which calls Claude with EDMECA's key (`ANTHROPIC_API_KEY` in Vercel) and keeps the instructions server-side. Keep participant names out of the text sent.
 - On-screen text: plain English, second person, no em dashes, no section symbol, dates as "Thursday 29 October 2026". No client names: "roles, not names".
 - Tests are headless Playwright against the installed Chrome, one file per change in `tests/`: `npm i -D playwright`, then `node tests/<file>.test.js /absolute/path/to/DigitalLeaderApp`. Run all of them before pushing.
 

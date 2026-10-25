@@ -143,7 +143,7 @@ await ev(()=>s6SaveCommit());await wait(200);
 ok(await ev(()=>window.workbookFrozen===true&&!!document.getElementById('s6Frozen')&&document.getElementById('s6Frozen').textContent==='The workbook is now read-only; your exports are still available.'),'read-only reply: the banner shows');
 ok(await ev(()=>!Object.keys(JSON.parse(localStorage.getItem('edmeca:pending')||'{}')).some(k=>k.includes('s6commit'))),'a read-only save is not queued for retry');
 await ev(()=>{window.print=()=>{window.__printed=document.getElementById('s6print').innerText}});
-await ev(()=>s6ExportPlan('pdf'));
+await ev(()=>s6ExportPlan('pdf'));await wait(400); /* the export first asks /api/commentary, which this test does not serve */
 const printed=await ev(()=>window.__printed||'');
 ok(printed.includes('Your 90-Day Roadmap')&&printed.includes('Your Curated AI Toolkit')&&printed.includes('Your Accountability Commitment')&&printed.includes('Quote every job from the cost sheet'),'PDF export still works: roadmap, toolkit and commitment pages');
 ok(await ev(()=>document.querySelectorAll('#s6print .s6page').length===3),'three pages');

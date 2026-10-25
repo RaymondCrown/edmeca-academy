@@ -1,5 +1,8 @@
 {
   "rewrites": [
     { "source": "/api/bridge", "destination": "/api/bridge.js" }
-  ]
+  ],
+  "functions": {
+    "api/commentary.js": { "maxDuration": 90 }
+  }
 }

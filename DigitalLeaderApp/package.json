@@ -1,0 +1,9 @@
+{
+  "name": "edmeca-digital-leader",
+  "private": true,
+  "type": "module",
+  "description": "EDMECA Digital Leader workbook. The page is static; api/ holds the Vercel functions.",
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.133.0"
+  }
+}

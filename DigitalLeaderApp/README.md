@@ -87,3 +87,11 @@ Session 6, AI Roadmap (built 25 October 2026 for Thursday 29 October 2026; brief
 The facilitator freeze: a `Config` tab with `freeze` (default FALSE). Set it to TRUE on Friday 30 October and every save is refused as read-only; exports keep working.
 
 Redeploy `EDMECA_Bridge_AppsScript.gs` after pulling (Manage deployments, edit, New version, so the `/exec` URL and the `EDMECA_BRIDGE_URL` variable stay the same): it adds the `S6_...` and `Config` tabs, the `s6post`, `s6roadmap`, `s6toolkit`, `s6story` and `s6commit` events and the `journey` read. Also in this version: the Session 5 customer calls are due Friday 16 October (was Thursday 15 October). Tests: `tests/session6_roadmap.test.js`. Pre-class steps: `CLAUDE.md` at the repo root.
+
+## Export commentary (Claude)
+
+The PDF and Word exports of My Journey and the Session 6 plan, and the Session 5 canvas Word export, end with a **Commentary and guidance** page: three to five paragraphs from Claude interpreting the document and saying what to act on, marked "Written by Claude (AI) from the content of this document. Check it before you rely on it." The browser sends the document's text (no participant name in it) to `api/commentary.js`, which holds the instructions for each export, checks the participant has a saved workbook (State tab) and calls Claude Opus 5.5 (`claude-opus-5-5`, adaptive thinking, medium effort, server-side `fallbacks: "default"`) through `@anthropic-ai/sdk`. Each document version is asked once per page load; if commentary is unavailable (no key, offline, refused, busy) the export goes ahead without it. The look-only example canvas is never sent.
+
+Setup: add `ANTHROPIC_API_KEY` to the Vercel project (Production) and redeploy. Without it the exports work as before, without commentary. `package.json` in this folder carries the SDK for the function; `vercel.json` gives the function 90 seconds.
+
+This is the one place the workbook sends participant content to an AI from EDMECA's own account (everything else is copy prompt, paste back, in the participant's own Claude). Claude is in the Proposal's tools list; tell Property Point before switching it on, per SLA clause 4.4. Tests: `tests/export_commentary.test.js` (the function with the SDK mocked, and the three exports).

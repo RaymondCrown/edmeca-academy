@@ -1699,12 +1699,14 @@ ${d.example?'<div class="card" style="background:#fffbeb;border-color:#fde68a"><
 }
 /* ---------- save and export ---------- */
 function s5Finalise(){const d=s5();if(d.example)return toast('This is the example canvas. Reset and build your own before you finalise.');if(!s5Stats().items)return toast('Your canvas is empty. Answer at least one block first.');d.finalized=new Date().toISOString();postSession5('s5submit',{analysis:d.analysis,dtRows:dtRows()});toast('Business Model Canvas finalised and saved.');renderSession5Step()}
+function s5CanvasText(){return 'Business Model Canvas\n\n'+s5Sections.map(x=>{const items=s5Answered(x.id);return items.length?`${x.seq}. ${x.title}:\n${items.map((t,i)=>`  ${i+1}. ${t}`).join('\n')}`:`${x.seq}. ${x.title}: [EMPTY]`}).join('\n\n')}
 function s5FileBase(){const clean=String(state.business||'canvas').replace(/[^\w\- ]+/g,'').trim().replace(/\s+/g,'-').toLowerCase()||'canvas';return `bmc-${clean}-${new Date().toISOString().split('T')[0]}`}
 function s5Download(blob,name){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 /* Positional, empty answers included, so an import puts each answer back under its prompt (same file as the portal's). */
 function s5ExportJson(){const st=s5Stats();s5Download(new Blob([JSON.stringify({companyName:state.business||'Untitled Business',exportDate:new Date().toISOString(),canvas:s5().canvas,statistics:{completedSections:st.filled,totalItems:st.items,completionPercentage:st.pct}},null,2)],{type:'application/json'}),s5FileBase()+'.json');toast('Your canvas has been exported as JSON.')}
 function s5ExportWord(){
-	s5LoadDocx().then(D=>{
+	let note='';
+	(s5().example?Promise.resolve(''):exportCommentary('canvas',s5CanvasText())).then(n=>{note=n;return s5LoadDocx()}).then(D=>{
 		const {Document,Packer,Paragraph,TextRun,HeadingLevel,AlignmentType,BorderStyle}=D,st=s5Stats(),a=s5().analysis,biz=state.business||'Untitled Business';
 		const when=new Date().toLocaleDateString('en-ZA',{year:'numeric',month:'long',day:'numeric'});
 		const rule={bottom:{color:'CCCCCC',space:10,style:BorderStyle.SINGLE,size:6}};
@@ -1712,8 +1714,9 @@ function s5ExportWord(){
 		s5Sections.forEach(x=>{const items=s5Answered(x.id);body.push(new Paragraph({text:`${x.seq}. ${x.title}`,heading:HeadingLevel.HEADING_2,spacing:{before:400,after:200}}),new Paragraph({children:[new TextRun({text:x.question,italics:true,color:'666666'})],spacing:{after:200}}));if(!items.length)body.push(new Paragraph({children:[new TextRun({text:'No items defined yet',italics:true,color:'999999'})],spacing:{after:200}}));else items.forEach(i=>body.push(new Paragraph({text:'• '+i,spacing:{after:100}})))});
 		if(a){body.push(new Paragraph({text:'',spacing:{before:400},border:rule}),new Paragraph({text:'AI Canvas Analysis',heading:HeadingLevel.HEADING_1,spacing:{before:400,after:300}}),new Paragraph({text:'Overall Assessment',heading:HeadingLevel.HEADING_2,spacing:{before:200,after:100}}),new Paragraph({text:a.overallAssessment,spacing:{after:300}}));
 			[['Strengths',a.strengths,'✓'],['Areas to Develop',a.areasToImprove,'▲'],['Cross-Block Coherence',a.coherenceChecks,'→']].forEach(([h,list,mark])=>{if(list.length){body.push(new Paragraph({text:h,heading:HeadingLevel.HEADING_2,spacing:{before:200,after:100}}));list.forEach(t=>body.push(new Paragraph({text:mark+' '+t,spacing:{after:80}})))}})}
+		if(note)body.push(new Paragraph({text:'',spacing:{before:400},border:rule}),...exportNoteParas(D,note));
 		return Packer.toBlob(new Document({sections:[{properties:{},children:body}]}));
-	}).then(blob=>{s5Download(blob,s5FileBase()+'.docx');toast('Your canvas has been exported as a Word document.')}).catch(()=>toast('Word export needs an internet connection. Try again, or use Export JSON.'));
+	}).then(blob=>{s5Download(blob,s5FileBase()+'.docx');toast('Your canvas has been exported as a Word document.')}).catch(e=>{if(!e||e.message!=='busy')toast('Word export needs an internet connection. Try again, or use Export JSON.')});
 }
 /* Session 5 · Design Thinking: in class, before the Business Model Canvas (homework).
    Three views on the Session 5 step bar: Empathize, Define, Ideate (views 1 to 3); the canvas views follow as homework (views 4 to 6).
@@ -2365,6 +2368,24 @@ function s6Post(exercise,keepalive){
 	localStorage.setItem('edmeca:'+s6Key(),JSON.stringify(payload));
 	return bridgePost(payload,keepalive);
 }
+/* ---------- export commentary: Claude, through /api/commentary (the server holds the key and the instructions) ----------
+   A few paragraphs of interpretation and guidance added to the PDF and Word exports of My Journey, the plan and the Session 5 canvas.
+   Asked once per version of a document; if it is unavailable (no key, offline, refused) the export goes ahead without it. */
+const exportNotes={};let exportBusy=false;
+const exportNoteTitle='Commentary and guidance',exportNoteSource='Written by Claude (AI) from the content of this document. Check it before you rely on it.';
+function exportCommentary(kind,text){
+	const sig=kind+'|'+text;if(exportNotes[sig])return Promise.resolve(exportNotes[sig]);
+	if(exportBusy){toast('Your commentary is still being written.');return Promise.reject(new Error('busy'))}
+	exportBusy=true;toast('Writing your commentary. This can take up to a minute.');
+	const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),90000);
+	return fetch('/api/commentary',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:state.name,business:state.business,kind,text}),signal:ctl.signal})
+		.then(r=>r.json()).then(j=>{if(!j||!j.ok||!j.commentary)throw new Error(j&&j.error||'none');exportNotes[sig]=j.commentary;return j.commentary})
+		.catch(()=>{toast('Commentary is not available right now, so this export has none.');return ''})
+		.finally(()=>{clearTimeout(timer);exportBusy=false});
+}
+function exportNoteHtml(note){return note?`<div class="s6page"><h1>${esc(exportNoteTitle)}</h1>${note.split(/\n\s*\n/).map(p=>`<p>${esc(p.trim())}</p>`).join('')}<p style="color:#555;font-size:11px">${esc(exportNoteSource)}</p></div>`:''}
+function exportNoteParas(D,note){const{Paragraph,TextRun,HeadingLevel}=D;return [new Paragraph({text:exportNoteTitle,heading:HeadingLevel.HEADING_1,spacing:{before:300,after:200}}),...note.split(/\n\s*\n/).map(p=>new Paragraph({text:p.trim(),spacing:{after:160}})),new Paragraph({children:[new TextRun({text:exportNoteSource,italics:true,color:'666666',size:18})]})]}
+function exportPartsText(parts){return parts.map(p=>`${p.title}\n${p.rows.map(r=>p.head[0]?p.head.map((h,i)=>`${h}: ${r[i]||''}`).join(' | '):`${r[0]}: ${r[1]}`).join('\n')}`).join('\n\n')}
 /* ---------- exports: PDF through the browser's print dialog, Word through docx (same loader as the Session 5 canvas) ---------- */
 function s6Print(html){
 	let box=document.getElementById('s6print');if(!box){box=document.createElement('div');box.id='s6print';document.body.appendChild(box)}
@@ -2392,21 +2413,28 @@ function s6ExportJourney(kind){
 	const p=s6JourneyParts();
 	s6().journeyExported=true;s6Touch(1);
 	const was=quietSave;quietSave=true;try{s6Post('s6story')}finally{quietSave=was}
-	if(kind==='pdf')return s6Print(`<div class="s6page"><h1>${esc(p.title)}</h1><p>${esc(p.who)}</p><table>${p.lines.map(([k,v])=>`<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join('')}</table>${p.artefacts.length?`<h2>Artefacts 1 to 21</h2><ul>${p.artefacts.map(a=>`<li>${esc(a)}</li>`).join('')}</ul>`:''}</div>`);
-	s5LoadDocx().then(D=>{const{Document,Packer,Paragraph,TextRun,HeadingLevel}=D;
+	const text=p.title+'\n'+p.lines.map(([k,v])=>`${k}: ${v}`).join('\n')+(p.artefacts.length?'\n\nArtefacts 1 to 21\n'+p.artefacts.join('\n'):'');
+	let note='';
+	exportCommentary('journey',text).then(n=>{note=n;
+	if(kind==='pdf')return s6Print(`<div class="s6page"><h1>${esc(p.title)}</h1><p>${esc(p.who)}</p><table>${p.lines.map(([k,v])=>`<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join('')}</table>${p.artefacts.length?`<h2>Artefacts 1 to 21</h2><ul>${p.artefacts.map(a=>`<li>${esc(a)}</li>`).join('')}</ul>`:''}</div>${exportNoteHtml(note)}`);
+	return s5LoadDocx().then(D=>{const{Document,Packer,Paragraph,TextRun,HeadingLevel}=D;
 		const body=[new Paragraph({text:p.title,heading:HeadingLevel.TITLE}),new Paragraph({text:p.who}),...p.lines.map(([k,v])=>new Paragraph({children:[new TextRun({text:k+': ',bold:true}),new TextRun(String(v||''))]}))];
 		if(p.artefacts.length){body.push(new Paragraph({text:'Artefacts 1 to 21',heading:HeadingLevel.HEADING_2}));p.artefacts.forEach(a=>body.push(new Paragraph({text:a})))}
+		if(note)body.push(...exportNoteParas(D,note));
 		return Packer.toBlob(new Document({sections:[{children:body}]}));
-	}).then(b=>{s5Download(b,s6FileBase('journey')+'.docx');toast('Your journey has been exported as a Word document.')}).catch(()=>toast('Word export needs an internet connection. Try again, or use Export PDF.'));
+	}).then(b=>{s5Download(b,s6FileBase('journey')+'.docx');toast('Your journey has been exported as a Word document.')}).catch(()=>toast('Word export needs an internet connection. Try again, or use Export PDF.'))}).catch(()=>{});
 }
 function s6ExportPlan(kind){
 	const parts=s6PlanParts(),who=`${state.name} · ${state.business}`;
-	if(kind==='pdf')return s6Print(parts.map(p=>`<div class="s6page"><h1>${esc(p.title)}</h1><p>${esc(who)}</p><table>${p.head[0]?`<tr>${p.head.map(h=>`<th>${esc(h)}</th>`).join('')}</tr>`:''}${p.rows.map(r=>`<tr>${r.map((c,i)=>i===0&&!p.head[0]?`<th>${esc(c)}</th>`:`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</table></div>`).join(''));
-	s5LoadDocx().then(D=>{const{Document,Packer,Paragraph,Table,TableRow,TableCell,TextRun,HeadingLevel,WidthType,PageOrientation}=D;
+	let note='';
+	exportCommentary('plan',exportPartsText(parts)).then(n=>{note=n;
+	if(kind==='pdf')return s6Print(parts.map(p=>`<div class="s6page"><h1>${esc(p.title)}</h1><p>${esc(who)}</p><table>${p.head[0]?`<tr>${p.head.map(h=>`<th>${esc(h)}</th>`).join('')}</tr>`:''}${p.rows.map(r=>`<tr>${r.map((c,i)=>i===0&&!p.head[0]?`<th>${esc(c)}</th>`:`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</table></div>`).join('')+exportNoteHtml(note));
+	return s5LoadDocx().then(D=>{const{Document,Packer,Paragraph,Table,TableRow,TableCell,TextRun,HeadingLevel,WidthType,PageOrientation}=D;
 		const cell=(t,b)=>new TableCell({children:[new Paragraph({children:[new TextRun({text:String(t||''),bold:!!b,size:18})]})]});
 		const sections=parts.map(p=>({properties:{page:{size:{orientation:PageOrientation.LANDSCAPE}}},children:[new Paragraph({text:p.title,heading:HeadingLevel.HEADING_1}),new Paragraph({text:who}),new Table({width:{size:100,type:WidthType.PERCENTAGE},rows:[...(p.head[0]?[new TableRow({children:p.head.map(h=>cell(h,true))})]:[]),...p.rows.map(r=>new TableRow({children:r.map((c,i)=>cell(c,i===0&&!p.head[0]))}))]})]}));
+		if(note)sections.push({properties:{},children:exportNoteParas(D,note)});
 		return Packer.toBlob(new Document({sections}));
-	}).then(b=>{s5Download(b,s6FileBase('roadmap')+'.docx');toast('Your plan has been exported as a Word document.')}).catch(()=>toast('Word export needs an internet connection. Try again, or use Export PDF.'));
+	}).then(b=>{s5Download(b,s6FileBase('roadmap')+'.docx');toast('Your plan has been exported as a Word document.')}).catch(()=>toast('Word export needs an internet connection. Try again, or use Export PDF.'))}).catch(()=>{});
 }
 </script>
 </body>
