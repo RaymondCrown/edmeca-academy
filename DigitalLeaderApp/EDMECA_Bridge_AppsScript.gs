@@ -34,10 +34,24 @@ var TABS = {
   S5_Analysis: ['Timestamp','Name','Business','OverallAssessment','Strengths','AreasToDevelop','CoherenceChecks'],
   S5_DesignThinking: ['Timestamp','Name','Business','Phase','Field','Value','EmpathizeDone','DefineDone','IdeateDone'],
   S5_Artefacts: ['Timestamp','Name','Business','ArtefactNumber','Artefact','Credit','Event'],
-  S5_Progress: ['Timestamp','Name','Business','EmpathizeDone','DefineDone','IdeatePrototypeDone','InClassStepsOutOf3','CustomerCallsRecordedOutOf3','CanvasSectionsOutOf9','CanvasFinalised']
+  S5_Progress: ['Timestamp','Name','Business','EmpathizeDone','DefineDone','IdeatePrototypeDone','InClassStepsOutOf3','CustomerCallsRecordedOutOf3','CanvasSectionsOutOf9','CanvasFinalised'],
+  S6_Post: ['Timestamp','Name','Business','Key','M','O','G','I','T','Total','Band','ToolsAdopted','OneChange','RetroM','RetroO','RetroG','RetroI','RetroT','RetroTotal','Event'],
+  S6_Journey: ['Key','Name','Business','AugustAnswer','PreM','PreO','PreG','PreI','PreT','PreTotal','PreBand','Artefacts','Notes'],
+  S6_Roadmap: ['Timestamp','Name','Business','Key','PriorityNo','Priority','FromArtefactNo','FromArtefact','OwnerRole','Tool','FirstStep','FirstStepDate','Measure','Day30','Day60','Day90','ClaudeQuestions','OneChange','StrangerMonday','StrangerDay30','StrangerDrop','StrangerChange','Event'],
+  S6_Toolkit: ['Timestamp','Name','Business','Key','JobNo','Job','Tool','Cost','Choice','Why','Event'],
+  S6_Story: ['Timestamp','Name','Business','Key','StorySeed','TopWin','ReplacedSaved','ShowOn27Jan','Consent','Event'],
+  S6_Commit: ['Timestamp','Name','Business','Key','FirstStep','FirstStepDate','FirstStepDone','Day30Date','Day30With','Day60Date','Day60With','LetterSent','Event'],
+  S6_Artefacts: ['Timestamp','Name','Business','ArtefactNumber','Artefact','Credit','Event'],
+  S6_Progress: ['Key','Name','Business','PostDone','PostTotal','PostBand','JourneyExported','RoadmapPriorities','ClaudeQuestionsPasted','StrangerCheckDone','ToolkitDone','StoryDone','Consent','FirstStepDone','ReviewDatesSet','LetterSent','LastSaved'],
+  Config: ['Setting','Value']
 };
 
 var S5_ARTEFACTS = { 18: 'Refined Value Proposition', 19: 'Business Model Canvas', 20: 'New Service Idea', 21: 'Differentiation Statement' };
+
+var S6_ARTEFACTS = { 22: '90-Day AI Implementation Roadmap', 23: 'Curated AI Toolkit', 24: 'POST-Assessment Score', 25: 'Captured Success Story', 26: 'Accountability Commitment' };
+
+// Session 6: test identities never appear in S6_Progress, the facilitator's one-row-per-participant summary (matched on name or business, case-insensitive).
+var S6_TEST_IDENTITIES = ['a', 'b', 'c', 'd', 'dvev', 'test person', 'test co', 'test user', 'sipho', 'testa a', 'abz', 'aq', 'as', 'dfsad', 'hgdyh', 'utfug', 'test kevin', 'zz bridge test', 'test live', 'test dbg', 'raymond crown', 'justin siljeur', 'jerome adonis'];
 
 var S3_SORT_ANSWERS = {
   price: 'yours', claims: 'yours', dates: 'yours', conversation: 'yours',
@@ -53,6 +67,8 @@ function sheet(name) {
     tab.appendRow(TABS[name]);
     tab.setFrozenRows(1);
     tab.getRange(1, 1, 1, TABS[name].length).setFontWeight('bold');
+    if (name === 'S6_Journey') tab.getRange(1, 12, tab.getMaxRows(), 1).setNumberFormat('@');
+    if (name === 'Config') tab.appendRow(['freeze', false]);
   }
   return tab;
 }
@@ -122,21 +138,87 @@ function writeDesignThinking(data, name, business, timestamp) {
 
 // S5_Artefacts: one row per participant and artefact number, replaced when that artefact is saved again (credit 1 = complete, 0.5 = started).
 // 20 arrives on s5dt once Ideate & Prototype is complete; 18, 19, 20 and 21 arrive on s5submit and on every later canvas save while the canvas stays finalised.
-function writeArtefacts(data, name, business, timestamp, event) {
-  var tab = sheet('S5_Artefacts');
+function writeArtefacts(data, name, business, timestamp, event, tabName, names) {
+  var tab = sheet(tabName || 'S5_Artefacts');
+  names = names || S5_ARTEFACTS;
   var credits = data.artefacts || {};
   var numbers = Object.keys(credits);
   if (!numbers.length) return;
   deleteRowRuns(tab, matchingRows(tab, name, business, function (v) { return numbers.indexOf(String(v[3])) !== -1; }).numbers);
   appendRows(tab, numbers.map(function (number) {
-    return [timestamp, name, business, Number(number), S5_ARTEFACTS[number] || '', credits[number], event];
+    return [timestamp, name, business, Number(number), names[number] || '', credits[number], event];
   }));
 }
 
-// S5_Progress: the facilitator's one-row-per-participant check on in-class steps, customer calls (due 15 October) and the canvas (due 22 October).
+// S5_Progress: the facilitator's one-row-per-participant check on in-class steps, customer calls (due 16 October) and the canvas (due 22 October).
 function writeProgress(data, name, business, timestamp) {
   var p = data.progress || {};
   upsertRows('S5_Progress', name, business, [[timestamp, name, business, p.empathize ? 'YES' : '', p.define ? 'YES' : '', p.ideate ? 'YES' : '', p.inClass || 0, p.calls || 0, p.sections || 0, p.finalised ? 'YES' : '']]);
+}
+
+// Session 6 · AI Roadmap. Every S6 tab except S6_Post holds one current record per participant, replaced on every save.
+// S6_Post keeps every submission (the latest counts). Key is the lowercased "name|business".
+function yes(v) { return v ? 'YES' : ''; }
+
+function writeSession6(exercise, data, name, business, timestamp) {
+  var key = keyFor(name, business);
+  if (exercise === 's6post') {
+    var a = data.answers || {}, r = data.retro || {};
+    var dims = ['M', 'O', 'G', 'I', 'T'];
+    appendRows(sheet('S6_Post'), [[timestamp, name, business, key].concat(dims.map(function (k) { return a[k] || ''; }), [data.total || '', data.band || '', data.tools || '', data.oneChange || ''], dims.map(function (k) { return r[k] || ''; }), [data.retroTotal || '', exercise])]);
+  } else if (exercise === 's6roadmap') {
+    var st = data.stranger || {};
+    upsertRows('S6_Roadmap', name, business, (data.rows || []).map(function (row, i) {
+      var first = i === 0; // the Claude questions, the change and the stranger check (about priority 1) sit on the priority 1 row
+      return [timestamp, name, business, key, row.no || i + 1, row.priority || '', row.fromNo || '', row.from || '', row.owner || '', row.tool || '', row.step || '', row.date || '', row.measure || '', row.d30 || '', row.d60 || '', row.d90 || '',
+        first ? data.claudeQ || '' : '', first ? data.change || '' : '', first ? st.monday || '' : '', first ? st.day30 || '' : '', first ? st.drop || '' : '', first ? st.change || '' : '', exercise];
+    }));
+  } else if (exercise === 's6toolkit') {
+    upsertRows('S6_Toolkit', name, business, (data.rows || []).map(function (row, i) {
+      return [timestamp, name, business, key, row.no || i + 1, row.job || '', row.tool || '', row.cost || '', row.choice || '', row.why || '', exercise];
+    }));
+  } else if (exercise === 's6story') {
+    upsertRows('S6_Story', name, business, [[timestamp, name, business, key, data.storySeed || '', data.topWin || '', data.replaced || '', data.show27 || '', data.consent || '', exercise]]);
+  } else if (exercise === 's6commit') {
+    upsertRows('S6_Commit', name, business, [[timestamp, name, business, key, data.firstStep || '', data.firstStepDate || '', yes(data.done), data.d30 || '', data.d30With || '', data.d60 || '', data.d60With || '', yes(data.letter), exercise]]);
+  } else {
+    return;
+  }
+  if (data.artefacts) writeArtefacts(data, name, business, timestamp, exercise, 'S6_Artefacts', S6_ARTEFACTS);
+  if (data.progress && !isTestIdentity(name, business)) writeS6Progress(data.progress, name, business, timestamp);
+}
+
+// S6_Progress: flags come from the participant's content (the app derives them on every save), never from a button.
+function writeS6Progress(p, name, business, timestamp) {
+  upsertRows('S6_Progress', name, business, [[keyFor(name, business), name, business, yes(p.postDone), p.postTotal || '', p.postBand || '', yes(p.journeyExported), p.roadmapPriorities || 0,
+    yes(p.claudeQuestionsPasted), yes(p.strangerCheckDone), yes(p.toolkitDone), yes(p.storyDone), p.consent || '', yes(p.firstStepDone), yes(p.reviewDatesSet), yes(p.letterSent), timestamp]]);
+}
+
+function isTestIdentity(name, business) {
+  return S6_TEST_IDENTITIES.indexOf(String(name).trim().toLowerCase()) !== -1 || S6_TEST_IDENTITIES.indexOf(String(business).trim().toLowerCase()) !== -1;
+}
+
+// S6_Journey is prepared by the facilitator (one row per Key). The participant gets their own row only, without Notes.
+function readJourney(name, business) {
+  var values = sheet('S6_Journey').getDataRange().getDisplayValues();
+  var key = keyFor(name, business);
+  for (var i = values.length - 1; i >= 1; i--) {
+    if (String(values[i][0]).trim().toLowerCase() === key) {
+      var row = {};
+      TABS.S6_Journey.forEach(function (h, j) { if (h !== 'Notes') row[h] = values[i][j] == null ? '' : String(values[i][j]); });
+      return row;
+    }
+  }
+  return null;
+}
+
+// Config!freeze: TRUE makes the workbook read-only (the facilitator sets it on Friday 30 October). Every write is refused.
+function isFrozen() {
+  var values = sheet('Config').getDataRange().getValues();
+  for (var i = 1; i < values.length; i++) {
+    if (String(values[i][0]).trim().toLowerCase() === 'freeze') return values[i][1] === true || String(values[i][1]).trim().toUpperCase() === 'TRUE';
+  }
+  return false;
 }
 
 // State: a Google Sheets cell holds at most 50,000 characters, so the state JSON is split across StateJSON to StateJSON8
@@ -176,13 +258,17 @@ function keyFor(name, business) {
 
 function doGet(event) {
   var params = event.parameter || {};
+  if (params.action === 'journey') {
+    var journey = readJourney(params.name || '', params.business || '');
+    return json({ ok: true, found: !!journey, journey: journey, freeze: isFrozen() });
+  }
   if (params.action !== 'load') return json({ ok: true, ping: 'EDMECA bridge alive' });
   var values = sheet('State').getDataRange().getValues();
   var key = keyFor(params.name || '', params.business || '');
   for (var i = values.length - 1; i >= 1; i--) {
-    if (values[i][0] === key) return json({ ok: true, found: true, state: readState(values[i]) });
+    if (values[i][0] === key) return json({ ok: true, found: true, state: readState(values[i]), freeze: isFrozen() });
   }
-  return json({ ok: true, found: false });
+  return json({ ok: true, found: false, freeze: isFrozen() });
 }
 
 function doPost(event) {
@@ -193,6 +279,7 @@ function doPost(event) {
     var name = String(body.name || '').trim();
     var business = String(body.business || '').trim();
     if (!name || !business) return json({ ok: false, error: 'missing name or business' });
+    if (isFrozen()) return json({ ok: false, readOnly: true, error: 'read-only' });
     var timestamp = new Date();
     var exercise = body.exercise;
     var data = body.data || {};
@@ -352,6 +439,9 @@ function doPost(event) {
       if (exercise === 's5submit' && data.dtRows && data.dtRows.length) writeDesignThinking(data, name, business, timestamp);
       if (exercise === 's5submit') sheet('Participants').appendRow([timestamp, name, business, 's5submit']);
     }
+
+    // Session 6 · AI Roadmap
+    if (String(exercise || '').indexOf('s6') === 0) writeSession6(exercise, data, name, business, timestamp);
 
     // Session 5 facilitator evidence, written alongside whichever s5 event arrived
     if (String(exercise || '').indexOf('s5') === 0) {
