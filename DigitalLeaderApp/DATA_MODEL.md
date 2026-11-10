@@ -156,6 +156,7 @@ Session 6 (`S6_...`, built 25 October 2026 for Thursday 29 October). Every tab c
 - `S6_Commit`: the first step of priority 1 and its date, FirstStepDone, the Day 30 and Day 60 review dates and roles, LetterSent (event `s6commit`)
 - `S6_Artefacts`: same shape as `S5_Artefacts`. 24 on `s6post` (1); 22 on `s6roadmap` (1 with three complete priorities, 0.5 with one or two); 23 on `s6toolkit` (1 with all eight jobs chosen, 0.5 otherwise); 25 on `s6story` once consent is chosen and TopWin is filled; 26 on `s6commit` (1 when FirstStepDone is ticked and both review dates are set, 0.5 otherwise). A priority is complete when it has a priority, an owner, a first step dated this week and a measure
 - `S6_Progress`: one row per Key, rewritten on every S6 save; flags are derived from the content, never from a button. Test identities (the list in `S6_TEST_IDENTITIES`) never get a row
+- `S6_Support`: one row per support request (event `s6support`): Session, Request, ContactVia, and Status for the facilitator to fill in. Each request also emails `SUPPORT_EMAIL` (raymond@edmeca.co.za). Taken even while `freeze` is TRUE; the app stops offering the form after Wednesday 27 January 2027
 - `Config`: `freeze` (default FALSE). TRUE makes every write, in every session, return `{ok:false, readOnly:true}`; the app keeps the work on the device, does not queue it for retry, and shows "The workbook is now read-only; your exports are still available."
 
 State: `state.session6` (`blankS6` / `mergeS6`), the view in `state.session6View` (0 to 4).

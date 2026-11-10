@@ -110,6 +110,16 @@ ok(tk&&JSON.stringify(tk.data.artefacts)==='{"23":0.5}','toolkit partly chosen: 
 await ev(()=>{for(let i=1;i<7;i++)s6Choose(i,'try');s6SaveToolkit()});await wait(150);
 ok(JSON.stringify(posts.filter(p=>p.exercise==='s6toolkit').pop().data.artefacts)==='{"23":1}','all eight chosen: 23 at 1');
 
+console.log('7b · Library and support');
+ok(await ev(()=>document.getElementById('s6Library').href)==='https://drive.google.com/drive/folders/1WWELXQavP8Ac1bGH4ly_mAOuC7l_eB4j','library link opens the Drive folder');
+await ev(()=>document.getElementById('s6Support').click());
+ok(await ev(()=>document.getElementById('s6SupportCard').open),'Ask for support opens the support card');
+posts.length=0;await ev(()=>{document.getElementById('s6SupRequest').value='The cost sheet will not open';s6SendSupport()});await wait(150);
+ok(!posts.some(p=>p.exercise==='s6support'),'an incomplete request is not sent');
+await ev(()=>{document.getElementById('s6SupSession').value='Session 4 · Financial Intelligence';document.getElementById('s6SupContact').value='WhatsApp';s6SendSupport()});await wait(150);
+const sup=posts.find(p=>p.exercise==='s6support');
+ok(sup&&sup.data.request==='The cost sheet will not open'&&sup.data.session.startsWith('Session 4')&&sup.data.contact==='WhatsApp'&&!sup.state,'request sent as s6support, without the workbook');
+ok(await ev(()=>s6().support.length===1&&document.getElementById('s6SupportCard').textContent.includes('Sent:')),'the participant sees it was sent');
 console.log('8 · Story and Commitment');
 await ev(()=>goS6View(4));await wait(100);
 ok((await text()).includes('I price from my cost sheet now'),'What changed shown above the story');
@@ -173,7 +183,7 @@ Tab.prototype={appendRow(r){this.rows.push(r.slice())},setFrozenRows(n){this.fro
   setValues(v){v.forEach((row,i)=>{t.rows[r-1+i]=t.rows[r-1+i]||[];row.forEach((x,j)=>{t.rows[r-1+i][c-1+j]=x})});return this}}}};
 const tabs={};const SS={getActive:()=>({getSheetByName:n=>tabs[n],insertSheet:n=>(tabs[n]=new Tab())})};
 const CS={createTextOutput:t=>({setMimeType(){return JSON.parse(t)}}),MimeType:{JSON:1}};
-const g=new Function('SpreadsheetApp','ContentService','LockService','Utilities',src+';return{doPost,doGet}')(SS,CS,{getScriptLock:()=>({waitLock(){},releaseLock(){}})},{getUuid:()=>'abcdef12'});
+const mails=[];const g=new Function('SpreadsheetApp','ContentService','LockService','Utilities','MailApp',src+';return{doPost,doGet}')(SS,CS,{getScriptLock:()=>({waitLock(){},releaseLock(){}})},{getUuid:()=>'abcdef12'},{sendEmail:(...a)=>mails.push(a)});
 const post=b=>g.doPost({postData:{contents:JSON.stringify(b)}});
 const prog={postDone:true,postTotal:11,postBand:'Builder',roadmapPriorities:3,claudeQuestionsPasted:true,consent:'Anonymised: use the story, not the name'};
 post({name:'Zanele M',business:'ZM Electrical',exercise:'s6post',data:{answers:{M:3,O:2,G:2,I:2,T:2},total:11,band:'Builder',tools:'Claude',retro:{},artefacts:{24:1},progress:prog}});
@@ -201,4 +211,8 @@ tabs.Config.rows[1][1]=true;
 const before=tabs.S6_Commit.rows.length;const fr=post({name:'Zanele M',business:'ZM Electrical',exercise:'s6commit',data:{progress:prog}});
 ok(fr.readOnly&&!fr.ok&&tabs.S6_Commit.rows.length===before,'Config freeze TRUE: writes refused as read-only');
 ok(g.doGet({parameter:{action:'load',name:'Zanele M',business:'ZM Electrical'}}).freeze===true,'load reports the freeze');
+const sr=post({name:'Zanele M',business:'ZM Electrical',exercise:'s6support',data:{session:'Session 4',request:'Sheet will not open',contact:'WhatsApp'}});
+ok(sr.ok&&tabs.S6_Support.rows.length===2&&tabs.S6_Support.rows[1][5]==='Sheet will not open'&&tabs.S6_Support.rows[1][8]==='s6support','support request written to S6_Support, even while frozen');
+ok(mails.length===1&&mails[0][0]==='raymond@edmeca.co.za'&&mails[0][2].includes('Sheet will not open'),'and emailed to the facilitator');
+ok(!post({name:'Zanele M',business:'ZM Electrical',exercise:'s6support',data:{request:''}}).ok,'an empty request is refused');
 console.log(`\n${pass} passed, ${fail} failed`);process.exit(fail?1:0)})();

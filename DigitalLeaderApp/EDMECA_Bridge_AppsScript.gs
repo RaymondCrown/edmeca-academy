@@ -43,6 +43,7 @@ var TABS = {
   S6_Commit: ['Timestamp','Name','Business','Key','FirstStep','FirstStepDate','FirstStepDone','Day30Date','Day30With','Day60Date','Day60With','LetterSent','Event'],
   S6_Artefacts: ['Timestamp','Name','Business','ArtefactNumber','Artefact','Credit','Event'],
   S6_Progress: ['Key','Name','Business','PostDone','PostTotal','PostBand','JourneyExported','RoadmapPriorities','ClaudeQuestionsPasted','StrangerCheckDone','ToolkitDone','StoryDone','Consent','FirstStepDone','ReviewDatesSet','LetterSent','LastSaved'],
+  S6_Support: ['Timestamp','Name','Business','Key','Session','Request','ContactVia','Status','Event'],
   Config: ['Setting','Value']
 };
 
@@ -212,6 +213,20 @@ function readJourney(name, business) {
   return null;
 }
 
+// S6_Support: one row per request (Status is for the facilitator), and an email so it is acknowledged within two working days.
+var SUPPORT_EMAIL = 'raymond@edmeca.co.za';
+
+function writeSupport(data, name, business, timestamp) {
+  var request = String(data.request || '').slice(0, 3000), session = String(data.session || '').slice(0, 100), contact = String(data.contact || '').slice(0, 200);
+  if (!request) return { ok: false, error: 'empty request' };
+  appendRows(sheet('S6_Support'), [[timestamp, name, business, keyFor(name, business), session, request, contact, '', 's6support']]);
+  try {
+    MailApp.sendEmail(SUPPORT_EMAIL, 'EDMECA support request: ' + name + ', ' + business,
+      'From: ' + name + ' (' + business + ')\nAbout: ' + session + '\nReach them on: ' + contact + '\n\n' + request + '\n\nLogged on the S6_Support tab.');
+  } catch (mailError) {} // the row is the record; a failed email never loses the request
+  return { ok: true };
+}
+
 // Config!freeze: TRUE makes the workbook read-only (the facilitator sets it on Friday 30 October). Every write is refused.
 function isFrozen() {
   var values = sheet('Config').getDataRange().getValues();
@@ -279,6 +294,8 @@ function doPost(event) {
     var name = String(body.name || '').trim();
     var business = String(body.business || '').trim();
     if (!name || !business) return json({ ok: false, error: 'missing name or business' });
+    // Support requests are taken even while the workbook is frozen (the 90 days run past the freeze).
+    if (body.exercise === 's6support') return json(writeSupport(body.data || {}, name, business, new Date()));
     if (isFrozen()) return json({ ok: false, readOnly: true, error: 'read-only' });
     var timestamp = new Date();
     var exercise = body.exercise;
